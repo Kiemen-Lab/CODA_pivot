@@ -6,12 +6,16 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>842</width>
-    <height>722</height>
+    <width>862</width>
+    <height>745</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>logo square large.jpg</normaloff>logo square large.jpg</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true">QWidget { 
@@ -27,14 +31,14 @@ QMenuBar::item {
     color: #ffffff; /* White font color for menu items */
 }</string>
   </property>
-  <widget class="QWidget" name="centralwidget">
+  <widget class="QWidget" name="centralWidget">
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>0</x>
+      <x>10</x>
       <y>10</y>
       <width>841</width>
-      <height>701</height>
+      <height>711</height>
      </rect>
     </property>
     <property name="font">
@@ -63,25 +67,26 @@ QTabBar::tab {
     color: #e6e6e6;
 	height: 23px;
 	width: 150px;
-}</string>
+}
+</string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>4</number>
     </property>
     <property name="usesScrollButtons">
-     <bool>true</bool>
+     <bool>false</bool>
     </property>
-    <widget class="QWidget" name="tab">
+    <widget class="QWidget" name="ImportProjectTabName">
      <attribute name="title">
-      <string>Import Project</string>
+      <string>Define Job</string>
      </attribute>
      <widget class="QFrame" name="DefineFixedImageFrame">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>651</width>
-        <height>141</height>
+        <width>820</width>
+        <height>120</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -101,8 +106,8 @@ QTabBar::tab {
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>651</width>
-         <height>24</height>
+         <width>820</width>
+         <height>25</height>
         </rect>
        </property>
        <property name="font">
@@ -139,7 +144,7 @@ p, li { white-space: pre-wrap; }
       <widget class="QPushButton" name="chooseFixedImageButton">
        <property name="geometry">
         <rect>
-         <x>534</x>
+         <x>694</x>
          <y>35</y>
          <width>41</width>
          <height>31</height>
@@ -177,8 +182,8 @@ p, li { white-space: pre-wrap; }
         <rect>
          <x>10</x>
          <y>35</y>
-         <width>525</width>
-         <height>91</height>
+         <width>685</width>
+         <height>75</height>
         </rect>
        </property>
        <property name="font">
@@ -218,6 +223,7 @@ QTableCornerButton::section {
 QTableWidget::item {
     border: 0px solid #e6e6e6; /* Border  */
     gridline-color: #e6e6e6; /* Set the color of the gridlines */
+	text-align: center;
 }
 
 QTableView::viewport {
@@ -250,10 +256,13 @@ QTableWidget QLineEdit {
         <number>3</number>
        </property>
        <attribute name="horizontalHeaderMinimumSectionSize">
-        <number>40</number>
+        <number>75</number>
        </attribute>
        <attribute name="horizontalHeaderDefaultSectionSize">
-        <number>153</number>
+        <number>227</number>
+       </attribute>
+       <attribute name="horizontalHeaderStretchLastSection">
+        <bool>true</bool>
        </attribute>
        <attribute name="verticalHeaderVisible">
         <bool>false</bool>
@@ -275,9 +284,9 @@ QTableWidget QLineEdit {
        </property>
        <property name="geometry">
         <rect>
-         <x>595</x>
-         <y>95</y>
-         <width>51</width>
+         <x>755</x>
+         <y>79</y>
+         <width>50</width>
          <height>30</height>
         </rect>
        </property>
@@ -315,9 +324,9 @@ QPushButton:pressed {
        </property>
        <property name="geometry">
         <rect>
-         <x>540</x>
-         <y>95</y>
-         <width>51</width>
+         <x>700</x>
+         <y>79</y>
+         <width>50</width>
          <height>30</height>
         </rect>
        </property>
@@ -359,9 +368,9 @@ QPushButton:pressed {
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>160</y>
-        <width>651</width>
-        <height>351</height>
+        <y>140</y>
+        <width>820</width>
+        <height>275</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -381,8 +390,8 @@ QPushButton:pressed {
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>651</width>
-         <height>24</height>
+         <width>820</width>
+         <height>25</height>
         </rect>
        </property>
        <property name="font">
@@ -421,8 +430,8 @@ p, li { white-space: pre-wrap; }
         <rect>
          <x>10</x>
          <y>35</y>
-         <width>525</width>
-         <height>301</height>
+         <width>685</width>
+         <height>230</height>
         </rect>
        </property>
        <property name="font">
@@ -461,6 +470,7 @@ QTableCornerButton::section {
 QTableWidget::item {
     border: 0px solid #e6e6e6; /* Border  */
     gridline-color: #e6e6e6; /* Set the color of the gridlines */
+	text-align: center;
 }
 
 QTableView::viewport {
@@ -493,10 +503,13 @@ QTableWidget QLineEdit {
         <number>3</number>
        </property>
        <attribute name="horizontalHeaderMinimumSectionSize">
-        <number>40</number>
+        <number>75</number>
        </attribute>
        <attribute name="horizontalHeaderDefaultSectionSize">
-        <number>153</number>
+        <number>227</number>
+       </attribute>
+       <attribute name="horizontalHeaderStretchLastSection">
+        <bool>true</bool>
        </attribute>
        <attribute name="verticalHeaderVisible">
         <bool>false</bool>
@@ -515,7 +528,7 @@ QTableWidget QLineEdit {
       <widget class="QPushButton" name="chooseMovingImageButton">
        <property name="geometry">
         <rect>
-         <x>534</x>
+         <x>694</x>
          <y>35</y>
          <width>41</width>
          <height>31</height>
@@ -551,8 +564,8 @@ QTableWidget QLineEdit {
       <widget class="QPushButton" name="deleteMovingImageButton">
        <property name="geometry">
         <rect>
-         <x>595</x>
-         <y>305</y>
+         <x>755</x>
+         <y>79</y>
          <width>50</width>
          <height>30</height>
         </rect>
@@ -591,8 +604,8 @@ QPushButton:pressed {
        </property>
        <property name="geometry">
         <rect>
-         <x>540</x>
-         <y>305</y>
+         <x>700</x>
+         <y>79</y>
          <width>50</width>
          <height>30</height>
         </rect>
@@ -630,9 +643,9 @@ QPushButton:pressed {
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>520</y>
-        <width>651</width>
-        <height>131</height>
+        <y>425</y>
+        <width>820</width>
+        <height>120</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -652,8 +665,8 @@ QPushButton:pressed {
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>651</width>
-         <height>24</height>
+         <width>820</width>
+         <height>25</height>
         </rect>
        </property>
        <property name="font">
@@ -690,8 +703,8 @@ p, li { white-space: pre-wrap; }
       <widget class="QCheckBox" name="JobFolderCheckBox">
        <property name="geometry">
         <rect>
-         <x>545</x>
-         <y>80</y>
+         <x>700</x>
+         <y>74</y>
          <width>101</width>
          <height>41</height>
         </rect>
@@ -723,8 +736,8 @@ Image Folder</string>
         <rect>
          <x>10</x>
          <y>35</y>
-         <width>525</width>
-         <height>81</height>
+         <width>685</width>
+         <height>75</height>
         </rect>
        </property>
        <property name="styleSheet">
@@ -757,6 +770,7 @@ QTableCornerButton::section {
 QTableWidget::item {
     border: 0px solid #e6e6e6; /* Border  */
     gridline-color: #e6e6e6; /* Set the color of the gridlines */
+	text-align: center;
 }
 
 QTableView::viewport {
@@ -789,10 +803,13 @@ QTableWidget QLineEdit {
         <number>2</number>
        </property>
        <attribute name="horizontalHeaderMinimumSectionSize">
-        <number>40</number>
+        <number>75</number>
        </attribute>
        <attribute name="horizontalHeaderDefaultSectionSize">
-        <number>229</number>
+        <number>340</number>
+       </attribute>
+       <attribute name="horizontalHeaderStretchLastSection">
+        <bool>true</bool>
        </attribute>
        <attribute name="verticalHeaderVisible">
         <bool>false</bool>
@@ -810,7 +827,7 @@ QTableWidget QLineEdit {
       <widget class="QPushButton" name="chooseJobFolderButton">
        <property name="geometry">
         <rect>
-         <x>534</x>
+         <x>694</x>
          <y>35</y>
          <width>41</width>
          <height>31</height>
@@ -851,9 +868,9 @@ QTableWidget QLineEdit {
      <widget class="QPushButton" name="loadTemplateButton">
       <property name="geometry">
        <rect>
-        <x>670</x>
-        <y>10</y>
-        <width>161</width>
+        <x>20</x>
+        <y>555</y>
+        <width>110</width>
         <height>30</height>
        </rect>
       </property>
@@ -885,12 +902,12 @@ QPushButton:pressed {
        <string>Load Template</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="goToApplyRegistrationTabButton">
+     <widget class="QPushButton" name="NavigationButton">
       <property name="geometry">
        <rect>
-        <x>670</x>
-        <y>80</y>
-        <width>161</width>
+        <x>20</x>
+        <y>630</y>
+        <width>65</width>
         <height>30</height>
        </rect>
       </property>
@@ -919,27 +936,88 @@ QPushButton:pressed {
 }</string>
       </property>
       <property name="text">
-       <string>Apply Registration</string>
+       <string>Navigate</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="goToFiducialPointTabButton">
+     <widget class="QFrame" name="WhatNextControlFrame">
       <property name="geometry">
        <rect>
-        <x>670</x>
-        <y>45</y>
-        <width>161</width>
-        <height>30</height>
+        <x>555</x>
+        <y>570</y>
+        <width>275</width>
+        <height>110</height>
        </rect>
       </property>
-      <property name="font">
-       <font>
-        <pointsize>9</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
       <property name="styleSheet">
-       <string notr="true">QPushButton {
+       <string notr="true">QFrame { 
+	background-color: #4b4b4b;
+	border: 1px solid #e6e6e6; /* Border  */
+}</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QTextEdit" name="WhatNextText">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>275</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QTextEdit { 
+	background-color: #4b4b4b;
+	color: #e6e6e6; /* Text color */
+	border: 1px solid #e6e6e6; /* Border  */
+}</string>
+       </property>
+       <property name="verticalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+       <property name="html">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:9pt; font-weight:600; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;App Navigation&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="GoToImportProjectTab">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>35</y>
+         <width>90</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
     background-color: #5a5a5a;
     color: #e6e6e6; /* Text color */
     border: 1px solid #e6e6e6; /* Border  */
@@ -954,23 +1032,172 @@ QPushButton:hover {
 QPushButton:pressed {
     background-color: #7b8e9c; /* More blue when pressed */
 }</string>
-      </property>
-      <property name="text">
-       <string>Fiducial Point Selection</string>
-      </property>
+       </property>
+       <property name="text">
+        <string>Define Job</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="GoToFiducialsTab">
+       <property name="geometry">
+        <rect>
+         <x>105</x>
+         <y>35</y>
+         <width>90</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 4px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Pick Fiducials</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="GoToJobStatusTab">
+       <property name="geometry">
+        <rect>
+         <x>105</x>
+         <y>70</y>
+         <width>90</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Job Status</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="GoToCoordsTab">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>70</y>
+         <width>90</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Align Data</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="CloseNavigationButton">
+       <property name="geometry">
+        <rect>
+         <x>200</x>
+         <y>70</y>
+         <width>65</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Minimize</string>
+       </property>
+      </widget>
      </widget>
     </widget>
-    <widget class="QWidget" name="tab_3">
+    <widget class="QWidget" name="AddFiducialsTabName">
      <attribute name="title">
-      <string>Select Point Cloud</string>
+      <string>Pick Fiducials</string>
      </attribute>
      <widget class="QFrame" name="ChooseMovingImageFrame">
       <property name="geometry">
        <rect>
-        <x>290</x>
+        <x>350</x>
         <y>10</y>
-        <width>521</width>
-        <height>84</height>
+        <width>480</width>
+        <height>85</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -988,7 +1215,7 @@ QPushButton:pressed {
       <widget class="QPushButton" name="LoadNewMovingImageButton">
        <property name="geometry">
         <rect>
-         <x>420</x>
+         <x>380</x>
          <y>10</y>
          <width>91</width>
          <height>30</height>
@@ -1025,7 +1252,7 @@ QPushButton:pressed {
       <widget class="QPushButton" name="LoadOldMovingImageButton">
        <property name="geometry">
         <rect>
-         <x>420</x>
+         <x>380</x>
          <y>46</y>
          <width>91</width>
          <height>30</height>
@@ -1062,9 +1289,9 @@ QPushButton:pressed {
       <widget class="QComboBox" name="MovingImagesComboBox">
        <property name="geometry">
         <rect>
-         <x>250</x>
+         <x>170</x>
          <y>12</y>
-         <width>151</width>
+         <width>201</width>
          <height>25</height>
         </rect>
        </property>
@@ -1092,12 +1319,12 @@ QComboBox QAbstractItemView { /* Styles for dropdown list */
 </string>
        </property>
       </widget>
-      <widget class="QTextEdit" name="textEdit_5">
+      <widget class="QTextEdit" name="MovingImagesText">
        <property name="geometry">
         <rect>
-         <x>70</x>
+         <x>5</x>
          <y>13</y>
-         <width>171</width>
+         <width>160</width>
          <height>27</height>
         </rect>
        </property>
@@ -1131,12 +1358,12 @@ p, li { white-space: pre-wrap; }
 &lt;p align=&quot;right&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8.25pt; font-weight:600;&quot;&gt;Register Moving Image&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
-      <widget class="QTextEdit" name="textEdit_6">
+      <widget class="QTextEdit" name="OldMovingImagesText">
        <property name="geometry">
         <rect>
-         <x>4</x>
+         <x>5</x>
          <y>49</y>
-         <width>241</width>
+         <width>160</width>
          <height>27</height>
         </rect>
        </property>
@@ -1167,15 +1394,15 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;right&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8.25pt; font-weight:600;&quot;&gt;Re-register Completed Moving Image&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p align=&quot;right&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8.25pt; font-weight:600;&quot;&gt;Re-register Moving Image&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
       <widget class="QComboBox" name="OldMovingImagesComboBox">
        <property name="geometry">
         <rect>
-         <x>250</x>
+         <x>170</x>
          <y>48</y>
-         <width>151</width>
+         <width>201</width>
          <height>25</height>
         </rect>
        </property>
@@ -1203,51 +1430,14 @@ QComboBox QAbstractItemView { /* Styles for dropdown list */
 </string>
        </property>
       </widget>
-      <widget class="QPushButton" name="PickNewMovingImageButton">
-       <property name="geometry">
-        <rect>
-         <x>350</x>
-         <y>0</y>
-         <width>171</width>
-         <height>30</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    background-color: #5a5a5a;
-    color: #e6e6e6; /* Text color */
-    border: 1px solid #e6e6e6; /* Border  */
-    border-radius: 5px; /* Optional: Rounded corners */
-    padding: 5px; /* Optional: Padding around text */
-}
-
-QPushButton:hover {
-    background-color: #666f75; /* Grey-blue when hovered */
-}
-
-QPushButton:pressed {
-    background-color: #7b8e9c; /* More blue when pressed */
-}</string>
-       </property>
-       <property name="text">
-        <string>Load New Moving Image</string>
-       </property>
-      </widget>
      </widget>
      <widget class="QFrame" name="FiducialPointControlsFrame">
       <property name="geometry">
        <rect>
-        <x>422</x>
-        <y>500</y>
-        <width>401</width>
-        <height>111</height>
+        <x>10</x>
+        <y>605</y>
+        <width>250</width>
+        <height>75</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -1267,8 +1457,8 @@ QPushButton:pressed {
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>401</width>
-         <height>24</height>
+         <width>250</width>
+         <height>25</height>
         </rect>
        </property>
        <property name="font">
@@ -1299,7 +1489,7 @@ QPushButton:pressed {
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:600; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:9pt;&quot;&gt;Fiducial Point Controls&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:9pt;&quot;&gt;Fiducial Point View&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
       <widget class="QPushButton" name="AddFiducialButton">
@@ -1307,7 +1497,7 @@ p, li { white-space: pre-wrap; }
         <rect>
          <x>10</x>
          <y>35</y>
-         <width>85</width>
+         <width>55</width>
          <height>30</height>
         </rect>
        </property>
@@ -1342,9 +1532,9 @@ QPushButton:pressed {
       <widget class="QPushButton" name="ColorFiducialButton">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>70</y>
-         <width>85</width>
+         <x>135</x>
+         <y>35</y>
+         <width>45</width>
          <height>30</height>
         </rect>
        </property>
@@ -1379,15 +1569,15 @@ QPushButton:pressed {
       <widget class="QPushButton" name="ShrinkFiducialButton">
        <property name="geometry">
         <rect>
-         <x>135</x>
-         <y>73</y>
-         <width>30</width>
+         <x>185</x>
+         <y>38</y>
+         <width>25</width>
          <height>25</height>
         </rect>
        </property>
        <property name="font">
         <font>
-         <pointsize>12</pointsize>
+         <pointsize>9</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -1416,15 +1606,15 @@ QPushButton:pressed {
       <widget class="QPushButton" name="GrowFiducialButton">
        <property name="geometry">
         <rect>
-         <x>170</x>
-         <y>73</y>
-         <width>30</width>
+         <x>215</x>
+         <y>38</y>
+         <width>25</width>
          <height>25</height>
         </rect>
        </property>
        <property name="font">
         <font>
-         <pointsize>12</pointsize>
+         <pointsize>9</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -1450,88 +1640,12 @@ QPushButton:pressed {
         <string>+</string>
        </property>
       </widget>
-      <widget class="QTextEdit" name="FiducialSizeText">
-       <property name="geometry">
-        <rect>
-         <x>93</x>
-         <y>73</y>
-         <width>41</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QTextEdit { 
-	background-color: #4b4b4b;
-	color: #e6e6e6; /* Text color */
-	border: 1px solid #4b4b4b; /* Border  */
-    border-radius: 5px; /* Optional: Rounded corners */
-}</string>
-       </property>
-       <property name="verticalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-       <property name="horizontalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-       <property name="html">
-        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;right&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8.25pt; font-weight:600;&quot;&gt;Size&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="DeleteFromFixedButton">
-       <property name="geometry">
-        <rect>
-         <x>305</x>
-         <y>35</y>
-         <width>85</width>
-         <height>30</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    background-color: #5a5a5a;
-    color: #e6e6e6; /* Text color */
-    border: 1px solid #e6e6e6; /* Border  */
-    border-radius: 5px; /* Optional: Rounded corners */
-    padding: 5px; /* Optional: Padding around text */
-}
-
-QPushButton:hover {
-    background-color: #666f75; /* Grey-blue when hovered */
-}
-
-QPushButton:pressed {
-    background-color: #7b8e9c; /* More blue when pressed */
-}</string>
-       </property>
-       <property name="text">
-        <string>Delete One</string>
-       </property>
-      </widget>
       <widget class="QPushButton" name="DeleteAllButton">
        <property name="geometry">
         <rect>
-         <x>305</x>
-         <y>70</y>
-         <width>85</width>
+         <x>70</x>
+         <y>35</y>
+         <width>55</width>
          <height>30</height>
         </rect>
        </property>
@@ -1560,17 +1674,15 @@ QPushButton:pressed {
 }</string>
        </property>
        <property name="text">
-        <string>Delete all</string>
+        <string>Delete</string>
        </property>
       </widget>
+      <zorder>DeleteAllButton</zorder>
       <zorder>FiducialFrameHeaderText</zorder>
       <zorder>AddFiducialButton</zorder>
       <zorder>GrowFiducialButton</zorder>
-      <zorder>FiducialSizeText</zorder>
-      <zorder>ShrinkFiducialButton</zorder>
-      <zorder>DeleteFromFixedButton</zorder>
-      <zorder>DeleteAllButton</zorder>
       <zorder>ColorFiducialButton</zorder>
+      <zorder>ShrinkFiducialButton</zorder>
      </widget>
      <widget class="QFrame" name="FixedImageDisplayFrame">
       <property name="geometry">
@@ -1597,7 +1709,7 @@ QPushButton:pressed {
      <widget class="QFrame" name="MovingImageDisplayFrame">
       <property name="geometry">
        <rect>
-        <x>422</x>
+        <x>425</x>
         <y>125</y>
         <width>400</width>
         <height>350</height>
@@ -1616,461 +1728,11 @@ QPushButton:pressed {
        <enum>QFrame::Raised</enum>
       </property>
      </widget>
-     <widget class="QFrame" name="ImageViewControlsFrame">
+     <widget class="QTextEdit" name="FiducialTabUpdateText">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>500</y>
-        <width>401</width>
-        <height>111</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QFrame { 
-	background-color: #4b4b4b;
-	border: 1px solid #e6e6e6; /* Border  */
-}</string>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <widget class="QTextEdit" name="ImageViewFrameHeaderText">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>401</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>10</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QTextEdit { 
-	background-color: #4b4b4b;
-	color: #e6e6e6; /* Text color */
-	border: 1px solid #e6e6e6; /* Border  */
-}</string>
-       </property>
-       <property name="verticalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-       <property name="horizontalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-       <property name="html">
-        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:600; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:9pt;&quot;&gt;Image View Controls&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="ZoomPanButton">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>35</y>
-         <width>85</width>
-         <height>30</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    background-color: #5a5a5a;
-    color: #e6e6e6; /* Text color */
-    border: 1px solid #e6e6e6; /* Border  */
-    border-radius: 5px; /* Optional: Rounded corners */
-    padding: 5px; /* Optional: Padding around text */
-}
-
-QPushButton:hover {
-    background-color: #666f75; /* Grey-blue when hovered */
-}
-
-QPushButton:pressed {
-    background-color: #7b8e9c; /* More blue when pressed */
-}</string>
-       </property>
-       <property name="text">
-        <string>Zoom/Pan</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="RotateButton">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>35</y>
-         <width>85</width>
-         <height>30</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    background-color: #5a5a5a;
-    color: #e6e6e6; /* Text color */
-    border: 1px solid #e6e6e6; /* Border  */
-    border-radius: 5px; /* Optional: Rounded corners */
-    padding: 5px; /* Optional: Padding around text */
-}
-
-QPushButton:hover {
-    background-color: #666f75; /* Grey-blue when hovered */
-}
-
-QPushButton:pressed {
-    background-color: #7b8e9c; /* More blue when pressed */
-}</string>
-       </property>
-       <property name="text">
-        <string>Rotate</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="RevertButton">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>70</y>
-         <width>85</width>
-         <height>30</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    background-color: #5a5a5a;
-    color: #e6e6e6; /* Text color */
-    border: 1px solid #e6e6e6; /* Border  */
-    border-radius: 5px; /* Optional: Rounded corners */
-    padding: 5px; /* Optional: Padding around text */
-}
-
-QPushButton:hover {
-    background-color: #666f75; /* Grey-blue when hovered */
-}
-
-QPushButton:pressed {
-    background-color: #7b8e9c; /* More blue when pressed */
-}</string>
-       </property>
-       <property name="text">
-        <string>Revert</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="FlipButton">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>70</y>
-         <width>85</width>
-         <height>30</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    background-color: #5a5a5a;
-    color: #e6e6e6; /* Text color */
-    border: 1px solid #e6e6e6; /* Border  */
-    border-radius: 5px; /* Optional: Rounded corners */
-    padding: 5px; /* Optional: Padding around text */
-}
-
-QPushButton:hover {
-    background-color: #666f75; /* Grey-blue when hovered */
-}
-
-QPushButton:pressed {
-    background-color: #7b8e9c; /* More blue when pressed */
-}</string>
-       </property>
-       <property name="text">
-        <string>Flip</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="brightnessDownButton">
-       <property name="geometry">
-        <rect>
-         <x>348</x>
-         <y>34</y>
-         <width>21</width>
-         <height>25</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    background-color: #5a5a5a;
-    color: #e6e6e6; /* Text color */
-    border: 1px solid #e6e6e6; /* Border  */
-    border-radius: 5px; /* Optional: Rounded corners */
-    padding: 5px; /* Optional: Padding around text */
-}
-
-QPushButton:hover {
-    background-color: #666f75; /* Grey-blue when hovered */
-}
-
-QPushButton:pressed {
-    background-color: #7b8e9c; /* More blue when pressed */
-}</string>
-       </property>
-       <property name="text">
-        <string>-</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="brightnessUpButton">
-       <property name="geometry">
-        <rect>
-         <x>373</x>
-         <y>34</y>
-         <width>21</width>
-         <height>25</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    background-color: #5a5a5a;
-    color: #e6e6e6; /* Text color */
-    border: 1px solid #e6e6e6; /* Border  */
-    border-radius: 5px; /* Optional: Rounded corners */
-    padding: 5px; /* Optional: Padding around text */
-}
-
-QPushButton:hover {
-    background-color: #666f75; /* Grey-blue when hovered */
-}
-
-QPushButton:pressed {
-    background-color: #7b8e9c; /* More blue when pressed */
-}</string>
-       </property>
-       <property name="text">
-        <string>+</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="contrastDownButton">
-       <property name="geometry">
-        <rect>
-         <x>348</x>
-         <y>74</y>
-         <width>21</width>
-         <height>25</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    background-color: #5a5a5a;
-    color: #e6e6e6; /* Text color */
-    border: 1px solid #e6e6e6; /* Border  */
-    border-radius: 5px; /* Optional: Rounded corners */
-    padding: 5px; /* Optional: Padding around text */
-}
-
-QPushButton:hover {
-    background-color: #666f75; /* Grey-blue when hovered */
-}
-
-QPushButton:pressed {
-    background-color: #7b8e9c; /* More blue when pressed */
-}</string>
-       </property>
-       <property name="text">
-        <string>-</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="contrastUpButton">
-       <property name="geometry">
-        <rect>
-         <x>373</x>
-         <y>74</y>
-         <width>21</width>
-         <height>25</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    background-color: #5a5a5a;
-    color: #e6e6e6; /* Text color */
-    border: 1px solid #e6e6e6; /* Border  */
-    border-radius: 5px; /* Optional: Rounded corners */
-    padding: 5px; /* Optional: Padding around text */
-}
-
-QPushButton:hover {
-    background-color: #666f75; /* Grey-blue when hovered */
-}
-
-QPushButton:pressed {
-    background-color: #7b8e9c; /* More blue when pressed */
-}</string>
-       </property>
-       <property name="text">
-        <string>+</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="ContrastImage">
-       <property name="geometry">
-        <rect>
-         <x>310</x>
-         <y>70</y>
-         <width>35</width>
-         <height>35</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    background-color: #4b4b4b;
-    color: #e6e6e6; /* Text color */
-    border: 1px solid #4b4b4b; /* Border  */
-    border-radius: 0px; /* Optional: Rounded corners */
-    padding: 5px; /* Optional: Padding around text */
-}
-
-QPushButton:hover {
-    background-color: #666f75; /* Grey-blue when hovered */
-}
-
-QPushButton:pressed {
-    background-color: #7b8e9c; /* More blue when pressed */
-}</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normaloff>Contrast.jpg</normaloff>Contrast.jpg</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>35</width>
-         <height>35</height>
-        </size>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="BrightnessImage">
-       <property name="geometry">
-        <rect>
-         <x>310</x>
-         <y>30</y>
-         <width>35</width>
-         <height>35</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    background-color: #4b4b4b;
-    color: #e6e6e6; /* Text color */
-    border: 1px solid #4b4b4b; /* Border  */
-    border-radius: 0px; /* Optional: Rounded corners */
-    padding: 5px; /* Optional: Padding around text */
-}
-
-QPushButton:hover {
-    background-color: #666f75; /* Grey-blue when hovered */
-}
-
-QPushButton:pressed {
-    background-color: #7b8e9c; /* More blue when pressed */
-}</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normaloff>Brightness.jpg</normaloff>Brightness.jpg</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>33</width>
-         <height>33</height>
-        </size>
-       </property>
-      </widget>
-     </widget>
-     <widget class="QTextEdit" name="CalculatingICPText">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>640</y>
+        <y>530</y>
         <width>341</width>
         <height>24</height>
        </rect>
@@ -2102,19 +1764,19 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Calculating Point Cloud Registration. Please Wait...&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
-     <widget class="QLabel" name="moving_image_border">
+     <widget class="QLabel" name="MovingImageBorder">
       <property name="geometry">
        <rect>
-        <x>420</x>
-        <y>123</y>
-        <width>404</width>
-        <height>354</height>
+        <x>422</x>
+        <y>122</y>
+        <width>406</width>
+        <height>356</height>
        </rect>
       </property>
       <property name="styleSheet">
        <string notr="true">QLabel {
         background-color: transparent; /* Transparent fill */
-        border: 3px solid #e6e6e6;       /* Green border */
+        border: 5px solid #e6e6e6;       /* Green border */
     }
 </string>
       </property>
@@ -2126,7 +1788,7 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>97</y>
+        <y>96</y>
         <width>400</width>
         <height>24</height>
        </rect>
@@ -2154,7 +1816,7 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>422</x>
-        <y>97</y>
+        <y>96</y>
         <width>400</width>
         <height>24</height>
        </rect>
@@ -2178,19 +1840,19 @@ p, li { white-space: pre-wrap; }
        <string> Moving Image</string>
       </property>
      </widget>
-     <widget class="QLabel" name="fixed_image_border">
+     <widget class="QLabel" name="FixedImageBorder">
       <property name="geometry">
        <rect>
-        <x>8</x>
-        <y>123</y>
-        <width>404</width>
-        <height>354</height>
+        <x>7</x>
+        <y>122</y>
+        <width>406</width>
+        <height>356</height>
        </rect>
       </property>
       <property name="styleSheet">
        <string notr="true">QLabel {
         background-color: transparent; /* Transparent fill */
-        border: 3px solid #e6e6e6;       /* Green border */
+        border: 5px solid #e6e6e6;       /* Green border */
     }
 </string>
       </property>
@@ -2198,28 +1860,459 @@ p, li { white-space: pre-wrap; }
        <string/>
       </property>
      </widget>
-     <zorder>fixed_image_border</zorder>
-     <zorder>moving_image_border</zorder>
+     <widget class="QPushButton" name="PickNewMovingImageButton">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>565</y>
+        <width>120</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+      </property>
+      <property name="text">
+       <string>View New Image</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="AttemptICPRegistrationButton">
+      <property name="geometry">
+       <rect>
+        <x>135</x>
+        <y>565</y>
+        <width>125</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: #447544;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #488a48; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #49a349; /* More blue when pressed */
+}</string>
+      </property>
+      <property name="text">
+       <string>Register Points</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="NavigationButton_F">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>650</y>
+        <width>65</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+      </property>
+      <property name="text">
+       <string>Navigate</string>
+      </property>
+     </widget>
+     <widget class="QFrame" name="WhatNextControlFrame_F">
+      <property name="geometry">
+       <rect>
+        <x>555</x>
+        <y>570</y>
+        <width>275</width>
+        <height>110</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame { 
+	background-color: #4b4b4b;
+	border: 1px solid #e6e6e6; /* Border  */
+}</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QTextEdit" name="WhatNextText_F">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>275</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QTextEdit { 
+	background-color: #4b4b4b;
+	color: #e6e6e6; /* Text color */
+	border: 1px solid #e6e6e6; /* Border  */
+}</string>
+       </property>
+       <property name="verticalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+       <property name="html">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:9pt; font-weight:600; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;App Navigation&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="GoToImportProjectTab_F">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>35</y>
+         <width>90</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Define Job</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="GoToFiducialsTab_F">
+       <property name="geometry">
+        <rect>
+         <x>105</x>
+         <y>35</y>
+         <width>90</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 4px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Pick Fiducials</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="GoToJobStatusTab_F">
+       <property name="geometry">
+        <rect>
+         <x>105</x>
+         <y>70</y>
+         <width>90</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Job Status</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="GoToCoordsTab_F">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>70</y>
+         <width>90</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Align Data</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="CloseNavigationButton_F">
+       <property name="geometry">
+        <rect>
+         <x>200</x>
+         <y>70</y>
+         <width>65</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Minimize</string>
+       </property>
+      </widget>
+     </widget>
      <zorder>ChooseMovingImageFrame</zorder>
+     <zorder>FixedImageBorder</zorder>
+     <zorder>MovingImageBorder</zorder>
      <zorder>FiducialPointControlsFrame</zorder>
      <zorder>FixedImageDisplayFrame</zorder>
      <zorder>MovingImageDisplayFrame</zorder>
-     <zorder>ImageViewControlsFrame</zorder>
-     <zorder>CalculatingICPText</zorder>
+     <zorder>FiducialTabUpdateText</zorder>
      <zorder>FixedImageFrameHeaderText</zorder>
      <zorder>MovingImageFrameHeaderText</zorder>
+     <zorder>PickNewMovingImageButton</zorder>
+     <zorder>AttemptICPRegistrationButton</zorder>
+     <zorder>NavigationButton_F</zorder>
+     <zorder>WhatNextControlFrame_F</zorder>
     </widget>
-    <widget class="QWidget" name="tab_2">
+    <widget class="QWidget" name="ApplyToCoordsTabName">
      <attribute name="title">
-      <string>View Overlay</string>
+      <string>Align Data</string>
      </attribute>
-     <widget class="QFrame" name="DefineFixedImageFrame_10">
+     <widget class="QLabel" name="RegisterCoordsFrameHeaderText">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>420</y>
-        <width>371</width>
-        <height>151</height>
+        <y>200</y>
+        <width>531</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QLabel { 
+	background-color: transparent;
+	color: #e6e6e6; /* Text color */
+	border: 0px solid #e6e6e6; /* Border  */
+    qproperty-alignment: 'AlignCenter';
+}</string>
+      </property>
+      <property name="text">
+       <string>Unregistered Moving Image</string>
+      </property>
+     </widget>
+     <widget class="QFrame" name="RegisterCoordsDisplayFrame">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>230</y>
+        <width>525</width>
+        <height>385</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame { 
+	background-color: #4b4b4b;
+	border: 0px solid #e6e6e6; /* Border  */
+}</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="RegisterCoordsImageBorder">
+      <property name="geometry">
+       <rect>
+        <x>7</x>
+        <y>227</y>
+        <width>531</width>
+        <height>391</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QLabel {
+        background-color: transparent; /* Transparent fill */
+        border: 5px solid #e6e6e6;       /* Green border */
+    }
+</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QFrame" name="ImageViewControlsFrame_C">
+      <property name="geometry">
+       <rect>
+        <x>555</x>
+        <y>480</y>
+        <width>125</width>
+        <height>75</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -2234,18 +2327,18 @@ p, li { white-space: pre-wrap; }
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <widget class="QTextEdit" name="textEdit_17">
+      <widget class="QTextEdit" name="ImageViewFrameHeaderText_C">
        <property name="geometry">
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>371</width>
-         <height>24</height>
+         <width>125</width>
+         <height>25</height>
         </rect>
        </property>
        <property name="font">
         <font>
-         <pointsize>9</pointsize>
+         <pointsize>10</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -2270,21 +2363,22 @@ p, li { white-space: pre-wrap; }
         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:9pt; font-weight:600; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Image View Controls&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:600; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:9pt;&quot;&gt;Fiducial Point View&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="pushButton_22">
+      <widget class="QPushButton" name="ColorFiducialButton_C">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>70</y>
-         <width>71</width>
+         <y>35</y>
+         <width>45</width>
          <height>30</height>
         </rect>
        </property>
        <property name="font">
         <font>
+         <pointsize>9</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -2307,236 +2401,21 @@ QPushButton:pressed {
 }</string>
        </property>
        <property name="text">
-        <string>Zoom</string>
+        <string>Color</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="pushButton_27">
+      <widget class="QPushButton" name="GrowFiducialButton_C">
        <property name="geometry">
         <rect>
-         <x>85</x>
-         <y>70</y>
-         <width>71</width>
-         <height>30</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    background-color: #5a5a5a;
-    color: #e6e6e6; /* Text color */
-    border: 1px solid #e6e6e6; /* Border  */
-    border-radius: 5px; /* Optional: Rounded corners */
-    padding: 5px; /* Optional: Padding around text */
-}
-
-QPushButton:hover {
-    background-color: #666f75; /* Grey-blue when hovered */
-}
-
-QPushButton:pressed {
-    background-color: #7b8e9c; /* More blue when pressed */
-}</string>
-       </property>
-       <property name="text">
-        <string>Pan</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushButton_28">
-       <property name="geometry">
-        <rect>
-         <x>160</x>
-         <y>70</y>
-         <width>71</width>
-         <height>30</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    background-color: #5a5a5a;
-    color: #e6e6e6; /* Text color */
-    border: 1px solid #e6e6e6; /* Border  */
-    border-radius: 5px; /* Optional: Rounded corners */
-    padding: 5px; /* Optional: Padding around text */
-}
-
-QPushButton:hover {
-    background-color: #666f75; /* Grey-blue when hovered */
-}
-
-QPushButton:pressed {
-    background-color: #7b8e9c; /* More blue when pressed */
-}</string>
-       </property>
-       <property name="text">
-        <string>Crop</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushButton_30">
-       <property name="geometry">
-        <rect>
-         <x>85</x>
-         <y>105</y>
-         <width>71</width>
-         <height>30</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    background-color: #5a5a5a;
-    color: #e6e6e6; /* Text color */
-    border: 1px solid #e6e6e6; /* Border  */
-    border-radius: 5px; /* Optional: Rounded corners */
-    padding: 5px; /* Optional: Padding around text */
-}
-
-QPushButton:hover {
-    background-color: #666f75; /* Grey-blue when hovered */
-}
-
-QPushButton:pressed {
-    background-color: #7b8e9c; /* More blue when pressed */
-}</string>
-       </property>
-       <property name="text">
-        <string>Rotate</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushButton_31">
-       <property name="geometry">
-        <rect>
-         <x>160</x>
-         <y>105</y>
-         <width>71</width>
-         <height>30</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    background-color: #5a5a5a;
-    color: #e6e6e6; /* Text color */
-    border: 1px solid #e6e6e6; /* Border  */
-    border-radius: 5px; /* Optional: Rounded corners */
-    padding: 5px; /* Optional: Padding around text */
-}
-
-QPushButton:hover {
-    background-color: #666f75; /* Grey-blue when hovered */
-}
-
-QPushButton:pressed {
-    background-color: #7b8e9c; /* More blue when pressed */
-}</string>
-       </property>
-       <property name="text">
-        <string>Revert</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushButton_32">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>105</y>
-         <width>71</width>
-         <height>30</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    background-color: #5a5a5a;
-    color: #e6e6e6; /* Text color */
-    border: 1px solid #e6e6e6; /* Border  */
-    border-radius: 5px; /* Optional: Rounded corners */
-    padding: 5px; /* Optional: Padding around text */
-}
-
-QPushButton:hover {
-    background-color: #666f75; /* Grey-blue when hovered */
-}
-
-QPushButton:pressed {
-    background-color: #7b8e9c; /* More blue when pressed */
-}</string>
-       </property>
-       <property name="text">
-        <string>Flip</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushButton_33">
-       <property name="geometry">
-        <rect>
-         <x>305</x>
-         <y>70</y>
-         <width>21</width>
+         <x>90</x>
+         <y>38</y>
+         <width>25</width>
          <height>25</height>
         </rect>
        </property>
        <property name="font">
         <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    background-color: #5a5a5a;
-    color: #e6e6e6; /* Text color */
-    border: 1px solid #e6e6e6; /* Border  */
-    border-radius: 5px; /* Optional: Rounded corners */
-    padding: 5px; /* Optional: Padding around text */
-}
-
-QPushButton:hover {
-    background-color: #666f75; /* Grey-blue when hovered */
-}
-
-QPushButton:pressed {
-    background-color: #7b8e9c; /* More blue when pressed */
-}</string>
-       </property>
-       <property name="text">
-        <string>-</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushButton_34">
-       <property name="geometry">
-        <rect>
-         <x>330</x>
-         <y>70</y>
-         <width>21</width>
-         <height>25</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
+         <pointsize>9</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -2562,17 +2441,18 @@ QPushButton:pressed {
         <string>+</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="pushButton_35">
+      <widget class="QPushButton" name="ShrinkFiducialButton_C">
        <property name="geometry">
         <rect>
-         <x>305</x>
-         <y>110</y>
-         <width>21</width>
+         <x>60</x>
+         <y>38</y>
+         <width>25</width>
          <height>25</height>
         </rect>
        </property>
        <property name="font">
         <font>
+         <pointsize>9</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -2598,525 +2478,20 @@ QPushButton:pressed {
         <string>-</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="pushButton_36">
-       <property name="geometry">
-        <rect>
-         <x>330</x>
-         <y>110</y>
-         <width>21</width>
-         <height>25</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    background-color: #5a5a5a;
-    color: #e6e6e6; /* Text color */
-    border: 1px solid #e6e6e6; /* Border  */
-    border-radius: 5px; /* Optional: Rounded corners */
-    padding: 5px; /* Optional: Padding around text */
-}
-
-QPushButton:hover {
-    background-color: #666f75; /* Grey-blue when hovered */
-}
-
-QPushButton:pressed {
-    background-color: #7b8e9c; /* More blue when pressed */
-}</string>
-       </property>
-       <property name="text">
-        <string>+</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushButton_14">
-       <property name="geometry">
-        <rect>
-         <x>260</x>
-         <y>63</y>
-         <width>40</width>
-         <height>40</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    background-color: #4b4b4b;
-    color: #e6e6e6; /* Text color */
-    border: 1px solid #4b4b4b; /* Border  */
-    border-radius: 0px; /* Optional: Rounded corners */
-    padding: 5px; /* Optional: Padding around text */
-}
-
-QPushButton:hover {
-    background-color: #666f75; /* Grey-blue when hovered */
-}
-
-QPushButton:pressed {
-    background-color: #7b8e9c; /* More blue when pressed */
-}</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normaloff>../../../../.designer/backup/Brightness.jpg</normaloff>../../../../.designer/backup/Brightness.jpg</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>40</width>
-         <height>40</height>
-        </size>
-       </property>
-      </widget>
      </widget>
-     <widget class="QFrame" name="DefineFixedImageFrame_11">
-      <property name="geometry">
-       <rect>
-        <x>390</x>
-        <y>100</y>
-        <width>371</width>
-        <height>311</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QFrame { 
-	background-color: #4b4b4b;
-	border: 1px solid #e6e6e6; /* Border  */
-}</string>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <widget class="QTextEdit" name="textEdit_21">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>371</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QTextEdit { 
-	background-color: #4b4b4b;
-	color: #e6e6e6; /* Text color */
-	border: 1px solid #e6e6e6; /* Border  */
-}</string>
-       </property>
-       <property name="verticalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-       <property name="horizontalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-       <property name="html">
-        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:9pt; font-weight:600; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Moving Image&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-      </widget>
-     </widget>
-     <widget class="QFrame" name="DefineFixedImageFrame_12">
-      <property name="geometry">
-       <rect>
-        <x>390</x>
-        <y>420</y>
-        <width>371</width>
-        <height>71</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QFrame { 
-	background-color: #4b4b4b;
-	border: 1px solid #e6e6e6; /* Border  */
-}</string>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <widget class="QTextEdit" name="textEdit_22">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>371</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QTextEdit { 
-	background-color: #4b4b4b;
-	color: #e6e6e6; /* Text color */
-	border: 1px solid #e6e6e6; /* Border  */
-}</string>
-       </property>
-       <property name="verticalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-       <property name="horizontalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-       <property name="html">
-        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:9pt; font-weight:600; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Is the registration acceptable?&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushButton_37">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>33</y>
-         <width>141</width>
-         <height>30</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    background-color: #5a5a5a;
-    color: #e6e6e6; /* Text color */
-    border: 1px solid #e6e6e6; /* Border  */
-    border-radius: 5px; /* Optional: Rounded corners */
-    padding: 5px; /* Optional: Padding around text */
-}
-
-QPushButton:hover {
-    background-color: #666f75; /* Grey-blue when hovered */
-}
-
-QPushButton:pressed {
-    background-color: #7b8e9c; /* More blue when pressed */
-}</string>
-       </property>
-       <property name="text">
-        <string>Yes, Save the Results</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushButton_38">
-       <property name="geometry">
-        <rect>
-         <x>155</x>
-         <y>33</y>
-         <width>141</width>
-         <height>30</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    background-color: #5a5a5a;
-    color: #e6e6e6; /* Text color */
-    border: 1px solid #e6e6e6; /* Border  */
-    border-radius: 5px; /* Optional: Rounded corners */
-    padding: 5px; /* Optional: Padding around text */
-}
-
-QPushButton:hover {
-    background-color: #666f75; /* Grey-blue when hovered */
-}
-
-QPushButton:pressed {
-    background-color: #7b8e9c; /* More blue when pressed */
-}</string>
-       </property>
-       <property name="text">
-        <string>No, Return to Fiducials</string>
-       </property>
-      </widget>
-     </widget>
-     <widget class="QFrame" name="DefineFixedImageFrame_13">
-      <property name="geometry">
-       <rect>
-        <x>390</x>
-        <y>500</y>
-        <width>371</width>
-        <height>71</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QFrame { 
-	background-color: #4b4b4b;
-	border: 1px solid #e6e6e6; /* Border  */
-}</string>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <widget class="QTextEdit" name="textEdit_24">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>371</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QTextEdit { 
-	background-color: #4b4b4b;
-	color: #e6e6e6; /* Text color */
-	border: 1px solid #e6e6e6; /* Border  */
-}</string>
-       </property>
-       <property name="verticalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-       <property name="horizontalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-       <property name="html">
-        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:9pt; font-weight:600; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;What Do You Want to Do Next?&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushButton_42">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>33</y>
-         <width>111</width>
-         <height>30</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    background-color: #5a5a5a;
-    color: #e6e6e6; /* Text color */
-    border: 1px solid #e6e6e6; /* Border  */
-    border-radius: 5px; /* Optional: Rounded corners */
-    padding: 5px; /* Optional: Padding around text */
-}
-
-QPushButton:hover {
-    background-color: #666f75; /* Grey-blue when hovered */
-}
-
-QPushButton:pressed {
-    background-color: #7b8e9c; /* More blue when pressed */
-}</string>
-       </property>
-       <property name="text">
-        <string>Register Images</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushButton_43">
-       <property name="geometry">
-        <rect>
-         <x>125</x>
-         <y>33</y>
-         <width>111</width>
-         <height>30</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    background-color: #5a5a5a;
-    color: #e6e6e6; /* Text color */
-    border: 1px solid #e6e6e6; /* Border  */
-    border-radius: 5px; /* Optional: Rounded corners */
-    padding: 5px; /* Optional: Padding around text */
-}
-
-QPushButton:hover {
-    background-color: #666f75; /* Grey-blue when hovered */
-}
-
-QPushButton:pressed {
-    background-color: #7b8e9c; /* More blue when pressed */
-}</string>
-       </property>
-       <property name="text">
-        <string>Apply to Data</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushButton_44">
-       <property name="geometry">
-        <rect>
-         <x>240</x>
-         <y>33</y>
-         <width>111</width>
-         <height>30</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    background-color: #5a5a5a;
-    color: #e6e6e6; /* Text color */
-    border: 1px solid #e6e6e6; /* Border  */
-    border-radius: 5px; /* Optional: Rounded corners */
-    padding: 5px; /* Optional: Padding around text */
-}
-
-QPushButton:hover {
-    background-color: #666f75; /* Grey-blue when hovered */
-}
-
-QPushButton:pressed {
-    background-color: #7b8e9c; /* More blue when pressed */
-}</string>
-       </property>
-       <property name="text">
-        <string>Apply to Images</string>
-       </property>
-      </widget>
-     </widget>
-     <widget class="QFrame" name="DefineFixedImageFrame_14">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>100</y>
-        <width>371</width>
-        <height>311</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QFrame { 
-	background-color: #4b4b4b;
-	border: 1px solid #e6e6e6; /* Border  */
-}</string>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <widget class="QTextEdit" name="textEdit_26">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>371</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QTextEdit { 
-	background-color: #4b4b4b;
-	color: #e6e6e6; /* Text color */
-	border: 1px solid #e6e6e6; /* Border  */
-}</string>
-       </property>
-       <property name="verticalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-       <property name="horizontalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-       <property name="html">
-        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:9pt; font-weight:600; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Fixed Image&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-      </widget>
-     </widget>
-     <widget class="QFrame" name="DefineFixedImageFrame_16">
+     <widget class="QFrame" name="RegisterCoordinatesFrame">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>231</width>
-        <height>81</height>
+        <width>820</width>
+        <height>180</height>
        </rect>
       </property>
       <property name="styleSheet">
        <string notr="true">QFrame { 
-	background-color: #323232;
-	border: 1px solid #323232; /* Border  */
-    border-radius: 5px; /* Optional: Rounded corners */
+	background-color: #4b4b4b;
+	border: 1px solid #e6e6e6; /* Border  */
 }</string>
       </property>
       <property name="frameShape">
@@ -3125,21 +2500,27 @@ p, li { white-space: pre-wrap; }
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <widget class="QTextEdit" name="textEdit_29">
+      <widget class="QTextEdit" name="RegisterCoordinatesTableHeaderText">
        <property name="geometry">
         <rect>
-         <x>2</x>
-         <y>5</y>
-         <width>201</width>
-         <height>24</height>
+         <x>0</x>
+         <y>0</y>
+         <width>820</width>
+         <height>25</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
        </property>
        <property name="styleSheet">
         <string notr="true">QTextEdit { 
-	background-color: #323232;
+	background-color: #4b4b4b;
 	color: #e6e6e6; /* Text color */
-	border: 1px solid #323232; /* Border  */
-    border-radius: 5px; /* Optional: Rounded corners */
+	border: 1px solid #e6e6e6; /* Border  */
 }</string>
        </property>
        <property name="verticalScrollBarPolicy">
@@ -3155,58 +2536,175 @@ p, li { white-space: pre-wrap; }
         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:9pt; font-weight:600;&quot;&gt;Fixed Image Size: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:9pt; font-weight:600; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Define Coordinates to Register&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
-      <widget class="QTextEdit" name="textEdit_30">
+      <widget class="QPushButton" name="chooseCoordinatesFileButton">
        <property name="geometry">
         <rect>
-         <x>2</x>
-         <y>28</y>
-         <width>201</width>
-         <height>24</height>
+         <x>10</x>
+         <y>65</y>
+         <width>41</width>
+         <height>31</height>
         </rect>
        </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="styleSheet">
-        <string notr="true">QTextEdit { 
-	background-color: #323232;
-	color: #e6e6e6; /* Text color */
-	border: 1px solid #323232; /* Border  */
-    border-radius: 5px; /* Optional: Rounded corners */
-}</string>
+        <string notr="true">QPushButton {
+    background-color: #323232;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 0px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+	qproperty-icon: url(Folder.jpg); /* Default icon */
+}
+ </string>
        </property>
-       <property name="verticalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
+       <property name="text">
+        <string/>
        </property>
-       <property name="horizontalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-       <property name="html">
-        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:9pt; font-weight:600;&quot;&gt;Unregistered RMSE: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <property name="iconSize">
+        <size>
+         <width>35</width>
+         <height>35</height>
+        </size>
        </property>
       </widget>
-      <widget class="QTextEdit" name="textEdit_31">
+      <widget class="QTableWidget" name="RegisterCoordinatesTableWidget">
        <property name="geometry">
         <rect>
-         <x>2</x>
-         <y>51</y>
-         <width>201</width>
+         <x>10</x>
+         <y>95</y>
+         <width>800</width>
+         <height>75</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QTableView {
+    background-color: #5a5a5a;
+    color: #e6e6e6; 
+    font-weight: bold;
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 0px; /* Optional: Rounded corners */
+}
+
+QHeaderView::section {
+    border: 0px solid #e6e6e6; /* Border  */
+    gridline-color: #e6e6e6; /* Set the color of the gridlines */
+    background-color: #646464;
+    color: #e6e6e6; 
+    font-weight: bold;
+    padding: 4px;
+}
+
+QHeaderView {
+	border: 0px solid #e6e6e6; /* Border  */
+    background-color: #646464; /* Background for the entire header area */
+}
+
+QTableCornerButton::section {
+    background-color: #646464; /* Match the header background */
+}
+
+QTableWidget::item {
+    border: 0px solid #e6e6e6; /* Border  */
+    gridline-color: #e6e6e6; /* Set the color of the gridlines */
+	text-align: center;
+}
+
+QTableView::viewport {
+    background-color: #646464; /* Background beneath the last row */
+}
+
+QTableWidget::item:selected {
+    background-color: #666f75; /* background for selected cells */
+   color: #e6e6e6; /* Text color for selected cells */
+}
+
+QTableWidget::item:selected:!active {
+    background-color: #5a5a5a; /* background when table loses focus */
+    color: #e6e6e6; /* Text color */
+}
+
+QTableWidget QLineEdit {
+    background-color: #666f75; /* Background when editing (light orange) */
+    color: #e6e6e6; /* Text color while editing */
+    border: 1px solid #e6e6e6; /* Border for the editor */
+}</string>
+       </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
+       <property name="rowCount">
+        <number>1</number>
+       </property>
+       <property name="columnCount">
+        <number>7</number>
+       </property>
+       <attribute name="horizontalHeaderCascadingSectionResizes">
+        <bool>true</bool>
+       </attribute>
+       <attribute name="horizontalHeaderMinimumSectionSize">
+        <number>75</number>
+       </attribute>
+       <attribute name="horizontalHeaderDefaultSectionSize">
+        <number>109</number>
+       </attribute>
+       <attribute name="horizontalHeaderStretchLastSection">
+        <bool>true</bool>
+       </attribute>
+       <attribute name="verticalHeaderVisible">
+        <bool>false</bool>
+       </attribute>
+       <attribute name="verticalHeaderMinimumSectionSize">
+        <number>25</number>
+       </attribute>
+       <attribute name="verticalHeaderDefaultSectionSize">
+        <number>25</number>
+       </attribute>
+       <row/>
+       <column/>
+       <column/>
+       <column/>
+       <column/>
+       <column/>
+       <column/>
+       <column/>
+      </widget>
+      <widget class="QTextEdit" name="BrowseForCoordinatesFileText">
+       <property name="geometry">
+        <rect>
+         <x>55</x>
+         <y>68</y>
+         <width>161</width>
          <height>24</height>
         </rect>
        </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="styleSheet">
         <string notr="true">QTextEdit { 
-	background-color: #323232;
+	background-color: transparent;
 	color: #e6e6e6; /* Text color */
-	border: 1px solid #323232; /* Border  */
+	border: 0px solid #4b4b4b; /* Border  */
     border-radius: 5px; /* Optional: Rounded corners */
 }</string>
        </property>
@@ -3223,17 +2721,1478 @@ p, li { white-space: pre-wrap; }
         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:9pt; font-weight:600;&quot;&gt;Registered RMSE: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:9pt; font-weight:600; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Browse Coordinates File&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="RegisterToWhichImageComboBox">
+       <property name="geometry">
+        <rect>
+         <x>280</x>
+         <y>65</y>
+         <width>201</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QComboBox {
+    background-color: #707070; /* Light gray background color */
+    color: #e6e6e6; /* Dark gray font color */
+    padding: 5px; /* Optional: adds padding inside the combobox */
+    border: 1px solid #555555; /* Optional: border color */
+    border-radius: 5px; /* Optional: rounded corners */
+}
+
+QComboBox QAbstractItemView { /* Styles for dropdown list */
+    background-color: #707070; /* Dropdown background color */
+    color: #e6e6e6; /* Dropdown font color */
+    selection-background-color: #cce5ff; /* Background color when an item is selected */
+    selection-color: #e6e6e6; /* Font color of selected item */
+}
+
+</string>
+       </property>
+      </widget>
+      <widget class="QTextEdit" name="CorrespondingImageText">
+       <property name="geometry">
+        <rect>
+         <x>490</x>
+         <y>30</y>
+         <width>191</width>
+         <height>24</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QTextEdit { 
+	background-color: transparent;
+	color: #e6e6e6; /* Text color */
+	border: 0px solid #4b4b4b; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+}</string>
+       </property>
+       <property name="verticalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+       <property name="html">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:9pt; font-weight:600; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Corresponding Image&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="LoadCoordinatesButton">
+       <property name="geometry">
+        <rect>
+         <x>750</x>
+         <y>60</y>
+         <width>60</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Load </string>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="CorrespondingImageComboBox">
+       <property name="geometry">
+        <rect>
+         <x>280</x>
+         <y>30</y>
+         <width>201</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QComboBox {
+    background-color: #707070; /* Light gray background color */
+    color: #e6e6e6; /* Dark gray font color */
+    padding: 5px; /* Optional: adds padding inside the combobox */
+    border: 1px solid #555555; /* Optional: border color */
+    border-radius: 5px; /* Optional: rounded corners */
+}
+
+QComboBox QAbstractItemView { /* Styles for dropdown list */
+    background-color: #707070; /* Dropdown background color */
+    color: #e6e6e6; /* Dropdown font color */
+    selection-background-color: #cce5ff; /* Background color when an item is selected */
+    selection-color: #e6e6e6; /* Font color of selected item */
+}
+
+</string>
+       </property>
+      </widget>
+      <widget class="QTextEdit" name="CorrespondingImageText_2">
+       <property name="geometry">
+        <rect>
+         <x>490</x>
+         <y>65</y>
+         <width>191</width>
+         <height>24</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QTextEdit { 
+	background-color: transparent;
+	color: #e6e6e6; /* Text color */
+	border: 0px solid #4b4b4b; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+}</string>
+       </property>
+       <property name="verticalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+       <property name="html">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:9pt; font-weight:600; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Register to Which Image&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+      <zorder>RegisterCoordinatesTableHeaderText</zorder>
+      <zorder>BrowseForCoordinatesFileText</zorder>
+      <zorder>RegisterToWhichImageComboBox</zorder>
+      <zorder>CorrespondingImageText</zorder>
+      <zorder>chooseCoordinatesFileButton</zorder>
+      <zorder>RegisterCoordinatesTableWidget</zorder>
+      <zorder>LoadCoordinatesButton</zorder>
+      <zorder>CorrespondingImageComboBox</zorder>
+      <zorder>CorrespondingImageText_2</zorder>
+     </widget>
+     <widget class="QFrame" name="CoordinatesOverlayControlsFrame">
+      <property name="geometry">
+       <rect>
+        <x>555</x>
+        <y>230</y>
+        <width>275</width>
+        <height>223</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame { 
+	background-color: #4b4b4b;
+	border: 1px solid #e6e6e6; /* Border  */
+}</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QTextEdit" name="CoordinatesOverlayHeaderText">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>275</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QTextEdit { 
+	background-color: #4b4b4b;
+	color: #e6e6e6; /* Text color */
+	border: 1px solid #e6e6e6; /* Border  */
+}</string>
+       </property>
+       <property name="verticalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+       <property name="html">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:600; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:9pt;&quot;&gt;Confirm Coordinates Overlay&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="SwapXYButton">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>35</y>
+         <width>85</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Swap XY</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="EditTableButton">
+       <property name="geometry">
+        <rect>
+         <x>100</x>
+         <y>35</y>
+         <width>85</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Edit Table</string>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="UnregisteredMovingCheckBox">
+       <property name="geometry">
+        <rect>
+         <x>165</x>
+         <y>67</y>
+         <width>101</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QCheckBox {
+    background-color: #4b4b4b;
+    color: #e6e6e6; /* Text color */
+    padding: 2px; /* Optional: space around the text */
+	width: 100px; /* Optional: Adjust width to allow for wrapping */
+    word-wrap: break-word; /* Enable word wrap */
+}
+</string>
+       </property>
+       <property name="text">
+        <string>Looks Good?</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="ViewFixedButton">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>146</y>
+         <width>145</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Target Image</string>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="RegisteredMovingCheckBox">
+       <property name="geometry">
+        <rect>
+         <x>165</x>
+         <y>104</y>
+         <width>101</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QCheckBox {
+    background-color: #4b4b4b;
+    color: #e6e6e6; /* Text color */
+    padding: 2px; /* Optional: space around the text */
+	width: 100px; /* Optional: Adjust width to allow for wrapping */
+    word-wrap: break-word; /* Enable word wrap */
+}
+</string>
+       </property>
+       <property name="text">
+        <string>Looks Good?</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="ViewUnregisteredMovingButton">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>72</y>
+         <width>145</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Unregistered Moving</string>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="FixedCheckBox">
+       <property name="geometry">
+        <rect>
+         <x>165</x>
+         <y>142</y>
+         <width>101</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QCheckBox {
+    background-color: #4b4b4b;
+    color: #e6e6e6; /* Text color */
+    padding: 2px; /* Optional: space around the text */
+	width: 100px; /* Optional: Adjust width to allow for wrapping */
+    word-wrap: break-word; /* Enable word wrap */
+}
+</string>
+       </property>
+       <property name="text">
+        <string>Looks Good?</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="ViewRegisteredMovingButton">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>109</y>
+         <width>145</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Fixed Image</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="SaveRegisteredCoordinatesButton">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>183</y>
+         <width>145</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Save Registered Data</string>
        </property>
       </widget>
      </widget>
-     <widget class="QTextEdit" name="textEdit_32">
+     <widget class="QFrame" name="DisableFrame_C">
+      <property name="geometry">
+       <rect>
+        <x>5</x>
+        <y>650</y>
+        <width>31</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame { 
+	background-color: rgba(255, 255, 255, 0.4);
+	border: 1px solid #e6e6e6; /* Border  */
+}</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+     </widget>
+     <widget class="QFrame" name="WhatNextControlFrame_C">
+      <property name="geometry">
+       <rect>
+        <x>555</x>
+        <y>570</y>
+        <width>275</width>
+        <height>110</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame { 
+	background-color: #4b4b4b;
+	border: 1px solid #e6e6e6; /* Border  */
+}</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QTextEdit" name="WhatNextText_C">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>275</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QTextEdit { 
+	background-color: #4b4b4b;
+	color: #e6e6e6; /* Text color */
+	border: 1px solid #e6e6e6; /* Border  */
+}</string>
+       </property>
+       <property name="verticalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+       <property name="html">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:9pt; font-weight:600; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;App Navigation&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="GoToImportProjectTab_C">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>35</y>
+         <width>90</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Define Job</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="GoToFiducialsTab_C">
+       <property name="geometry">
+        <rect>
+         <x>105</x>
+         <y>35</y>
+         <width>90</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 4px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Pick Fiducials</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="GoToJobStatusTab_C">
+       <property name="geometry">
+        <rect>
+         <x>105</x>
+         <y>70</y>
+         <width>90</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Job Status</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="GoToCoordsTab_C">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>70</y>
+         <width>90</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Align Data</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="CloseNavigationButton_C">
+       <property name="geometry">
+        <rect>
+         <x>200</x>
+         <y>70</y>
+         <width>65</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Minimize</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QPushButton" name="NavigationButton_C">
+      <property name="geometry">
+       <rect>
+        <x>480</x>
+        <y>650</y>
+        <width>65</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+      </property>
+      <property name="text">
+       <string>Navigate</string>
+      </property>
+     </widget>
+     <widget class="QTextEdit" name="PlottingImageText">
+      <property name="geometry">
+       <rect>
+        <x>550</x>
+        <y>455</y>
+        <width>271</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QTextEdit { 
+	background-color: #323232;
+	color: #e6e6e6; /* Text color */
+	border: 1px solid #323232; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+}</string>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="html">
+       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Plotting Image. Please Wait...&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+     <widget class="QFrame" name="DisableFrame_C_2">
+      <property name="geometry">
+       <rect>
+        <x>45</x>
+        <y>650</y>
+        <width>31</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame { 
+	background-color: rgba(255, 255, 255, 0.4);
+	border: 1px solid #e6e6e6; /* Border  */
+}</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+     </widget>
+     <widget class="QFrame" name="DisableFrame_C_3">
+      <property name="geometry">
+       <rect>
+        <x>85</x>
+        <y>650</y>
+        <width>31</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame { 
+	background-color: rgba(255, 255, 255, 0.4);
+	border: 1px solid #e6e6e6; /* Border  */
+}</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+     </widget>
+     <widget class="QTextEdit" name="MakingCoordOverlayText">
+      <property name="geometry">
+       <rect>
+        <x>430</x>
+        <y>200</y>
+        <width>400</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QTextEdit { 
+	background-color: #323232;
+	color: #e6e6e6; /* Text color */
+	border: 1px solid #323232; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+}</string>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="html">
+       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Making the Coordinate Overlay Image. Please Wait...&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+     <zorder>RegisterCoordsImageBorder</zorder>
+     <zorder>RegisterCoordinatesFrame</zorder>
+     <zorder>RegisterCoordsFrameHeaderText</zorder>
+     <zorder>RegisterCoordsDisplayFrame</zorder>
+     <zorder>ImageViewControlsFrame_C</zorder>
+     <zorder>CoordinatesOverlayControlsFrame</zorder>
+     <zorder>DisableFrame_C</zorder>
+     <zorder>WhatNextControlFrame_C</zorder>
+     <zorder>NavigationButton_C</zorder>
+     <zorder>PlottingImageText</zorder>
+     <zorder>DisableFrame_C_2</zorder>
+     <zorder>DisableFrame_C_3</zorder>
+     <zorder>MakingCoordOverlayText</zorder>
+    </widget>
+    <widget class="QWidget" name="JobStatusTabName">
+     <attribute name="title">
+      <string>Job Status</string>
+     </attribute>
+     <widget class="QFrame" name="JobStatusFrame">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>575</y>
-        <width>321</width>
+        <y>10</y>
+        <width>820</width>
+        <height>451</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame { 
+	background-color: #4b4b4b;
+	border: 1px solid #e6e6e6; /* Border  */
+}</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QTextEdit" name="JobStatusHeaderText">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>820</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QTextEdit { 
+	background-color: #4b4b4b;
+	color: #e6e6e6; /* Text color */
+	border: 1px solid #e6e6e6; /* Border  */
+}</string>
+       </property>
+       <property name="verticalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+       <property name="html">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:9pt; font-weight:600; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Job Status for each Moving Image&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+      <widget class="QTableWidget" name="JobStatusTableWidget">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>35</y>
+         <width>800</width>
+         <height>401</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QTableView {
+    background-color: #5a5a5a;
+    color: #e6e6e6; 
+    font-weight: bold;
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 0px; /* Optional: Rounded corners */
+}
+
+QHeaderView::section {
+    border: 0px solid #e6e6e6; /* Border  */
+    gridline-color: #e6e6e6; /* Set the color of the gridlines */
+    background-color: #646464;
+    color: #e6e6e6; 
+    font-weight: bold;
+    padding: 4px;
+}
+
+QHeaderView {
+	border: 0px solid #e6e6e6; /* Border  */
+    background-color: #646464; /* Background for the entire header area */
+}
+
+QTableCornerButton::section {
+    background-color: #646464; /* Match the header background */
+}
+
+QTableWidget::item {
+    border: 0px solid #e6e6e6; /* Border  */
+    gridline-color: #e6e6e6; /* Set the color of the gridlines */
+}
+
+QTableView::viewport {
+    background-color: #646464; /* Background beneath the last row */
+}
+
+QTableWidget::item:selected {
+    background-color: #666f75; /* background for selected cells */
+   color: #e6e6e6; /* Text color for selected cells */
+}
+
+QTableWidget::item:selected:!active {
+    background-color: #5a5a5a; /* background when table loses focus */
+    color: #e6e6e6; /* Text color */
+}
+
+QTableWidget QLineEdit {
+    background-color: #666f75; /* Background when editing (light orange) */
+    color: #e6e6e6; /* Text color while editing */
+    border: 1px solid #e6e6e6; /* Border for the editor */
+}</string>
+       </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
+       <property name="rowCount">
+        <number>1</number>
+       </property>
+       <property name="columnCount">
+        <number>5</number>
+       </property>
+       <attribute name="horizontalHeaderMinimumSectionSize">
+        <number>75</number>
+       </attribute>
+       <attribute name="horizontalHeaderDefaultSectionSize">
+        <number>150</number>
+       </attribute>
+       <attribute name="horizontalHeaderStretchLastSection">
+        <bool>true</bool>
+       </attribute>
+       <attribute name="verticalHeaderVisible">
+        <bool>false</bool>
+       </attribute>
+       <attribute name="verticalHeaderMinimumSectionSize">
+        <number>25</number>
+       </attribute>
+       <attribute name="verticalHeaderDefaultSectionSize">
+        <number>25</number>
+       </attribute>
+       <row/>
+       <column/>
+       <column/>
+       <column/>
+       <column/>
+       <column/>
+      </widget>
+     </widget>
+     <widget class="QPushButton" name="NavigationButton_J">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>610</y>
+        <width>65</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+      </property>
+      <property name="text">
+       <string>Navigate</string>
+      </property>
+     </widget>
+     <widget class="QFrame" name="WhatNextControlFrame_J">
+      <property name="geometry">
+       <rect>
+        <x>555</x>
+        <y>570</y>
+        <width>275</width>
+        <height>110</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame { 
+	background-color: #4b4b4b;
+	border: 1px solid #e6e6e6; /* Border  */
+}</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QTextEdit" name="WhatNextText_J">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>275</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QTextEdit { 
+	background-color: #4b4b4b;
+	color: #e6e6e6; /* Text color */
+	border: 1px solid #e6e6e6; /* Border  */
+}</string>
+       </property>
+       <property name="verticalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+       <property name="html">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:9pt; font-weight:600; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;App Navigation&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="GoToImportProjectTab_J">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>35</y>
+         <width>90</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Define Job</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="GoToFiducialsTab_J">
+       <property name="geometry">
+        <rect>
+         <x>105</x>
+         <y>35</y>
+         <width>90</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 4px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}
+</string>
+       </property>
+       <property name="text">
+        <string>Pick Fiducials</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="GoToJobStatusTab_J">
+       <property name="geometry">
+        <rect>
+         <x>105</x>
+         <y>70</y>
+         <width>90</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Job Status</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="GoToCoordsTab_J">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>70</y>
+         <width>90</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Align Data</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="CloseNavigationButton_J">
+       <property name="geometry">
+        <rect>
+         <x>200</x>
+         <y>70</y>
+         <width>65</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Minimize</string>
+       </property>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="ViewOverlaysTabName">
+     <attribute name="title">
+      <string>View Overlay</string>
+     </attribute>
+     <widget class="QTextEdit" name="SavingRegistrationResultsText">
+      <property name="geometry">
+       <rect>
+        <x>420</x>
+        <y>525</y>
+        <width>320</width>
         <height>24</height>
        </rect>
       </property>
@@ -3258,27 +4217,911 @@ p, li { white-space: pre-wrap; }
        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:4.125pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:9pt; font-weight:600;&quot;&gt;Saving Registration Results. Please Wait...&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
-     <zorder>DefineFixedImageFrame_16</zorder>
-     <zorder>DefineFixedImageFrame_10</zorder>
-     <zorder>DefineFixedImageFrame_11</zorder>
-     <zorder>DefineFixedImageFrame_12</zorder>
-     <zorder>DefineFixedImageFrame_13</zorder>
-     <zorder>DefineFixedImageFrame_14</zorder>
-     <zorder>textEdit_32</zorder>
-    </widget>
-    <widget class="QWidget" name="tab_4">
-     <attribute name="title">
-      <string>Apply to Coordinates</string>
-     </attribute>
-    </widget>
-    <widget class="QWidget" name="tab_5">
-     <attribute name="title">
-      <string>Apply to Images</string>
-     </attribute>
+     <widget class="QFrame" name="ImageViewControlsFrame_O">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>605</y>
+        <width>235</width>
+        <height>75</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame { 
+	background-color: #4b4b4b;
+	border: 1px solid #e6e6e6; /* Border  */
+}</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QTextEdit" name="ImageViewFrameHeaderText_O">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>235</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QTextEdit { 
+	background-color: #4b4b4b;
+	color: #e6e6e6; /* Text color */
+	border: 1px solid #e6e6e6; /* Border  */
+}</string>
+       </property>
+       <property name="verticalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+       <property name="html">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:600; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:9pt;&quot;&gt;Fiducial Point View&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="GrowFiducialButton2_O">
+       <property name="geometry">
+        <rect>
+         <x>200</x>
+         <y>38</y>
+         <width>25</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>+</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="ColorFiducialButton_O">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>35</y>
+         <width>45</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Color</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="ShrinkFiducialButton2_O">
+       <property name="geometry">
+        <rect>
+         <x>170</x>
+         <y>38</y>
+         <width>25</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>-</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="ColorFiducialButton2_O">
+       <property name="geometry">
+        <rect>
+         <x>120</x>
+         <y>35</y>
+         <width>45</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Color</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="GrowFiducialButton_O">
+       <property name="geometry">
+        <rect>
+         <x>90</x>
+         <y>38</y>
+         <width>25</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>+</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="ShrinkFiducialButton_O">
+       <property name="geometry">
+        <rect>
+         <x>60</x>
+         <y>38</y>
+         <width>25</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>-</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QLabel" name="UnregisteredImageFrameHeaderText">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>20</y>
+        <width>400</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QLabel { 
+	background-color: transparent;
+	color: #e6e6e6; /* Text color */
+	border: 0px solid #e6e6e6; /* Border  */
+    qproperty-alignment: 'AlignCenter';
+}</string>
+      </property>
+      <property name="text">
+       <string>Pre-Registration Overlay</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="RegisteredImageFrameHeaderText">
+      <property name="geometry">
+       <rect>
+        <x>422</x>
+        <y>20</y>
+        <width>400</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QLabel { 
+	background-color: transparent;
+	color: #e6e6e6; /* Text color */
+	border: 0px solid #e6e6e6; /* Border  */
+    qproperty-alignment: 'AlignCenter';
+}</string>
+      </property>
+      <property name="text">
+       <string>Post-Registration-Overlay</string>
+      </property>
+     </widget>
+     <widget class="QFrame" name="UnregisteredImageDisplayFrame">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>50</y>
+        <width>400</width>
+        <height>470</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame { 
+	background-color: #4b4b4b;
+	border: 0px solid #e6e6e6; /* Border  */
+}</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="RegisteredImageBorder">
+      <property name="geometry">
+       <rect>
+        <x>422</x>
+        <y>47</y>
+        <width>406</width>
+        <height>476</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QLabel {
+        background-color: transparent; /* Transparent fill */
+        border: 5px solid #e6e6e6;       /* Green border */
+    }
+</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QFrame" name="RegisteredImageDisplayFrame">
+      <property name="geometry">
+       <rect>
+        <x>425</x>
+        <y>50</y>
+        <width>400</width>
+        <height>470</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame { 
+	background-color: #4b4b4b;
+	border: 0px solid #e6e6e6; /* Border  */
+}</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="UnregisteredImageBorder">
+      <property name="geometry">
+       <rect>
+        <x>7</x>
+        <y>47</y>
+        <width>406</width>
+        <height>476</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QLabel {
+        background-color: transparent; /* Transparent fill */
+        border: 5px solid #e6e6e6;       /* Green border */
+    }
+</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QFrame" name="SaveRegistrationControlFrame">
+      <property name="geometry">
+       <rect>
+        <x>255</x>
+        <y>605</y>
+        <width>100</width>
+        <height>75</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame { 
+	background-color: #4b4b4b;
+	border: 1px solid #e6e6e6; /* Border  */
+}</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QTextEdit" name="SaveRegistrationHeaderText">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>100</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QTextEdit { 
+	background-color: #4b4b4b;
+	color: #e6e6e6; /* Text color */
+	border: 1px solid #e6e6e6; /* Border  */
+}</string>
+       </property>
+       <property name="verticalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+       <property name="html">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:600; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:9pt;&quot;&gt;Save Results?&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="SaveRegistrationResultsButton_O">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>35</y>
+         <width>35</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Yes</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="ReturnToFiducialsTab_O">
+       <property name="geometry">
+        <rect>
+         <x>50</x>
+         <y>35</y>
+         <width>35</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Edit</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QFrame" name="DisableFrame_O1">
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>10</y>
+        <width>31</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame { 
+	background-color: rgba(255, 255, 255, 0.4);
+	border: 1px solid #e6e6e6; /* Border  */
+}</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+     </widget>
+     <widget class="QFrame" name="DisableFrame_O2">
+      <property name="geometry">
+       <rect>
+        <x>420</x>
+        <y>10</y>
+        <width>31</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame { 
+	background-color: rgba(255, 255, 255, 0.4);
+	border: 1px solid #e6e6e6; /* Border  */
+}</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="NavigationButton_O">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>530</y>
+        <width>75</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+      </property>
+      <property name="text">
+       <string>Navigate</string>
+      </property>
+     </widget>
+     <widget class="QFrame" name="WhatNextControlFrame_O">
+      <property name="geometry">
+       <rect>
+        <x>555</x>
+        <y>570</y>
+        <width>275</width>
+        <height>110</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame { 
+	background-color: #4b4b4b;
+	border: 1px solid #e6e6e6; /* Border  */
+}</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QTextEdit" name="WhatNextText_O">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>275</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QTextEdit { 
+	background-color: #4b4b4b;
+	color: #e6e6e6; /* Text color */
+	border: 1px solid #e6e6e6; /* Border  */
+}</string>
+       </property>
+       <property name="verticalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+       <property name="html">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:9pt; font-weight:600; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;App Navigation&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="GoToImportProjectTab_O">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>35</y>
+         <width>90</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Define Job</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="GoToFiducialsTab_O">
+       <property name="geometry">
+        <rect>
+         <x>105</x>
+         <y>35</y>
+         <width>90</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 4px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Pick Fiducials</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="GoToJobStatusTab_O">
+       <property name="geometry">
+        <rect>
+         <x>105</x>
+         <y>70</y>
+         <width>90</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Job Status</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="GoToCoordsTab_O">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>70</y>
+         <width>90</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Align Data</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="CloseNavigationButton_O">
+       <property name="geometry">
+        <rect>
+         <x>200</x>
+         <y>70</y>
+         <width>65</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Minimize</string>
+       </property>
+      </widget>
+     </widget>
+     <zorder>UnregisteredImageBorder</zorder>
+     <zorder>ImageViewControlsFrame_O</zorder>
+     <zorder>UnregisteredImageFrameHeaderText</zorder>
+     <zorder>RegisteredImageFrameHeaderText</zorder>
+     <zorder>UnregisteredImageDisplayFrame</zorder>
+     <zorder>RegisteredImageBorder</zorder>
+     <zorder>SaveRegistrationControlFrame</zorder>
+     <zorder>DisableFrame_O1</zorder>
+     <zorder>DisableFrame_O2</zorder>
+     <zorder>RegisteredImageDisplayFrame</zorder>
+     <zorder>NavigationButton_O</zorder>
+     <zorder>WhatNextControlFrame_O</zorder>
+     <zorder>SavingRegistrationResultsText</zorder>
     </widget>
    </widget>
   </widget>
