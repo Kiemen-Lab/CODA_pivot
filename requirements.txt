@@ -1,0 +1,7 @@
+# conda create --name CODA_pivot python=3.9
+# conda activate CODA_pivot
+# pip install -r requirements.txt
+numpy
+pandas
+PySide6
+Pillow
