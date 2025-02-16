@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>854</width>
-    <height>741</height>
+    <width>852</width>
+    <height>745</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -71,7 +71,7 @@ QTabBar::tab {
 </string>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>1</number>
     </property>
     <property name="usesScrollButtons">
      <bool>false</bool>
@@ -85,7 +85,7 @@ QTabBar::tab {
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>820</width>
+        <width>815</width>
         <height>120</height>
        </rect>
       </property>
@@ -106,7 +106,7 @@ QTabBar::tab {
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>820</width>
+         <width>815</width>
          <height>25</height>
         </rect>
        </property>
@@ -369,7 +369,7 @@ QPushButton:pressed {
        <rect>
         <x>10</x>
         <y>140</y>
-        <width>820</width>
+        <width>815</width>
         <height>275</height>
        </rect>
       </property>
@@ -390,7 +390,7 @@ QPushButton:pressed {
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>820</width>
+         <width>815</width>
          <height>25</height>
         </rect>
        </property>
@@ -644,7 +644,7 @@ QPushButton:pressed {
        <rect>
         <x>10</x>
         <y>425</y>
-        <width>820</width>
+        <width>815</width>
         <height>120</height>
        </rect>
       </property>
@@ -665,7 +665,7 @@ QPushButton:pressed {
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>820</width>
+         <width>815</width>
          <height>25</height>
         </rect>
        </property>
@@ -905,8 +905,8 @@ QPushButton:pressed {
      <widget class="QPushButton" name="NavigationButton">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>630</y>
+        <x>755</x>
+        <y>550</y>
         <width>65</width>
         <height>30</height>
        </rect>
@@ -942,10 +942,10 @@ QPushButton:pressed {
      <widget class="QFrame" name="WhatNextControlFrame">
       <property name="geometry">
        <rect>
-        <x>555</x>
-        <y>570</y>
-        <width>275</width>
-        <height>110</height>
+        <x>365</x>
+        <y>605</y>
+        <width>465</width>
+        <height>75</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -965,7 +965,7 @@ QPushButton:pressed {
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>275</width>
+         <width>465</width>
          <height>25</height>
         </rect>
        </property>
@@ -1005,7 +1005,7 @@ p, li { white-space: pre-wrap; }
         <rect>
          <x>10</x>
          <y>35</y>
-         <width>90</width>
+         <width>80</width>
          <height>30</height>
         </rect>
        </property>
@@ -1040,7 +1040,7 @@ QPushButton:pressed {
       <widget class="QPushButton" name="GoToFiducialsTab">
        <property name="geometry">
         <rect>
-         <x>105</x>
+         <x>95</x>
          <y>35</y>
          <width>90</width>
          <height>30</height>
@@ -1059,7 +1059,7 @@ QPushButton:pressed {
     color: #e6e6e6; /* Text color */
     border: 1px solid #e6e6e6; /* Border  */
     border-radius: 5px; /* Optional: Rounded corners */
-    padding: 4px; /* Optional: Padding around text */
+    padding: 5px; /* Optional: Padding around text */
 }
 
 QPushButton:hover {
@@ -1077,8 +1077,8 @@ QPushButton:pressed {
       <widget class="QPushButton" name="GoToJobStatusTab">
        <property name="geometry">
         <rect>
-         <x>105</x>
-         <y>70</y>
+         <x>285</x>
+         <y>35</y>
          <width>90</width>
          <height>30</height>
         </rect>
@@ -1114,8 +1114,8 @@ QPushButton:pressed {
       <widget class="QPushButton" name="GoToCoordsTab">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>70</y>
+         <x>190</x>
+         <y>35</y>
          <width>90</width>
          <height>30</height>
         </rect>
@@ -1151,9 +1151,9 @@ QPushButton:pressed {
       <widget class="QPushButton" name="CloseNavigationButton">
        <property name="geometry">
         <rect>
-         <x>200</x>
-         <y>70</y>
-         <width>65</width>
+         <x>380</x>
+         <y>35</y>
+         <width>75</width>
          <height>30</height>
         </rect>
        </property>
@@ -1182,7 +1182,7 @@ QPushButton:pressed {
 }</string>
        </property>
        <property name="text">
-        <string>Minimize</string>
+        <string>Close</string>
        </property>
       </widget>
      </widget>
@@ -1937,8 +1937,8 @@ QPushButton:pressed {
      <widget class="QPushButton" name="NavigationButton_F">
       <property name="geometry">
        <rect>
-        <x>270</x>
-        <y>650</y>
+        <x>755</x>
+        <y>550</y>
         <width>65</width>
         <height>30</height>
        </rect>
@@ -1974,10 +1974,10 @@ QPushButton:pressed {
      <widget class="QFrame" name="WhatNextControlFrame_F">
       <property name="geometry">
        <rect>
-        <x>555</x>
-        <y>570</y>
-        <width>275</width>
-        <height>110</height>
+        <x>365</x>
+        <y>605</y>
+        <width>465</width>
+        <height>75</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -1997,7 +1997,7 @@ QPushButton:pressed {
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>275</width>
+         <width>465</width>
          <height>25</height>
         </rect>
        </property>
@@ -2037,7 +2037,7 @@ p, li { white-space: pre-wrap; }
         <rect>
          <x>10</x>
          <y>35</y>
-         <width>90</width>
+         <width>80</width>
          <height>30</height>
         </rect>
        </property>
@@ -2072,7 +2072,7 @@ QPushButton:pressed {
       <widget class="QPushButton" name="GoToFiducialsTab_F">
        <property name="geometry">
         <rect>
-         <x>105</x>
+         <x>95</x>
          <y>35</y>
          <width>90</width>
          <height>30</height>
@@ -2091,7 +2091,7 @@ QPushButton:pressed {
     color: #e6e6e6; /* Text color */
     border: 1px solid #e6e6e6; /* Border  */
     border-radius: 5px; /* Optional: Rounded corners */
-    padding: 4px; /* Optional: Padding around text */
+    padding: 5px; /* Optional: Padding around text */
 }
 
 QPushButton:hover {
@@ -2109,8 +2109,8 @@ QPushButton:pressed {
       <widget class="QPushButton" name="GoToJobStatusTab_F">
        <property name="geometry">
         <rect>
-         <x>105</x>
-         <y>70</y>
+         <x>285</x>
+         <y>35</y>
          <width>90</width>
          <height>30</height>
         </rect>
@@ -2146,8 +2146,8 @@ QPushButton:pressed {
       <widget class="QPushButton" name="GoToCoordsTab_F">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>70</y>
+         <x>190</x>
+         <y>35</y>
          <width>90</width>
          <height>30</height>
         </rect>
@@ -2183,9 +2183,9 @@ QPushButton:pressed {
       <widget class="QPushButton" name="CloseNavigationButton_F">
        <property name="geometry">
         <rect>
-         <x>200</x>
-         <y>70</y>
-         <width>65</width>
+         <x>380</x>
+         <y>35</y>
+         <width>75</width>
          <height>30</height>
         </rect>
        </property>
@@ -2214,7 +2214,7 @@ QPushButton:pressed {
 }</string>
        </property>
        <property name="text">
-        <string>Minimize</string>
+        <string>Close</string>
        </property>
       </widget>
      </widget>
@@ -2240,8 +2240,8 @@ QPushButton:pressed {
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>200</y>
-        <width>531</width>
+        <y>166</y>
+        <width>510</width>
         <height>24</height>
        </rect>
       </property>
@@ -2268,8 +2268,8 @@ QPushButton:pressed {
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>230</y>
-        <width>525</width>
+        <y>195</y>
+        <width>530</width>
         <height>385</height>
        </rect>
       </property>
@@ -2290,8 +2290,8 @@ QPushButton:pressed {
       <property name="geometry">
        <rect>
         <x>7</x>
-        <y>227</y>
-        <width>531</width>
+        <y>192</y>
+        <width>536</width>
         <height>391</height>
        </rect>
       </property>
@@ -2309,8 +2309,8 @@ QPushButton:pressed {
      <widget class="QFrame" name="ImageViewControlsFrame_C">
       <property name="geometry">
        <rect>
-        <x>555</x>
-        <y>480</y>
+        <x>10</x>
+        <y>605</y>
         <width>125</width>
         <height>75</height>
        </rect>
@@ -2484,8 +2484,8 @@ QPushButton:pressed {
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>820</width>
-        <height>180</height>
+        <width>810</width>
+        <height>150</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -2505,7 +2505,7 @@ QPushButton:pressed {
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>820</width>
+         <width>810</width>
          <height>25</height>
         </rect>
        </property>
@@ -2544,7 +2544,7 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>65</y>
+         <y>35</y>
          <width>41</width>
          <height>31</height>
         </rect>
@@ -2580,8 +2580,8 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>95</y>
-         <width>800</width>
+         <y>65</y>
+         <width>791</width>
          <height>75</height>
         </rect>
        </property>
@@ -2687,9 +2687,9 @@ QTableWidget QLineEdit {
       <widget class="QTextEdit" name="BrowseForCoordinatesFileText">
        <property name="geometry">
         <rect>
-         <x>55</x>
-         <y>68</y>
-         <width>161</width>
+         <x>51</x>
+         <y>38</y>
+         <width>201</width>
          <height>24</height>
         </rect>
        </property>
@@ -2722,14 +2722,14 @@ QTableWidget QLineEdit {
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:9pt; font-weight:600; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Browse Coordinates File&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Browse for Coordinates File&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
-      <widget class="QComboBox" name="RegisterToWhichImageComboBox">
+      <widget class="QComboBox" name="CorrespondingImageComboBox">
        <property name="geometry">
         <rect>
-         <x>280</x>
-         <y>65</y>
+         <x>260</x>
+         <y>36</y>
          <width>201</width>
          <height>25</height>
         </rect>
@@ -2761,119 +2761,8 @@ QComboBox QAbstractItemView { /* Styles for dropdown list */
       <widget class="QTextEdit" name="CorrespondingImageText">
        <property name="geometry">
         <rect>
-         <x>490</x>
-         <y>30</y>
-         <width>271</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QTextEdit { 
-	background-color: transparent;
-	color: #e6e6e6; /* Text color */
-	border: 0px solid #4b4b4b; /* Border  */
-    border-radius: 5px; /* Optional: Rounded corners */
-}</string>
-       </property>
-       <property name="verticalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-       <property name="horizontalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-       <property name="html">
-        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:9pt; font-weight:600; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Image Correesponding to Coordinates&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="LoadCoordinatesButton">
-       <property name="geometry">
-        <rect>
-         <x>750</x>
-         <y>60</y>
-         <width>60</width>
-         <height>30</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    background-color: #5a5a5a;
-    color: #e6e6e6; /* Text color */
-    border: 1px solid #e6e6e6; /* Border  */
-    border-radius: 5px; /* Optional: Rounded corners */
-    padding: 5px; /* Optional: Padding around text */
-}
-
-QPushButton:hover {
-    background-color: #666f75; /* Grey-blue when hovered */
-}
-
-QPushButton:pressed {
-    background-color: #7b8e9c; /* More blue when pressed */
-}</string>
-       </property>
-       <property name="text">
-        <string>Load </string>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="CorrespondingImageComboBox">
-       <property name="geometry">
-        <rect>
-         <x>280</x>
-         <y>30</y>
-         <width>201</width>
-         <height>25</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QComboBox {
-    background-color: #707070; /* Light gray background color */
-    color: #e6e6e6; /* Dark gray font color */
-    padding: 5px; /* Optional: adds padding inside the combobox */
-    border: 1px solid #555555; /* Optional: border color */
-    border-radius: 5px; /* Optional: rounded corners */
-}
-
-QComboBox QAbstractItemView { /* Styles for dropdown list */
-    background-color: #707070; /* Dropdown background color */
-    color: #e6e6e6; /* Dropdown font color */
-    selection-background-color: #cce5ff; /* Background color when an item is selected */
-    selection-color: #e6e6e6; /* Font color of selected item */
-}
-
-</string>
-       </property>
-      </widget>
-      <widget class="QTextEdit" name="CorrespondingImageText_2">
-       <property name="geometry">
-        <rect>
-         <x>490</x>
-         <y>65</y>
+         <x>460</x>
+         <y>37</y>
          <width>191</width>
          <height>24</height>
         </rect>
@@ -2907,25 +2796,60 @@ QComboBox QAbstractItemView { /* Styles for dropdown list */
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:9pt; font-weight:600; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Register to Which Image&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Corresponding Image&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="LoadCoordinatesButton">
+       <property name="geometry">
+        <rect>
+         <x>740</x>
+         <y>30</y>
+         <width>61</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Load </string>
        </property>
       </widget>
       <zorder>RegisterCoordinatesTableHeaderText</zorder>
       <zorder>BrowseForCoordinatesFileText</zorder>
-      <zorder>RegisterToWhichImageComboBox</zorder>
+      <zorder>CorrespondingImageComboBox</zorder>
       <zorder>CorrespondingImageText</zorder>
       <zorder>chooseCoordinatesFileButton</zorder>
       <zorder>RegisterCoordinatesTableWidget</zorder>
       <zorder>LoadCoordinatesButton</zorder>
-      <zorder>CorrespondingImageComboBox</zorder>
-      <zorder>CorrespondingImageText_2</zorder>
      </widget>
      <widget class="QFrame" name="CoordinatesOverlayControlsFrame">
       <property name="geometry">
        <rect>
-        <x>555</x>
-        <y>230</y>
-        <width>275</width>
+        <x>550</x>
+        <y>195</y>
+        <width>270</width>
         <height>223</height>
        </rect>
       </property>
@@ -2946,7 +2870,7 @@ p, li { white-space: pre-wrap; }
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>275</width>
+         <width>270</width>
          <height>25</height>
         </rect>
        </property>
@@ -3119,7 +3043,7 @@ QPushButton:pressed {
 }</string>
        </property>
        <property name="text">
-        <string>Target Image</string>
+        <string>Fixed</string>
        </property>
       </widget>
       <widget class="QCheckBox" name="RegisteredMovingCheckBox">
@@ -3253,7 +3177,7 @@ QPushButton:pressed {
 }</string>
        </property>
        <property name="text">
-        <string>Fixed Image</string>
+        <string>Registered Moving</string>
        </property>
       </widget>
       <widget class="QPushButton" name="SaveRegisteredCoordinatesButton">
@@ -3297,8 +3221,8 @@ QPushButton:pressed {
      <widget class="QFrame" name="DisableFrame_C">
       <property name="geometry">
        <rect>
-        <x>5</x>
-        <y>650</y>
+        <x>550</x>
+        <y>510</y>
         <width>31</width>
         <height>31</height>
        </rect>
@@ -3319,10 +3243,10 @@ QPushButton:pressed {
      <widget class="QFrame" name="WhatNextControlFrame_C">
       <property name="geometry">
        <rect>
-        <x>555</x>
-        <y>570</y>
-        <width>275</width>
-        <height>110</height>
+        <x>365</x>
+        <y>605</y>
+        <width>465</width>
+        <height>75</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -3342,7 +3266,7 @@ QPushButton:pressed {
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>275</width>
+         <width>465</width>
          <height>25</height>
         </rect>
        </property>
@@ -3382,7 +3306,7 @@ p, li { white-space: pre-wrap; }
         <rect>
          <x>10</x>
          <y>35</y>
-         <width>90</width>
+         <width>80</width>
          <height>30</height>
         </rect>
        </property>
@@ -3417,7 +3341,7 @@ QPushButton:pressed {
       <widget class="QPushButton" name="GoToFiducialsTab_C">
        <property name="geometry">
         <rect>
-         <x>105</x>
+         <x>95</x>
          <y>35</y>
          <width>90</width>
          <height>30</height>
@@ -3436,7 +3360,7 @@ QPushButton:pressed {
     color: #e6e6e6; /* Text color */
     border: 1px solid #e6e6e6; /* Border  */
     border-radius: 5px; /* Optional: Rounded corners */
-    padding: 4px; /* Optional: Padding around text */
+    padding: 5px; /* Optional: Padding around text */
 }
 
 QPushButton:hover {
@@ -3454,8 +3378,8 @@ QPushButton:pressed {
       <widget class="QPushButton" name="GoToJobStatusTab_C">
        <property name="geometry">
         <rect>
-         <x>105</x>
-         <y>70</y>
+         <x>285</x>
+         <y>35</y>
          <width>90</width>
          <height>30</height>
         </rect>
@@ -3491,8 +3415,8 @@ QPushButton:pressed {
       <widget class="QPushButton" name="GoToCoordsTab_C">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>70</y>
+         <x>190</x>
+         <y>35</y>
          <width>90</width>
          <height>30</height>
         </rect>
@@ -3528,9 +3452,9 @@ QPushButton:pressed {
       <widget class="QPushButton" name="CloseNavigationButton_C">
        <property name="geometry">
         <rect>
-         <x>200</x>
-         <y>70</y>
-         <width>65</width>
+         <x>380</x>
+         <y>35</y>
+         <width>75</width>
          <height>30</height>
         </rect>
        </property>
@@ -3559,15 +3483,15 @@ QPushButton:pressed {
 }</string>
        </property>
        <property name="text">
-        <string>Minimize</string>
+        <string>Close</string>
        </property>
       </widget>
      </widget>
      <widget class="QPushButton" name="NavigationButton_C">
       <property name="geometry">
        <rect>
-        <x>480</x>
-        <y>650</y>
+        <x>755</x>
+        <y>550</y>
         <width>65</width>
         <height>30</height>
        </rect>
@@ -3604,7 +3528,7 @@ QPushButton:pressed {
       <property name="geometry">
        <rect>
         <x>550</x>
-        <y>455</y>
+        <y>420</y>
         <width>271</width>
         <height>24</height>
        </rect>
@@ -3639,8 +3563,8 @@ p, li { white-space: pre-wrap; }
      <widget class="QFrame" name="DisableFrame_C_2">
       <property name="geometry">
        <rect>
-        <x>45</x>
-        <y>650</y>
+        <x>590</x>
+        <y>510</y>
         <width>31</width>
         <height>31</height>
        </rect>
@@ -3661,8 +3585,8 @@ p, li { white-space: pre-wrap; }
      <widget class="QFrame" name="DisableFrame_C_3">
       <property name="geometry">
        <rect>
-        <x>85</x>
-        <y>650</y>
+        <x>630</x>
+        <y>510</y>
         <width>31</width>
         <height>31</height>
        </rect>
@@ -3683,8 +3607,8 @@ p, li { white-space: pre-wrap; }
      <widget class="QTextEdit" name="MakingCoordOverlayText">
       <property name="geometry">
        <rect>
-        <x>430</x>
-        <y>200</y>
+        <x>419</x>
+        <y>165</y>
         <width>400</width>
         <height>24</height>
        </rect>
@@ -3716,8 +3640,8 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Making the Coordinate Overlay Image. Please Wait...&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
-     <zorder>RegisterCoordsImageBorder</zorder>
      <zorder>RegisterCoordinatesFrame</zorder>
+     <zorder>RegisterCoordsImageBorder</zorder>
      <zorder>RegisterCoordsFrameHeaderText</zorder>
      <zorder>RegisterCoordsDisplayFrame</zorder>
      <zorder>ImageViewControlsFrame_C</zorder>
@@ -3739,7 +3663,7 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>820</width>
+        <width>811</width>
         <height>451</height>
        </rect>
       </property>
@@ -3760,7 +3684,7 @@ p, li { white-space: pre-wrap; }
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>820</width>
+         <width>811</width>
          <height>25</height>
         </rect>
        </property>
@@ -3800,7 +3724,7 @@ p, li { white-space: pre-wrap; }
         <rect>
          <x>10</x>
          <y>35</y>
-         <width>800</width>
+         <width>791</width>
          <height>401</height>
         </rect>
        </property>
@@ -3900,8 +3824,8 @@ QTableWidget QLineEdit {
      <widget class="QPushButton" name="NavigationButton_J">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>610</y>
+        <x>755</x>
+        <y>550</y>
         <width>65</width>
         <height>30</height>
        </rect>
@@ -3937,10 +3861,10 @@ QPushButton:pressed {
      <widget class="QFrame" name="WhatNextControlFrame_J">
       <property name="geometry">
        <rect>
-        <x>555</x>
-        <y>570</y>
-        <width>275</width>
-        <height>110</height>
+        <x>365</x>
+        <y>605</y>
+        <width>465</width>
+        <height>75</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -3960,7 +3884,7 @@ QPushButton:pressed {
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>275</width>
+         <width>465</width>
          <height>25</height>
         </rect>
        </property>
@@ -4000,7 +3924,7 @@ p, li { white-space: pre-wrap; }
         <rect>
          <x>10</x>
          <y>35</y>
-         <width>90</width>
+         <width>80</width>
          <height>30</height>
         </rect>
        </property>
@@ -4035,7 +3959,7 @@ QPushButton:pressed {
       <widget class="QPushButton" name="GoToFiducialsTab_J">
        <property name="geometry">
         <rect>
-         <x>105</x>
+         <x>95</x>
          <y>35</y>
          <width>90</width>
          <height>30</height>
@@ -4054,7 +3978,7 @@ QPushButton:pressed {
     color: #e6e6e6; /* Text color */
     border: 1px solid #e6e6e6; /* Border  */
     border-radius: 5px; /* Optional: Rounded corners */
-    padding: 4px; /* Optional: Padding around text */
+    padding: 5px; /* Optional: Padding around text */
 }
 
 QPushButton:hover {
@@ -4063,8 +3987,7 @@ QPushButton:hover {
 
 QPushButton:pressed {
     background-color: #7b8e9c; /* More blue when pressed */
-}
-</string>
+}</string>
        </property>
        <property name="text">
         <string>Pick Fiducials</string>
@@ -4073,8 +3996,8 @@ QPushButton:pressed {
       <widget class="QPushButton" name="GoToJobStatusTab_J">
        <property name="geometry">
         <rect>
-         <x>105</x>
-         <y>70</y>
+         <x>285</x>
+         <y>35</y>
          <width>90</width>
          <height>30</height>
         </rect>
@@ -4110,8 +4033,8 @@ QPushButton:pressed {
       <widget class="QPushButton" name="GoToCoordsTab_J">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>70</y>
+         <x>190</x>
+         <y>35</y>
          <width>90</width>
          <height>30</height>
         </rect>
@@ -4147,9 +4070,9 @@ QPushButton:pressed {
       <widget class="QPushButton" name="CloseNavigationButton_J">
        <property name="geometry">
         <rect>
-         <x>200</x>
-         <y>70</y>
-         <width>65</width>
+         <x>380</x>
+         <y>35</y>
+         <width>75</width>
          <height>30</height>
         </rect>
        </property>
@@ -4178,7 +4101,7 @@ QPushButton:pressed {
 }</string>
        </property>
        <property name="text">
-        <string>Minimize</string>
+        <string>Close</string>
        </property>
       </widget>
      </widget>
@@ -4217,7 +4140,7 @@ QPushButton:pressed {
        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:4.125pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:9pt; font-weight:600;&quot;&gt;Saving Registration Results. Please Wait...&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
@@ -4828,8 +4751,8 @@ QPushButton:pressed {
      <widget class="QPushButton" name="NavigationButton_O">
       <property name="geometry">
        <rect>
-        <x>220</x>
-        <y>530</y>
+        <x>745</x>
+        <y>560</y>
         <width>75</width>
         <height>30</height>
        </rect>
@@ -4865,10 +4788,10 @@ QPushButton:pressed {
      <widget class="QFrame" name="WhatNextControlFrame_O">
       <property name="geometry">
        <rect>
-        <x>555</x>
-        <y>570</y>
-        <width>275</width>
-        <height>110</height>
+        <x>365</x>
+        <y>605</y>
+        <width>465</width>
+        <height>75</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -4888,7 +4811,7 @@ QPushButton:pressed {
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>275</width>
+         <width>465</width>
          <height>25</height>
         </rect>
        </property>
@@ -4928,7 +4851,7 @@ p, li { white-space: pre-wrap; }
         <rect>
          <x>10</x>
          <y>35</y>
-         <width>90</width>
+         <width>80</width>
          <height>30</height>
         </rect>
        </property>
@@ -4963,7 +4886,7 @@ QPushButton:pressed {
       <widget class="QPushButton" name="GoToFiducialsTab_O">
        <property name="geometry">
         <rect>
-         <x>105</x>
+         <x>95</x>
          <y>35</y>
          <width>90</width>
          <height>30</height>
@@ -4982,7 +4905,7 @@ QPushButton:pressed {
     color: #e6e6e6; /* Text color */
     border: 1px solid #e6e6e6; /* Border  */
     border-radius: 5px; /* Optional: Rounded corners */
-    padding: 4px; /* Optional: Padding around text */
+    padding: 5px; /* Optional: Padding around text */
 }
 
 QPushButton:hover {
@@ -5000,8 +4923,8 @@ QPushButton:pressed {
       <widget class="QPushButton" name="GoToJobStatusTab_O">
        <property name="geometry">
         <rect>
-         <x>105</x>
-         <y>70</y>
+         <x>285</x>
+         <y>35</y>
          <width>90</width>
          <height>30</height>
         </rect>
@@ -5037,8 +4960,8 @@ QPushButton:pressed {
       <widget class="QPushButton" name="GoToCoordsTab_O">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>70</y>
+         <x>190</x>
+         <y>35</y>
          <width>90</width>
          <height>30</height>
         </rect>
@@ -5074,9 +4997,9 @@ QPushButton:pressed {
       <widget class="QPushButton" name="CloseNavigationButton_O">
        <property name="geometry">
         <rect>
-         <x>200</x>
-         <y>70</y>
-         <width>65</width>
+         <x>380</x>
+         <y>35</y>
+         <width>75</width>
          <height>30</height>
         </rect>
        </property>
@@ -5105,7 +5028,7 @@ QPushButton:pressed {
 }</string>
        </property>
        <property name="text">
-        <string>Minimize</string>
+        <string>Close</string>
        </property>
       </widget>
      </widget>

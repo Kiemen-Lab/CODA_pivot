@@ -8,13 +8,11 @@ import pickle
 import numpy as np
 import pandas as pd
 from PIL import Image
-from pandas.io.formats.info import frame_sub_kwargs
 from scipy.stats import mode
 from datetime import datetime
 from PySide6 import QtWidgets
-from scipy.spatial import KDTree
-from PySide6.QtCore import Qt, QPointF, Signal, QObject, QEvent
-from PySide6.QtWidgets import QStyledItemDelegate, QFileDialog, QLabel, QColorDialog, QHeaderView, QMainWindow, QVBoxLayout, QWidget, QTabWidget
+from PySide6.QtCore import Qt, QPointF, Signal
+from PySide6.QtWidgets import QStyledItemDelegate, QFileDialog, QLabel, QColorDialog, QHeaderView, QMainWindow, QVBoxLayout, QWidget
 from PySide6.QtGui import QPixmap, QTransform, QImage, QPainter, QCursor, QColor, QPen, QMouseEvent
 
 class CustomDelegateTable(QStyledItemDelegate):
@@ -121,6 +119,11 @@ class MainWindow(QMainWindow):
         # Fiducials tab variables
         self.imFixed0 = []
         self.imMoving0 = []
+        self.MI = 0
+        self.MI_Fixed = 0
+        self.MI_Moving = 0
+        self.MI_MovingCoords = 0
+        self.MI_MovingCoordsReg = 0
         self.nmLoadedFixed = ""
         self.fixed_flip_state = False
         self.fixed_rotation_angle = 0
@@ -546,6 +549,7 @@ class MainWindow(QMainWindow):
                 self.label = self.fixed_image_label
                 self.pts = self.ptsFixed
                 self.pts2 = []
+                self.MI = self.MI_Fixed
                 try:
                     self.ImageHeight = self.imFixed0.height()
                     self.ImageWidth = self.imFixed0.width()
@@ -565,6 +569,7 @@ class MainWindow(QMainWindow):
                 self.label = self.moving_image_label
                 self.pts = self.ptsMoving
                 self.pts2 = []
+                self.MI = self.MI_Moving
                 try:
                     self.ImageHeight = self.imMoving0.height()
                     self.ImageWidth = self.imMoving0.width()
@@ -588,6 +593,7 @@ class MainWindow(QMainWindow):
             self.text_right = self.ui.RegisteredImageFrameHeaderText
             self.frame_left = self.ui.UnregisteredImageDisplayFrame
             self.frame_right = self.ui.RegisteredImageDisplayFrame
+            self.MI = 255
             try:
                 self.ImageHeight = max([self.imFixed0.height(), self.imMoving0.height()])
                 self.ImageWidth = max([self.imFixed0.width(), self.imMoving0.width()])
@@ -645,6 +651,7 @@ class MainWindow(QMainWindow):
             self.label = self.coordinates_label
             if whichImage == 0:
                 self.pts = self.ptsCoords
+                self.MI = self.MI_MovingCoords
                 try:
                     self.ImageHeight = self.imMovingCoords.height()
                     self.ImageWidth = self.imMovingCoords.width()
@@ -653,6 +660,7 @@ class MainWindow(QMainWindow):
                     self.ImageWidth = 0
             elif whichImage == 1:
                 self.pts = self.ptsCoordsReg
+                self.MI = self.MI_MovingCoordsReg
                 try:
                     self.ImageHeight = self.imMovingCoordsReg.height()
                     self.ImageWidth = self.imMovingCoordsReg.width()
@@ -661,6 +669,7 @@ class MainWindow(QMainWindow):
                     self.ImageWidth = 0
             else:
                 self.pts = self.ptsCoordsReg
+                self.MI = self.MI_Fixed
                 try:
                     self.ImageHeight = self.imFixed0.height()
                     self.ImageWidth = self.imFixed0.width()
@@ -1163,7 +1172,7 @@ class MainWindow(QMainWindow):
         # Set the center of the crosshair to the hotspot
         return QCursor(pixmap, pixmap_size // 2, pixmap_size // 2)
 
-    def reset_transformations(self, whichImage=None):
+    def reset_transformations(self, whichImage=None, keep_contrast=None):
         """Reset all transformations to their defaults."""
 
         if whichImage is not None:
@@ -1179,8 +1188,9 @@ class MainWindow(QMainWindow):
         self.zoom_scale = self.zoom_default
         self.pan_offset_x = 0
         self.pan_offset_y = 0
-        self.brightness = 0
-        self.contrast = 1
+        if keep_contrast is None:
+            self.brightness = 0
+            self.contrast = 1
         self.return_edit_frame()
         self.update_image_view()
 
@@ -1217,7 +1227,7 @@ class MainWindow(QMainWindow):
         self.return_edit_frame()
         self.update_image_view()
 
-    def increase_brightness(self, whichImage=None):
+    def change_brightness(self, whichImage=None, deltaval=0):
 
         if whichImage is not None:
             self.editWhichImage = whichImage
@@ -1227,11 +1237,12 @@ class MainWindow(QMainWindow):
         if self.current_index != self.fiducials_tab and self.current_index != self.apply_to_data_tab:
             return
 
-        self.brightness = self.brightness + 5
+        self.brightness = self.brightness + deltaval
         self.return_edit_frame()
         self.update_image_view()
+        print(f"brightness: {self.brightness}, contrast: {self.contrast}")
 
-    def decrease_brightness(self, whichImage=None):
+    def change_contrast(self, whichImage=None, deltaval=0):
 
         if whichImage is not None:
             self.editWhichImage = whichImage
@@ -1241,35 +1252,43 @@ class MainWindow(QMainWindow):
         if self.current_index != self.fiducials_tab and self.current_index != self.apply_to_data_tab:
             return
 
-        self.brightness = self.brightness - 5
+        self.contrast = self.contrast + deltaval
         self.return_edit_frame()
         self.update_image_view()
+        print(f"brightness: {self.brightness}, contrast: {self.contrast}")
 
-    def increase_contrast(self, whichImage=None):
+    def auto_adjust_contrast(self, whichImage=None):
 
-        if whichImage is not None:
-            self.editWhichImage = whichImage
-
-        # skip if we aren't in an image view tab
         self.define_edit_frame()
-        if self.current_index != self.fiducials_tab and self.current_index != self.apply_to_data_tab:
+
+        # define the current target pixmap
+        if self.current_index == self.fiducials_tab:
+            if self.editWhichImage == 0:  # fiducials tab fixed image
+                pixmap = self.imFixed0
+            else: # fiducials tab moving image
+                pixmap = self.imMoving0
+        elif self.current_index == self.overlay_tab:
+            if self.editWhichImage == 0: # overlay tab unregistered images
+                pixmap = self.imOverlay0
+            else:  # overlay tab registered images
+                pixmap = self.imOverlay #self.imMovingReg
+        elif self.current_index == self.apply_to_data_tab:
+            if self.editWhichImage == 0: # register coordinates tab unregistered moving image
+                pixmap = self.imMovingCoords
+            elif self.editWhichImage == 1: # register coordinates tab registered moving image
+                pixmap = self.imMovingCoordsReg
+            else: # Apply to coordinates tab fixed image
+                pixmap = self.imFixed0
+        else:
             return
 
-        self.contrast = self.contrast + 0.05
-        self.return_edit_frame()
-        self.update_image_view()
+        # calculate the maximum image intensity
+        max_intensity = self.MI + self.brightness
 
-    def decrease_contrast(self, whichImage=None):
-
-        if whichImage is not None:
-            self.editWhichImage = whichImage
-
-        # skip if we aren't in an image view tab
-        self.define_edit_frame()
-        if self.current_index != self.fiducials_tab and self.current_index != self.apply_to_data_tab:
-            return
-
-        self.contrast = self.contrast - 0.05
+        # determine the contrast to increase the maximum intensity to 255
+        contrast_old = self.contrast
+        self.contrast = 255 / min(max_intensity, 255)
+        print(f"  new auto contrast is {self.contrast}, adjusted from {contrast_old}")
         self.return_edit_frame()
         self.update_image_view()
 
@@ -1779,9 +1798,9 @@ class MainWindow(QMainWindow):
         # print(f"moving image: {self.nmMovingCoords}, loaded image: {self.nmLoadedMoving}")
         if self.nmMovingCoords != self.nmLoadedMoving:
             try:
-                self.imFixed0 = self.load_image(image_path_fixed)         # load the fixed image
-                self.imMovingCoords = self.load_image(image_path_moving)  # load the moving image
-                self.imMovingCoordsReg = self.load_image(image_path_reg)  # load the registered moving image
+                self.imFixed0, self.MI_Fixed = self.load_image(image_path_fixed)         # load the fixed image
+                self.imMovingCoords, self.MI_MovingCoords = self.load_image(image_path_moving)  # load the moving image
+                self.imMovingCoordsReg, self.MI_MovingCoordsReg = self.load_image(image_path_reg)  # load the registered moving image
                 self.nmLoadedMoving = self.nmMovingCoords
             except:
                 text = "One or more images could not be loaded."
@@ -1939,29 +1958,22 @@ class MainWindow(QMainWindow):
         self.ui.FixedCheckBox.setCheckState(Qt.Unchecked)
         self.all_images_checked = 0
 
-    def transform_image(self, szz=None):
+    def transform_image(self, pixmap):
 
-        # pad the image
-        width = max([self.imFixed0.width(), self.imMoving0.width()])
-        height = max([self.imFixed0.height(), self.imMoving0.height()])
-
-        pixmap = self.imMoving0
         if self.flip_im:
             transform = QTransform().scale(-1, 1)  # Horizontal flip
             pixmap = pixmap.transformed(transform, mode=Qt.SmoothTransformation)
 
-        # Prepare the image array
+        # Pad the image to the size of the fixed image
         border = 1
-        fv, array, arrayg = self.pad_images(pixmap, width, height, border)
+        width = max([self.imFixed0.width(), pixmap.width()])
+        height = max([self.imFixed0.height(), pixmap.height()])
+        szz = (width, height)  # (width, height)
+        array, array_g, mMovingReg = self.pad_images(pixmap, width, height, border)
 
-        # Determine the output shape
-        if szz is None:
-            szz = (width, height)  # (width, height)
-
-        # Apply the adjusted transformation
-        fv=int(fv)
+        # Apply the adjusted transformation and crop the image to the size of the fixed image
+        fv = int(mMovingReg)
         transformed_array = cv2.warpAffine(array, self.tform[:2, :], szz, flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=[fv, fv, fv])
-        # Crop the image to the size of the fixed image if necessary
         if transformed_array.shape[1] > self.imFixed0.height() or transformed_array.shape[0] > self.imFixed0.width():
             transformed_array = transformed_array[:self.imFixed0.height(), :self.imFixed0.width()]
         transformed_array = np.ascontiguousarray(transformed_array)
@@ -1970,8 +1982,9 @@ class MainWindow(QMainWindow):
         height = transformed_array.shape[1]
         width = transformed_array.shape[0]
         ss = transformed_array.strides[0]
-        adjusted_image = QImage(transformed_array.data, height, width, ss, QImage.Format_RGB888)
-        self.imMovingReg = QPixmap.fromImage(adjusted_image)
+        registered_image = QImage(transformed_array.data, height, width, ss, QImage.Format_RGB888)
+        registered_image = QPixmap.fromImage(registered_image)
+        return registered_image
 
     def icp_registration(self, pts_fixed, pts_moving):
         """
@@ -1985,9 +1998,12 @@ class MainWindow(QMainWindow):
         pts_moving0 = pts_moving
 
         # Compute the initial RMSE (unregistered points)
-        kdtree = KDTree(pts_fixed)
-        distances, _ = kdtree.query(pts_moving0)
-        RMSE0 = np.sqrt(np.mean(distances ** 2))
+        #kdtree = KDTree(pts_fixed)
+        #distances, _ = kdtree.query(pts_moving0)
+        #RMSE0 = np.sqrt(np.mean(distances ** 2))
+        dist = (pts_fixed[:, 0] - pts_moving0[:, 0]) ** 2 + (pts_fixed[:, 1] - pts_moving0[:, 1]) ** 2
+        RMSE0 = round(np.sqrt(np.mean(dist)))
+
 
         # scale is the ratio of the mean distance from the centroid
         centroid_fixed = np.mean(pts_fixed, axis=0)
@@ -2021,8 +2037,10 @@ class MainWindow(QMainWindow):
         registered_pts = (tform[:2, :2] @ pts_moving0.T).T + tform[:2, 2]
 
         # Compute the RMSE of the registered points
-        distances, _ = kdtree.query(registered_pts)
-        RMSE = np.sqrt(np.mean(distances ** 2))
+        #distances, _ = kdtree.query(registered_pts)
+        #RMSE = np.sqrt(np.mean(distances ** 2))
+        dist = (pts_fixed[:, 0] - registered_pts[:, 0]) ** 2 + (pts_fixed[:, 1] - registered_pts[:, 1]) ** 2
+        RMSE = round(np.sqrt(np.mean(dist)))
 
         return registered_pts, tform, RMSE, RMSE0
 
@@ -2053,16 +2071,68 @@ class MainWindow(QMainWindow):
         self.update_button_color()
         self.whichColor = 1
         self.update_button_color()
-        self.imOverlay0, self.unregistered_zoom_default = self.make_overlay_image(self.imFixed0, self.imMoving0)
+        pixmap_fixed = self.adjust_brightness_contrast(self.imFixed0, self.fixed_contrast, self.fixed_brightness)
+        pixmap_moving = self.adjust_brightness_contrast(self.imMoving0, self.moving_contrast, self.moving_brightness)
+        self.imOverlay0, self.unregistered_zoom_default = self.make_overlay_image(pixmap_fixed, pixmap_moving)
         self.registered_zoom_scale = self.unregistered_zoom_default
-
-        # plot registered overlay
-        self.transform_image()
-        self.imOverlay, self.registered_zoom_default = self.make_overlay_image(self.imFixed0, self.imMovingReg)
         self.editWhichImage = 0
         self.reset_transformations(self.editWhichImage)
+
+        # register the moving image
+        self.imMovingReg = self.transform_image(self.imMoving0)
+        pixmap_moving = self.adjust_brightness_contrast(self.imMovingReg, self.moving_contrast, self.moving_brightness)
+        # make the desired overlay image
+        #self.make_greyscale_overlay()
+        # plot registered overlay
+        self.imOverlay, self.registered_zoom_default = self.make_overlay_image(pixmap_fixed, pixmap_moving)
         self.editWhichImage = 1
         self.reset_transformations(self.editWhichImage)
+
+    def make_greyscale_overlay(self):
+
+        # register a mask of the moving image
+        array = self.pixmap_to_array(self.imMoving0)
+        array_mask = np.ones_like(array, dtype=np.uint8)
+        array_mask = self.array_to_pixmap(array_mask)
+        registered_mask = self.transform_image(array_mask)
+        registered_mask = self.pixmap_to_array(registered_mask)#[..., :3]
+
+        # Convert pixmaps to arrays
+        moving_array = self.pixmap_to_array(self.imMovingReg)
+        overlay_array = self.pixmap_to_array(self.imFixed0)
+        gray_values = overlay_array[..., :3].mean(axis=-1).astype(np.uint8)  # Mean of RGB channels
+        gray_values = (gray_values / gray_values.max() * 255).astype(np.uint8)  # Normalize brightness to match original
+        overlay_array = np.stack([gray_values] * overlay_array.shape[-1], axis=-1)
+        overlay_array[registered_mask == 1] = moving_array[registered_mask == 1]
+        overlay_array = np.ascontiguousarray(overlay_array[..., :3]) # remove the alpha channel
+        self.imOverlay = self.array_to_pixmap(overlay_array)
+
+        # Calculate zoom_default
+        width_scale = self.ui.UnregisteredImageDisplayFrame.width() / self.imOverlay.width()
+        height_scale = self.ui.UnregisteredImageDisplayFrame.height() / self.imOverlay.height()
+        self.registered_zoom_default = min(width_scale, height_scale)
+
+    def pixmap_to_array(self, pixmap):
+        """Convert QPixmap to a numpy array."""
+        image = pixmap.toImage()
+        width = image.width()
+        height = image.height()
+        bytes_per_line = image.bytesPerLine()
+        ptr = image.bits()
+        channels = int(np.size(ptr) / width / height)
+        ptr = np.array(ptr).reshape((height, bytes_per_line))  # Convert memory view to NumPy array
+        array = np.frombuffer(ptr, dtype=np.uint8).reshape((height, width, channels))
+        return array
+
+    def array_to_pixmap(self, array):
+        """Convert a numpy array to QPixmap."""
+
+        height = array.shape[1]
+        width = array.shape[0]
+        ss = array.strides[0]
+        pixmap = QImage(array.data, height, width, ss, QImage.Format_RGB888)
+        pixmap = QPixmap.fromImage(pixmap)
+        return pixmap
 
     def make_overlay_image(self, imFixed, imMoving):
 
@@ -2070,16 +2140,18 @@ class MainWindow(QMainWindow):
         height = max([imFixed.height(), imMoving.height()])
         width = max([imFixed.width(), imMoving.width()])
 
-        brightness = 0
-        contrast = 1.1
-        imFixed = self.adjust_brightness_contrast(imFixed, contrast, brightness)
-        imMoving = self.adjust_brightness_contrast(imMoving, contrast, brightness)
-
         # pad the fixed image
-        fillval_F, imFixed_pad, imFixed_pad_G = self.pad_images(imFixed, width, height)
+        imFixed_pad, imFixed_pad_G, mFixed = self.pad_images(imFixed, width, height)
 
         # pad the moving image
-        fillval_M, imMoving_pad, imMoving_pad_G = self.pad_images(imMoving, width, height)
+        imMoving_pad, imMoving_pad_G, mMoving = self.pad_images(imMoving, width, height)
+
+        # complement if necessary
+        print(f"mode moving: {mMoving}, mode fixed: {mFixed}")
+        if mMoving < 25 and mFixed > 25:  # complement if the image is brightfield
+            imMoving_pad_G = 255 - imMoving_pad_G
+        if mFixed < 25 and mMoving > 25:
+            imFixed_pad_G = 255 - imFixed_pad_G
 
         # make the combined overlay image
         combined_array = np.stack((imMoving_pad_G, imFixed_pad_G, imMoving_pad_G), axis=-1)  # (H, W, 3)
@@ -2097,14 +2169,23 @@ class MainWindow(QMainWindow):
 
         # Convert pixmap to image
         image = pixmap.toImage()
-        width0 = image.width()
-        height0 = image.height()
+        width0 = pixmap.width()
+        height0 = pixmap.height()
         bytes_per_line = image.bytesPerLine()
         ptr = image.bits()
         channels = int(np.size(ptr) / width0 / height0)
-
         ptr = np.array(ptr).reshape((height0, bytes_per_line))  # Convert memoryview to NumPy array
         array = np.frombuffer(ptr, dtype=np.uint8).reshape((height0, width0, channels))
+
+        if border is not None:
+            r, g, b = 0, 0, 0
+        else:
+            r = mode(array[..., 0].flatten(), axis=None).mode
+            g = mode(array[..., 1].flatten(), axis=None).mode
+            b = mode(array[..., 2].flatten(), axis=None).mode
+
+        flattened_image = array[..., 0:3].flatten()  # Combine channels 1, 2, and 3 into a single array
+        mode_val = mode(flattened_image, axis=None).mode
 
         if border is not None:
             # add a white border
@@ -2112,10 +2193,6 @@ class MainWindow(QMainWindow):
             array[-15:, :, :] = 255  # Bottom border
             array[:, :15, :] = 255  # Left border
             array[:, -15:, :] = 255  # Right border
-
-        r = mode(array[..., 0].flatten(), axis=None).mode
-        g = mode(array[..., 1].flatten(), axis=None).mode
-        b = mode(array[..., 2].flatten(), axis=None).mode
 
         # Pad each channel to the desired width and height
         pad_width = ((0, height - height0), (0, width - width0))  # Padding for height and width
@@ -2127,13 +2204,9 @@ class MainWindow(QMainWindow):
         array_pad = np.stack((b_pad, g_pad, r_pad), axis=-1)
 
         # Flatten the image and calculate the mode
-        flattened_image = array[..., 0:3].flatten()  # Combine channels 1, 2, and 3 into a single array
-        mode_val = mode(flattened_image, axis=None).mode
         array_pad_gray = np.mean(array_pad, axis=-1).astype(np.uint8)
-        if mode_val > 25: # complement if the image is brightfield
-            array_pad_gray = 255 - array_pad_gray
 
-        return mode_val, array_pad, array_pad_gray
+        return array_pad, array_pad_gray, mode_val
 
     def return_to_fiducials_tab(self):
         # initial button settings
@@ -2308,7 +2381,7 @@ class MainWindow(QMainWindow):
         # load and display fixed image
         image_path = os.path.join(self.pthFixed, self.nmFixed)
         if self.nmFixed != self.nmLoadedFixed:
-            self.imFixed0 = self.load_image(image_path)  # store the original pixmap
+            self.imFixed0, self.MI_Fixed = self.load_image(image_path)  # store the original pixmap
             self.nmLoadedFixed = self.nmFixed
 
         # Calculate zoom_default
@@ -2330,9 +2403,9 @@ class MainWindow(QMainWindow):
         # display image
         self.imMoving0 = []
         self.moving_zoom_default = 1
-        self.editWhichImage = 0
-        self.reset_transformations(self.editWhichImage)
         self.editWhichImage = 1
+        self.reset_transformations(self.editWhichImage)
+        self.editWhichImage = 0
         self.reset_transformations(self.editWhichImage)
 
     def update_both_images(self):
@@ -2832,7 +2905,7 @@ class MainWindow(QMainWindow):
         if not os.path.exists(image_path):
             print(f"Image file not found: {image_path}")
             return
-        self.imMoving0 = self.load_image(image_path)  # store the original pixmap
+        self.imMoving0, self.MI_Moving = self.load_image(image_path)  # store the original pixmap
 
         # check if saved fiducial points exist
         tmp = self.nmMoving[:self.nmMoving.rfind('.')] + ".pkl"
@@ -2848,7 +2921,7 @@ class MainWindow(QMainWindow):
             self.moving_zoom_default = min(width_scale, height_scale)
 
             self.editWhichImage = 0
-            self.reset_transformations(self.editWhichImage)
+            self.reset_transformations(self.editWhichImage, 0)
             self.editWhichImage = 1
             self.reset_transformations(self.editWhichImage)
 
@@ -3321,13 +3394,14 @@ class MainWindow(QMainWindow):
         # Update key states on release
         if event.key() == 16777248:
             self.shift_key = 0
-        elif event.key() == 82 or event.key() == 70 or event.key() == 68 or event.key() == 66 or event.key() == 67:
+        elif event.key() in {82, 70, 68, 66, 67, 65}:
             self.view_key = 0
-        elif event.key == 44 or event.key() == 46:
+        elif event.key() in {44, 46, 60, 62, 75, 76}:
             self.updown_key = 0
 
     def keyPressEvent(self, event):
         """Handle key press events."""
+
         print(event.key())
         # Check if the Esc key is pressed
         if event.key() == Qt.Key_Escape:
@@ -3341,68 +3415,61 @@ class MainWindow(QMainWindow):
             self.view_key = 2 # flip
         elif event.key() == 68: # d
             self.view_key = 3 # return view
-        elif event.key() == 66: #b
+        elif event.key() == 66: # b
             self.view_key = 4 # brightness
-        elif event.key == 67: # c
+        elif event.key() == 67: # c
             self.view_key = 5 # contrast
-        elif event.key == 44: # <
+        elif event.key() == 65: # auto adjust brightness
+            self.view_key = 6 # auto-adjust contrastA
+        elif event.key() in {44,60}: # <
             self.updown_key = 1 # down
-        elif event.key == 46: # >
+        elif event.key() in {46, 62}: # >
             self.updown_key = 2 # up
+        elif event.key() == 75: # k
+            self.updown_key = 3
+        elif event.key() == 76: # l
+            self.updown_key = 4
         else:
             # Pass the event to the base class for default handling
             super().keyPressEvent(event)
 
-        if self.shift_key == 0:
-            whichImage = 0 # left
-            if self.view_key == 1:
-                print("left rotate")
-                self.rotate_label_ui(whichImage)
-            elif self.view_key == 2:
-                print("left flip")
-                self.flip_image_y(whichImage)
-            elif self.view_key == 3:
-                print("left return")
-                self.reset_transformations(whichImage)
-            elif self.view_key == 4 and self.updown_key == 1:
-                print("left brightness")
-                self.decrease_brightness(whichImage)
-            elif self.view_key == 4 and self.updown_key == 2:
-                print("right brightness")
-                self.increase_brightness(whichImage)
-            elif self.view_key == 5 and self.updown_key == 1:
-                print("left contrast")
-                self.decrease_contrast(whichImage)
-            elif self.view_key == 5 and self.updown_key == 2:
-                print("right contrast")
-                self.increase_contrast(whichImage)
-        elif self.shift_key == 1:
-            whichImage = 1 # right
-            if self.view_key == 1:
-                print("right rotate")
-                self.rotate_label_ui(whichImage)
-            elif self.view_key == 2:
-                print("right flip")
-                self.flip_image_y(whichImage)
-            elif self.view_key == 3:
-                print("right return")
-                self.reset_transformations(whichImage)
-            elif self.view_key == 4 and self.updown_key == 1:
-                print("left brightness")
-                self.decrease_brightness(whichImage)
-            elif self.view_key == 4 and self.updown_key == 2:
-                print("right brightness")
-                self.increase_brightness(whichImage)
-            elif self.view_key == 5 and self.updown_key == 1:
-                print("left contrast")
-                self.decrease_contrast(whichImage)
-            elif self.view_key == 5 and self.updown_key == 2:
-                print("right contrast")
-                self.increase_contrast(whichImage)
+        #print(f"updown: {self.updown_key}, view_key: {self.view_key}, shift_key: {self.shift_key}")
+        #print(f"  increase contrast for updown=2 and view_key=5")
+        #print(f"  decrease contrast for updown=1 and view_key=5")
+
+        ff = [0, 1]
+        bb = [0, -5, 5, -20, 20]
+        cc = [0, -0.05, 0.05, -5, 5]
+        whichImage = ff[self.shift_key]
+        deltaval_b = bb[self.updown_key]
+        deltaval_c = cc[self.updown_key]
+        print("left" if whichImage == 0 else "right")
+
+        if self.view_key == 1:
+            print(" rotate")
+            self.rotate_label_ui(whichImage)
+        elif self.view_key == 2:
+            print(" flip")
+            self.flip_image_y(whichImage)
+        elif self.view_key == 3:
+            print(" return")
+            self.reset_transformations(whichImage)
+        elif self.view_key == 4: # brightness
+            print(" brightness")
+            self.change_brightness(whichImage, deltaval_b)
+        elif self.view_key == 5:  # contrast
+            print(" contrast")
+            self.change_contrast(whichImage, deltaval_c)
+        elif self.view_key == 6:
+            print(" auto adjust contrast")
+            self.auto_adjust_contrast(whichImage)
 
     def load_image(self, image_path):
 
         image = cv2.imread(image_path, cv2.IMREAD_UNCHANGED)
+        if image is None:
+            raise ValueError(f"Failed to load image: {image_path}")
+
         if len(image.shape) == 2:
             # Grayscale image: Convert to RGB
             image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
@@ -3413,16 +3480,15 @@ class MainWindow(QMainWindow):
             # Convert BGR to RGB (OpenCV loads images in BGR format)
             image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
-        if image.dtype != np.uint8:
-            # Only normalize if the image is not already 8-bit
-            image = image.astype(np.float32)
-            image = (image / np.iinfo(image.dtype).max * 255).astype(np.uint8)
+        if image.dtype == np.uint16:
+            image = (image / 65535.0 * 255).astype(np.uint8)
+        elif image.dtype == np.float32 or image.dtype == np.float64:
+            image = np.clip(image, 0, 1)  # Ensure values are in [0,1] before scaling
+            image = (image * 255).astype(np.uint8)
 
-        height, width, channels = image.shape
-        bytes_per_line = channels * width
-        qimage = QImage(image.data, width, height, bytes_per_line, QImage.Format_RGB888)
-        pixmap = QPixmap.fromImage(qimage)
-        return pixmap
+        max_intensity = np.max(image)
+        pixmap = self.array_to_pixmap(image)
+        return pixmap, max_intensity
 
     def resizeEvent(self, event):
         # Get the new size of the main window
