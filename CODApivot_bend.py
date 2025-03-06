@@ -10,10 +10,12 @@ import pandas as pd
 from PIL import Image
 from scipy.stats import mode
 from datetime import datetime
+import matplotlib.pyplot as plt
 from PySide6 import QtWidgets
 from PySide6.QtCore import Qt, QPointF, Signal
 from PySide6.QtWidgets import QStyledItemDelegate, QFileDialog, QLabel, QColorDialog, QHeaderView, QMainWindow, QVBoxLayout, QWidget
 from PySide6.QtGui import QPixmap, QTransform, QImage, QPainter, QCursor, QColor, QPen, QMouseEvent
+from elastic_registration import calculate_elastic_registration
 
 class CustomDelegateTable(QStyledItemDelegate):
     # Define a custom signal
@@ -108,6 +110,8 @@ class MainWindow(QMainWindow):
         self.border_right = []
         self.text_left = []
         self.text_right = []
+        self.pixmap = []
+        self.frame = []
         self.frame_left = []
         self.frame_right = []
         self.ColorButton = []
@@ -122,6 +126,8 @@ class MainWindow(QMainWindow):
         self.MI = 0
         self.MI_Fixed = 0
         self.MI_Moving = 0
+        self.mode_Fixed = [0, 0, 0]
+        self.mode_Moving = [0, 0, 0]
         self.MI_MovingCoords = 0
         self.MI_MovingCoordsReg = 0
         self.nmLoadedFixed = ""
@@ -158,6 +164,11 @@ class MainWindow(QMainWindow):
         self.flip_im = 0
         self.ptsMovingReg = np.array([[0, 0]], dtype=np.float64)
         self.imMovingReg = []
+        self.imMovingRegElastic = []
+        self.D = []
+        self.view_elastic_settings = 0
+        self.elastic_tilesize = 250
+        self.elastic_tilespacing = 100
 
         # Overlay tab view settings variables
         self.imOverlay0 = []
@@ -265,6 +276,7 @@ class MainWindow(QMainWindow):
         self.ui.SavingRegistrationResultsText.setGeometry(10, 480, 400, 24)
         self.ui.ChooseMovingImageFrame.setGeometry(10, 580, 480, 85)
         self.ui.MakingCoordOverlayText.setGeometry(10, 165, 400, 24)
+        self.ui.ElasticRegistrationControlsFrame.setGeometry(10, 605, 345, 75)
         self.ui.FixedImageFrameHeaderText.setGeometry(self.ui.UnregisteredImageFrameHeaderText.geometry())
         self.ui.MovingImageFrameHeaderText.setGeometry(self.ui.RegisteredImageFrameHeaderText.geometry())
         self.ui.FixedImageDisplayFrame.setGeometry(self.ui.UnregisteredImageDisplayFrame.geometry())
@@ -342,7 +354,6 @@ class MainWindow(QMainWindow):
         self.ui.GrowFiducialButton.clicked.connect(self.increase_fiducial_size)
         self.ui.DeleteAllButton.clicked.connect(self.delete_fiducials)
         self.ui.AttemptICPRegistrationButton.clicked.connect(self.begin_calculate_icp_tabF)
-
         # Overlay tab settings
         self.ui.DisableFrame_O1.setGeometry(self.ui.ImageViewControlsFrame_O.geometry())
         self.ui.DisableFrame_O2.setGeometry(self.ui.SaveRegistrationControlFrame.geometry())
@@ -350,11 +361,15 @@ class MainWindow(QMainWindow):
         self.overlay0_label.setScaledContents(True)  # Allow scaling to fit the frame
         self.overlay_label = ClickableLabel(self.ui.RegisteredImageDisplayFrame)
         self.overlay_label.setScaledContents(True)  # Allow scaling to fit the frame
-
         # Overlay tab what functions to call when a button is clicked
         self.ui.ReturnToFiducialsTab_O.clicked.connect(self.return_to_fiducials_tab)
         self.ui.SaveRegistrationResultsButton_O.clicked.connect(self.save_registration_results)
-
+        self.ui.TryElasticRegButton.clicked.connect(self.enable_elastic_registration)
+        self.ui.GrowTileSizeButton.clicked.connect(self.increase_elastic_tilesize)
+        self.ui.ShrinkTileSizeButton.clicked.connect(self.decrease_elastic_tilesize)
+        self.ui.GrowTileSpacingButton.clicked.connect(self.increase_elastic_tilespacing)
+        self.ui.ShrinkTileSpacingButton.clicked.connect(self.decrease_elastic_tilespacing)
+        self.ui.CalculateElasticRegistrationButton.clicked.connect(self.call_CODA_elastic_registration)
 
         # fiducial settings overlay tab
         self.ui.ColorFiducialButton_O.clicked.connect(self.call_change_fiducial_color0)
@@ -516,13 +531,13 @@ class MainWindow(QMainWindow):
         if not self.ui.FiducialPointControlsFrame.isVisible():
             self.ui.ChooseMovingImageFrame.setVisible(True)
 
-    def define_edit_frame(self, whichImage=None):
+    def define_edit_frame(self, make_pixmap = None):
+
+        if make_pixmap is None:
+            make_pixmap = 0
 
         # current tab
         self.current_index = self.ui.tabWidget.currentIndex()
-
-        if whichImage is None:
-            whichImage = self.editWhichImage
 
         if self.current_index == self.fiducials_tab:
             # point view variables
@@ -536,7 +551,7 @@ class MainWindow(QMainWindow):
             self.text_right = self.ui.MovingImageFrameHeaderText
             self.frame_left = self.ui.FixedImageDisplayFrame
             self.frame_right = self.ui.MovingImageDisplayFrame
-            if whichImage == 0:  # fixed image
+            if self.editWhichImage == 0:  # fixed image
                 # image view variables
                 self.flip_state = self.fixed_flip_state
                 self.rotation_angle = self.fixed_rotation_angle
@@ -594,13 +609,7 @@ class MainWindow(QMainWindow):
             self.frame_left = self.ui.UnregisteredImageDisplayFrame
             self.frame_right = self.ui.RegisteredImageDisplayFrame
             self.MI = 255
-            try:
-                self.ImageHeight = max([self.imFixed0.height(), self.imMoving0.height()])
-                self.ImageWidth = max([self.imFixed0.width(), self.imMoving0.width()])
-            except:
-                self.ImageHeight = 0
-                self.ImageWidth = 0
-            if whichImage == 0:  # unregistered image
+            if self.editWhichImage == 0:  # unregistered image
                 # image view variables
                 self.flip_state = self.unregistered_flip_state
                 self.rotation_angle = self.unregistered_rotation_angle
@@ -613,6 +622,12 @@ class MainWindow(QMainWindow):
                 self.label = self.overlay0_label
                 self.pts = self.ptsFixed
                 self.pts2 = self.ptsMoving
+                try:
+                    self.ImageHeight = self.imOverlay0.height()
+                    self.ImageWidth = self.imOverlay0.width()
+                except:
+                    self.ImageHeight = 0
+                    self.ImageWidth = 0
             else:  # registered image
                 # image view variables
                 self.flip_state = self.registered_flip_state
@@ -626,6 +641,12 @@ class MainWindow(QMainWindow):
                 self.label = self.overlay_label
                 self.pts = self.ptsFixed
                 self.pts2 = self.ptsMovingReg
+                try:
+                    self.ImageHeight = self.imOverlay.height()
+                    self.ImageWidth = self.imOverlay.width()
+                except:
+                    self.ImageHeight = 0
+                    self.ImageWidth = 0
         elif self.current_index == self.apply_to_data_tab: # apply to coordinates tab
             # point view variables
             self.rad = self.rad_tabC
@@ -649,7 +670,7 @@ class MainWindow(QMainWindow):
             self.pan_offset_x = self.coords_pan_offset_x
             self.pan_offset_y = self.coords_pan_offset_y
             self.label = self.coordinates_label
-            if whichImage == 0:
+            if self.editWhichImage == 0:
                 self.pts = self.ptsCoords
                 self.MI = self.MI_MovingCoords
                 try:
@@ -658,7 +679,7 @@ class MainWindow(QMainWindow):
                 except:
                     self.ImageHeight = 0
                     self.ImageWidth = 0
-            elif whichImage == 1:
+            elif self.editWhichImage == 1:
                 self.pts = self.ptsCoordsReg
                 self.MI = self.MI_MovingCoordsReg
                 try:
@@ -680,12 +701,35 @@ class MainWindow(QMainWindow):
         else:
             return
 
-    def return_edit_frame(self, whichImage=None):
+        if self.editWhichImage == 0:
+            self.frame = self.frame_left
+        else:
+            self.frame = self.frame_right
+
+        if make_pixmap == 1:
+            if self.current_index == self.fiducials_tab:
+                if self.editWhichImage == 0:  # fiducials tab fixed image
+                    self.pixmap = self.imFixed0
+                else:  # fiducials tab moving image
+                    self.pixmap = self.imMoving0
+
+            elif self.current_index == self.overlay_tab:
+                if self.editWhichImage == 0:  # overlay tab unregistered images
+                    self.pixmap = self.imOverlay0
+                else:  # overlay tab registered images
+                    self.pixmap = self.imOverlay  # self.imMovingReg
+
+            elif self.current_index == self.apply_to_data_tab:
+                if self.editWhichImage == 0:  # register coordinates tab unregistered moving image
+                    self.pixmap = self.imMovingCoords
+                elif self.editWhichImage == 1:  # register coordinates tab registered moving image
+                    self.pixmap = self.imMovingCoordsReg
+                else:  # Apply to coordinates tab fixed image
+                    self.pixmap = self.imFixed0
+
+    def return_edit_frame(self):
         # current tab
         self.current_index = self.ui.tabWidget.currentIndex()
-
-        if whichImage is None:
-            whichImage = self.editWhichImage
 
         if self.current_index == self.fiducials_tab:
             # point view variables
@@ -700,7 +744,7 @@ class MainWindow(QMainWindow):
             self.ui.FixedImageDisplayFrame = self.frame_left
             self.ui.MovingImageDisplayFrame = self.frame_right
 
-            if whichImage == 0:  # fixed image
+            if self.editWhichImage == 0:  # fixed image
                 # image view variables
                 self.fixed_flip_state = self.flip_state
                 self.fixed_rotation_angle = self.rotation_angle
@@ -739,7 +783,7 @@ class MainWindow(QMainWindow):
             self.ui.UnregisteredImageDisplayFrame = self.frame_left
             self.ui.RegisteredImageDisplayFrame = self.frame_right
 
-            if whichImage == 0:  # unregistered image
+            if self.editWhichImage == 0:  # unregistered image
                 # image view variables
                 self.unregistered_flip_state = self.flip_state
                 self.unregistered_rotation_angle = self.rotation_angle
@@ -776,6 +820,8 @@ class MainWindow(QMainWindow):
             self.coords_pan_offset_y = self.pan_offset_y
         else:
             return
+
+        self.pixmap = []
 
     def delete_fiducials(self):
 
@@ -910,29 +956,21 @@ class MainWindow(QMainWindow):
         self.ColorButton.setStyleSheet(tmp)
         self.whichColor = 0
 
-    def update_zoom_default(self, whichImage=None):
+    def update_zoom_default(self):
 
-        if whichImage is None:
-            whichImage = self.editWhichImage
-
-        self.define_edit_frame(whichImage)
+        self.define_edit_frame()
         if self.ImageWidth == 0 or self.ImageHeight == 0:
             return
 
-        if whichImage == 0:
-            frame = self.frame_left
-        else:
-            frame = self.frame_right
-
-        width_scale = frame.width() / self.ImageWidth
-        height_scale = frame.height() / self.ImageHeight
+        width_scale = self.frame.width() / self.ImageWidth
+        height_scale = self.frame.height() / self.ImageHeight
 
         zoom_default0 = self.zoom_default
         zoom_scale0 = self.zoom_scale
         zz = zoom_scale0 / zoom_default0
         self.zoom_default = min(width_scale, height_scale)
         self.zoom_scale = zz * self.zoom_default
-        self.return_edit_frame(whichImage)
+        self.return_edit_frame()
 
     def handle_fiducial_click(self, x, y, event):
 
@@ -1172,11 +1210,8 @@ class MainWindow(QMainWindow):
         # Set the center of the crosshair to the hotspot
         return QCursor(pixmap, pixmap_size // 2, pixmap_size // 2)
 
-    def reset_transformations(self, whichImage=None, keep_contrast=None):
+    def reset_transformations(self, keep_contrast=None):
         """Reset all transformations to their defaults."""
-
-        if whichImage is not None:
-            self.editWhichImage = whichImage
 
         # skip if we aren't in an image view tab
         self.define_edit_frame()
@@ -1194,11 +1229,8 @@ class MainWindow(QMainWindow):
         self.return_edit_frame()
         self.update_image_view()
 
-    def flip_image_y(self, whichImage=None):
+    def flip_image_y(self):
         """Flip the image horizontally while ensuring it fits within bounds."""
-
-        if whichImage is not None:
-            self.editWhichImage = whichImage
 
         # skip if we aren't in an image view tab
         self.define_edit_frame()
@@ -1211,11 +1243,8 @@ class MainWindow(QMainWindow):
         self.return_edit_frame()
         self.update_image_view()
 
-    def rotate_label_ui(self, whichImage=None):
+    def rotate_label_ui(self):
         """Rotate the image while ensuring pan offsets align with the rotation."""
-
-        if whichImage is not None:
-            self.editWhichImage = whichImage
 
         # skip if we aren't in an image view tab
         self.define_edit_frame()
@@ -1227,10 +1256,7 @@ class MainWindow(QMainWindow):
         self.return_edit_frame()
         self.update_image_view()
 
-    def change_brightness(self, whichImage=None, deltaval=0):
-
-        if whichImage is not None:
-            self.editWhichImage = whichImage
+    def change_brightness(self, deltaval=0):
 
         # skip if we aren't in an image view tab
         self.define_edit_frame()
@@ -1242,10 +1268,7 @@ class MainWindow(QMainWindow):
         self.update_image_view()
         print(f"brightness: {self.brightness}, contrast: {self.contrast}")
 
-    def change_contrast(self, whichImage=None, deltaval=0):
-
-        if whichImage is not None:
-            self.editWhichImage = whichImage
+    def change_contrast(self, deltaval=0):
 
         # skip if we aren't in an image view tab
         self.define_edit_frame()
@@ -1257,30 +1280,9 @@ class MainWindow(QMainWindow):
         self.update_image_view()
         print(f"brightness: {self.brightness}, contrast: {self.contrast}")
 
-    def auto_adjust_contrast(self, whichImage=None):
+    def auto_adjust_contrast(self):
 
         self.define_edit_frame()
-
-        # define the current target pixmap
-        if self.current_index == self.fiducials_tab:
-            if self.editWhichImage == 0:  # fiducials tab fixed image
-                pixmap = self.imFixed0
-            else: # fiducials tab moving image
-                pixmap = self.imMoving0
-        elif self.current_index == self.overlay_tab:
-            if self.editWhichImage == 0: # overlay tab unregistered images
-                pixmap = self.imOverlay0
-            else:  # overlay tab registered images
-                pixmap = self.imOverlay #self.imMovingReg
-        elif self.current_index == self.apply_to_data_tab:
-            if self.editWhichImage == 0: # register coordinates tab unregistered moving image
-                pixmap = self.imMovingCoords
-            elif self.editWhichImage == 1: # register coordinates tab registered moving image
-                pixmap = self.imMovingCoordsReg
-            else: # Apply to coordinates tab fixed image
-                pixmap = self.imFixed0
-        else:
-            return
 
         # calculate the maximum image intensity
         max_intensity = self.MI + self.brightness
@@ -1355,8 +1357,36 @@ class MainWindow(QMainWindow):
 
     def highlight_current_frame(self):
 
-        # turn off both frames
-        if not self.add_fiducial_active:
+        # highlight the frame to add a fiducial point to
+        if self.add_fiducial_active:
+            self.editWhichImage = self.editWhichFid
+            self.define_edit_frame()
+            if self.editWhichImage == 0:  # left image
+                self.border_left.setStyleSheet(self.activeLabel)
+                tmp = self.frame_left.geometry()
+                self.border_left.setGeometry(tmp.x() - 5, tmp.y() - 5, tmp.width() + 10, tmp.height() + 10)
+                self.text_left.setStyleSheet(self.activeTextLabel)
+                self.frame_left.setStyleSheet(self.activeFrame)
+
+                self.border_right.setStyleSheet(self.inactiveLabel)
+                tmp = self.frame_right.geometry()
+                self.border_right.setGeometry(tmp.x() - 3, tmp.y() - 3, tmp.width() + 6, tmp.height() + 6)
+                self.text_right.setStyleSheet(self.inactiveTextLabel)
+                self.frame_right.setStyleSheet(self.inactiveFrame)
+            else:  # right image
+                self.border_left.setStyleSheet(self.inactiveLabel)
+                tmp = self.frame_left.geometry()
+                self.border_left.setGeometry(tmp.x() - 3, tmp.y() - 3, tmp.width() + 6, tmp.height() + 6)
+                self.text_left.setStyleSheet(self.inactiveTextLabel)
+                self.frame_left.setStyleSheet(self.inactiveFrame)
+
+                self.border_right.setStyleSheet(self.activeLabel)
+                tmp = self.frame_right.geometry()
+                self.border_right.setGeometry(tmp.x() - 5, tmp.y() - 5, tmp.width() + 10, tmp.height() + 10)
+                self.text_right.setStyleSheet(self.activeTextLabel)
+                self.frame_right.setStyleSheet(self.activeFrame)
+        # make sure neither frame is highlighted
+        else:
             self.define_edit_frame()
             self.border_left.setStyleSheet(self.inactiveLabel)
             self.text_left.setStyleSheet(self.inactiveTextLabel)
@@ -1368,34 +1398,6 @@ class MainWindow(QMainWindow):
             self.frame_right.setStyleSheet(self.inactiveFrame)
             tmp = self.frame_right.geometry()
             self.border_right.setGeometry(tmp.x() - 3, tmp.y() - 3, tmp.width() + 6, tmp.height() + 6)
-            return
-
-        self.editWhichImage = self.editWhichFid
-        self.define_edit_frame()
-        if self.editWhichImage == 0:  # left image
-            self.border_left.setStyleSheet(self.activeLabel)
-            tmp = self.frame_left.geometry()
-            self.border_left.setGeometry(tmp.x() - 5, tmp.y() - 5, tmp.width() + 10, tmp.height() + 10)
-            self.text_left.setStyleSheet(self.activeTextLabel)
-            self.frame_left.setStyleSheet(self.activeFrame)
-
-            self.border_right.setStyleSheet(self.inactiveLabel)
-            tmp = self.frame_right.geometry()
-            self.border_right.setGeometry(tmp.x() - 3, tmp.y() - 3, tmp.width() + 6, tmp.height() + 6)
-            self.text_right.setStyleSheet(self.inactiveTextLabel)
-            self.frame_right.setStyleSheet(self.inactiveFrame)
-        else:  # right image
-            self.border_left.setStyleSheet(self.inactiveLabel)
-            tmp = self.frame_left.geometry()
-            self.border_left.setGeometry(tmp.x() - 3, tmp.y() - 3, tmp.width() + 6, tmp.height() + 6)
-            self.text_left.setStyleSheet(self.inactiveTextLabel)
-            self.frame_left.setStyleSheet(self.inactiveFrame)
-
-            self.border_right.setStyleSheet(self.activeLabel)
-            tmp = self.frame_right.geometry()
-            self.border_right.setGeometry(tmp.x() - 5, tmp.y() - 5, tmp.width() + 10, tmp.height() + 10)
-            self.text_right.setStyleSheet(self.activeTextLabel)
-            self.frame_right.setStyleSheet(self.activeFrame)
 
     def begin_calculate_icp_tabF(self):
 
@@ -1746,7 +1748,7 @@ class MainWindow(QMainWindow):
         self.ui.DisableFrame_C_3.setVisible(True)
         QtWidgets.QApplication.processEvents()
 
-        self.reset_transformations(self.editWhichImage)
+        self.reset_transformations()
         self.ui.DisableFrame_C_2.setVisible(False)
         self.ui.DisableFrame_C_3.setVisible(False)
         self.ui.PlottingImageText.setVisible(False)
@@ -1761,7 +1763,7 @@ class MainWindow(QMainWindow):
         self.ui.DisableFrame_C_3.setVisible(True)
         QtWidgets.QApplication.processEvents()
 
-        self.reset_transformations(self.editWhichImage)
+        self.reset_transformations()
         self.ui.DisableFrame_C_2.setVisible(False)
         self.ui.DisableFrame_C_3.setVisible(False)
         self.ui.PlottingImageText.setVisible(False)
@@ -1777,7 +1779,7 @@ class MainWindow(QMainWindow):
         self.ui.DisableFrame_C_3.setVisible(True)
         QtWidgets.QApplication.processEvents()
 
-        self.reset_transformations(self.editWhichImage)
+        self.reset_transformations()
         self.ui.DisableFrame_C_2.setVisible(False)
         self.ui.DisableFrame_C_3.setVisible(False)
         self.ui.PlottingImageText.setVisible(False)
@@ -1795,11 +1797,11 @@ class MainWindow(QMainWindow):
         image_path_moving = os.path.join(self.pthMovingCoords, self.nmMovingCoords)
         image_path_reg = self.nmMovingCoords[:self.nmMovingCoords.rfind('.')] + ".jpg"
         image_path_reg = os.path.join(self.jobFolder, self.ResultsName, "Registered images", image_path_reg)
-        # print(f"moving image: {self.nmMovingCoords}, loaded image: {self.nmLoadedMoving}")
+
         if self.nmMovingCoords != self.nmLoadedMoving:
             try:
-                self.imFixed0, self.MI_Fixed = self.load_image(image_path_fixed)         # load the fixed image
-                self.imMovingCoords, self.MI_MovingCoords = self.load_image(image_path_moving)  # load the moving image
+                self.imFixed0, self.MI_Fixed, self.mode_Fixed = self.load_image(image_path_fixed)         # load the fixed image
+                self.imMovingCoords, self.MI_MovingCoords, self.mode_Moving = self.load_image(image_path_moving)  # load the moving image
                 self.imMovingCoordsReg, self.MI_MovingCoordsReg = self.load_image(image_path_reg)  # load the registered moving image
                 self.nmLoadedMoving = self.nmMovingCoords
             except:
@@ -1958,22 +1960,27 @@ class MainWindow(QMainWindow):
         self.ui.FixedCheckBox.setCheckState(Qt.Unchecked)
         self.all_images_checked = 0
 
-    def transform_image(self, pixmap):
+    def debug_show_image(self, image):
+        plt.imshow(image)
+        plt.axis("off")  # Hide axis for clarity
+        plt.show()
+
+    def transform_image(self, pixmap, mode_vals):
 
         if self.flip_im:
             transform = QTransform().scale(-1, 1)  # Horizontal flip
             pixmap = pixmap.transformed(transform, mode=Qt.SmoothTransformation)
 
         # Pad the image to the size of the fixed image
-        border = 1
+        border = 0 # add border around fixed image
         width = max([self.imFixed0.width(), pixmap.width()])
         height = max([self.imFixed0.height(), pixmap.height()])
         szz = (width, height)  # (width, height)
-        array, array_g, mMovingReg = self.pad_images(pixmap, width, height, border)
+        array, array_g = self.pad_images(pixmap, width, height, mode_vals, border)
 
         # Apply the adjusted transformation and crop the image to the size of the fixed image
-        fv = int(mMovingReg)
-        transformed_array = cv2.warpAffine(array, self.tform[:2, :], szz, flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=[fv, fv, fv])
+        fv1, fv2, fv3 = int(mode_vals[0]), int(mode_vals[1]), int(mode_vals[2])
+        transformed_array = cv2.warpAffine(array, self.tform[:2, :], szz, flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=[fv1, fv2, fv3])
         if transformed_array.shape[1] > self.imFixed0.height() or transformed_array.shape[0] > self.imFixed0.width():
             transformed_array = transformed_array[:self.imFixed0.height(), :self.imFixed0.width()]
         transformed_array = np.ascontiguousarray(transformed_array)
@@ -2055,6 +2062,9 @@ class MainWindow(QMainWindow):
         self.ui.SavingRegistrationResultsText.setVisible(False)
         self.ui.SaveRegistrationControlFrame.setEnabled(True)
         self.ui.ImageViewControlsFrame_O.setEnabled(True)
+        self.ui.ElasticRegistrationControlsFrame.setVisible(False)
+        self.ui.DisableFrame_O3.setVisible(False)
+        self.ui.TryElasticRegButton.setVisible(False)
 
         self.add_fiducial_active = False
         self.delete_mode_active = False
@@ -2073,20 +2083,20 @@ class MainWindow(QMainWindow):
         self.update_button_color()
         pixmap_fixed = self.adjust_brightness_contrast(self.imFixed0, self.fixed_contrast, self.fixed_brightness)
         pixmap_moving = self.adjust_brightness_contrast(self.imMoving0, self.moving_contrast, self.moving_brightness)
-        self.imOverlay0, self.unregistered_zoom_default = self.make_overlay_image(pixmap_fixed, pixmap_moving)
-        self.registered_zoom_scale = self.unregistered_zoom_default
+        self.imOverlay0 = self.make_overlay_image(pixmap_fixed, pixmap_moving)
         self.editWhichImage = 0
-        self.reset_transformations(self.editWhichImage)
+        self.reset_transformations()
 
         # register the moving image
-        self.imMovingReg = self.transform_image(self.imMoving0)
+        self.imMovingReg = self.transform_image(self.imMoving0, self.mode_Moving)
         pixmap_moving = self.adjust_brightness_contrast(self.imMovingReg, self.moving_contrast, self.moving_brightness)
         # make the desired overlay image
-        #self.make_greyscale_overlay()
+        #self.imOverlay = self.make_greyscale_overlay()
         # plot registered overlay
-        self.imOverlay, self.registered_zoom_default = self.make_overlay_image(pixmap_fixed, pixmap_moving)
+        self.imOverlay = self.make_overlay_image(pixmap_fixed, pixmap_moving)
+
         self.editWhichImage = 1
-        self.reset_transformations(self.editWhichImage)
+        self.reset_transformations()
 
     def make_greyscale_overlay(self):
 
@@ -2094,7 +2104,7 @@ class MainWindow(QMainWindow):
         array = self.pixmap_to_array(self.imMoving0)
         array_mask = np.ones_like(array, dtype=np.uint8)
         array_mask = self.array_to_pixmap(array_mask)
-        registered_mask = self.transform_image(array_mask)
+        registered_mask = self.transform_image(array_mask, [0, 0, 0])
         registered_mask = self.pixmap_to_array(registered_mask)#[..., :3]
 
         # Convert pixmaps to arrays
@@ -2105,12 +2115,37 @@ class MainWindow(QMainWindow):
         overlay_array = np.stack([gray_values] * overlay_array.shape[-1], axis=-1)
         overlay_array[registered_mask == 1] = moving_array[registered_mask == 1]
         overlay_array = np.ascontiguousarray(overlay_array[..., :3]) # remove the alpha channel
-        self.imOverlay = self.array_to_pixmap(overlay_array)
+        imOverlay = self.array_to_pixmap(overlay_array)
 
-        # Calculate zoom_default
-        width_scale = self.ui.UnregisteredImageDisplayFrame.width() / self.imOverlay.width()
-        height_scale = self.ui.UnregisteredImageDisplayFrame.height() / self.imOverlay.height()
-        self.registered_zoom_default = min(width_scale, height_scale)
+        return imOverlay
+
+    def make_overlay_image(self, imFixed, imMoving):
+
+        # pad images to be the same size
+        height = max([imFixed.height(), imMoving.height()])
+        width = max([imFixed.width(), imMoving.width()])
+
+        # pad the fixed image
+        imFixed_pad, imFixed_pad_G = self.pad_images(imFixed, width, height, self.mode_Fixed)
+        mFixed = sum(self.mode_Fixed) / len(self.mode_Fixed)
+
+        # pad the moving image
+        imMoving_pad, imMoving_pad_G = self.pad_images(imMoving, width, height, self.mode_Moving)
+        mMoving = sum(self.mode_Moving) / len(self.mode_Moving)
+
+        # complement if necessary
+        # print(f"mode moving: {mMoving}, mode fixed: {mFixed}")
+        if mMoving < 25 and mFixed > 25:  # complement if the image is brightfield
+            imMoving_pad_G = 255 - imMoving_pad_G
+        if mFixed < 25 and mMoving > 25:
+            imFixed_pad_G = 255 - imFixed_pad_G
+
+        # make the combined overlay image
+        combined_array = np.stack((imMoving_pad_G, imFixed_pad_G, imMoving_pad_G), axis=-1)  # (H, W, 3)
+        imOverlay = QImage(combined_array.data, width, height, 3 * width, QImage.Format_RGB888)
+        imOverlay = QPixmap.fromImage(imOverlay)
+
+        return imOverlay
 
     def pixmap_to_array(self, pixmap):
         """Convert QPixmap to a numpy array."""
@@ -2122,70 +2157,29 @@ class MainWindow(QMainWindow):
         channels = int(np.size(ptr) / width / height)
         ptr = np.array(ptr).reshape((height, bytes_per_line))  # Convert memory view to NumPy array
         array = np.frombuffer(ptr, dtype=np.uint8).reshape((height, width, channels))
+
+        #if channels == 4:
+        #    array = array[:, :, :3]
+        #    print("  remove 4th channel")
+
         return array
 
     def array_to_pixmap(self, array):
         """Convert a numpy array to QPixmap."""
 
-        height = array.shape[1]
-        width = array.shape[0]
-        ss = array.strides[0]
-        pixmap = QImage(array.data, height, width, ss, QImage.Format_RGB888)
+        height, width, channels = array.shape[:3]
+        print(f" height: {height}, width: {width}, channels: {channels}")
+        pixmap = QImage(array.data, width, height, QImage.Format_ARGB32 if channels == 4 else QImage.Format_RGB888)
+        #ss = array.strides[0]
+        #pixmap = QImage(array.data, height, width, ss, QImage.Format_RGB888)
         pixmap = QPixmap.fromImage(pixmap)
         return pixmap
 
-    def make_overlay_image(self, imFixed, imMoving):
-
-        # pad images to be the same size
-        height = max([imFixed.height(), imMoving.height()])
-        width = max([imFixed.width(), imMoving.width()])
-
-        # pad the fixed image
-        imFixed_pad, imFixed_pad_G, mFixed = self.pad_images(imFixed, width, height)
-
-        # pad the moving image
-        imMoving_pad, imMoving_pad_G, mMoving = self.pad_images(imMoving, width, height)
-
-        # complement if necessary
-        print(f"mode moving: {mMoving}, mode fixed: {mFixed}")
-        if mMoving < 25 and mFixed > 25:  # complement if the image is brightfield
-            imMoving_pad_G = 255 - imMoving_pad_G
-        if mFixed < 25 and mMoving > 25:
-            imFixed_pad_G = 255 - imFixed_pad_G
-
-        # make the combined overlay image
-        combined_array = np.stack((imMoving_pad_G, imFixed_pad_G, imMoving_pad_G), axis=-1)  # (H, W, 3)
-        imOverlay = QImage(combined_array.data, width, height, 3 * width, QImage.Format_RGB888)
-        imOverlay = QPixmap.fromImage(imOverlay)
-
-        # Calculate zoom_default
-        width_scale = self.ui.UnregisteredImageDisplayFrame.width() / width
-        height_scale = self.ui.UnregisteredImageDisplayFrame.height() / height
-        zoom_default = min(width_scale, height_scale)
-
-        return imOverlay, zoom_default
-
-    def pad_images(self, pixmap, width, height, border=None):
+    def pad_images(self, pixmap, width, height, mode_vals, border=None):
 
         # Convert pixmap to image
-        image = pixmap.toImage()
-        width0 = pixmap.width()
-        height0 = pixmap.height()
-        bytes_per_line = image.bytesPerLine()
-        ptr = image.bits()
-        channels = int(np.size(ptr) / width0 / height0)
-        ptr = np.array(ptr).reshape((height0, bytes_per_line))  # Convert memoryview to NumPy array
-        array = np.frombuffer(ptr, dtype=np.uint8).reshape((height0, width0, channels))
-
-        if border is not None:
-            r, g, b = 0, 0, 0
-        else:
-            r = mode(array[..., 0].flatten(), axis=None).mode
-            g = mode(array[..., 1].flatten(), axis=None).mode
-            b = mode(array[..., 2].flatten(), axis=None).mode
-
-        flattened_image = array[..., 0:3].flatten()  # Combine channels 1, 2, and 3 into a single array
-        mode_val = mode(flattened_image, axis=None).mode
+        array = self.pixmap_to_array(pixmap)
+        height0, width0 = array.shape[:2]
 
         if border is not None:
             # add a white border
@@ -2196,9 +2190,9 @@ class MainWindow(QMainWindow):
 
         # Pad each channel to the desired width and height
         pad_width = ((0, height - height0), (0, width - width0))  # Padding for height and width
-        r_pad = np.pad(array[..., 0], pad_width, mode='constant', constant_values=r)
-        g_pad = np.pad(array[..., 1], pad_width, mode='constant', constant_values=g)
-        b_pad = np.pad(array[..., 2], pad_width, mode='constant', constant_values=b)
+        r_pad = np.pad(array[..., 0], pad_width, mode='constant', constant_values=mode_vals[0])
+        g_pad = np.pad(array[..., 1], pad_width, mode='constant', constant_values=mode_vals[1])
+        b_pad = np.pad(array[..., 2], pad_width, mode='constant', constant_values=mode_vals[2])
 
         # Combine the padded channels into a single RGB array and a grayscale array
         array_pad = np.stack((b_pad, g_pad, r_pad), axis=-1)
@@ -2206,7 +2200,7 @@ class MainWindow(QMainWindow):
         # Flatten the image and calculate the mode
         array_pad_gray = np.mean(array_pad, axis=-1).astype(np.uint8)
 
-        return array_pad, array_pad_gray, mode_val
+        return array_pad, array_pad_gray
 
     def return_to_fiducials_tab(self):
         # initial button settings
@@ -2266,6 +2260,119 @@ class MainWindow(QMainWindow):
         self.ui.ImageViewControlsFrame_O.setEnabled(False)
         self.ui.DisableFrame_O1.setVisible(True)
         self.ui.DisableFrame_O2.setVisible(True)
+        self.ui.TryElasticRegButton.setVisible(True)
+
+    def make_tissue_mask(self, array, mode_val):
+
+        # determine whether the image is brightfield or flourescent and make the tissue mask
+        #flattened_image = array[..., 0:3].flatten()  # Combine channels 1, 2, and 3 into a single array
+        array_grey = np.mean(array[:, :, :3], axis=-1).astype(np.uint8)  # im_ref = im_ref[:, :, :3]
+        #mode_val = mode(array_grey, axis=None).mode
+
+        mode_val = sum(mode_val) / len(mode_val)
+        print(f" mode of image: {mode_val}")
+        if mode_val < 200: # flourescent image
+            mask = array_grey > 10
+            array_grey = 255 - array_grey
+        else: # brightfield image
+            mask = array_grey < 215
+
+        return array_grey, mask
+
+    def call_CODA_elastic_registration(self):
+
+        # set up fixed image for elastic registration
+        im_ref = self.pixmap_to_array(self.imFixed0)
+        im_ref_grey, mask_ref, = self.make_tissue_mask(im_ref, self.mode_Fixed)
+
+        # set up moving image for elastic registration
+        im_moving = self.pixmap_to_array(self.imMovingReg)
+        im_moving = im_moving[:, :, :3]
+        im_moving_grey, mask_moving, = self.make_tissue_mask(im_moving, self.mode_Moving)
+
+        # elastic registration settings
+        tile_size = self.elastic_tilesize
+        n_buffer_pix = 50
+        intertile_distance = self.elastic_tilespacing
+
+        self.debug_show_image(im_moving_grey)
+        self.debug_show_image(mask_moving)
+        self.debug_show_image(im_ref_grey)
+        self.debug_show_image(mask_ref)
+
+        # Took below section from pyCODA:
+        D = calculate_elastic_registration(im_ref_grey, im_moving_grey, mask_ref, mask_moving, tile_size, n_buffer_pix, intertile_distance)
+        D = cv2.resize(D,(im_moving.shape[1], im_moving.shape[0]), interpolation=cv2.INTER_LINEAR,)
+        self.D = D.astype(np.float32)
+
+        # Create the base coordinate grid
+        base_x, base_y = np.meshgrid(np.arange(im_moving.shape[1]), np.arange(im_moving.shape[0]))
+
+        # Convert the displacement map to absolute coordinates
+        map_x = (base_x + self.D[..., 0]).astype(np.float32)
+        map_y = (base_y + self.D[..., 1]).astype(np.float32)
+        remapped_channels = [
+            cv2.remap(channel, map_x, map_y, interpolation=cv2.INTER_NEAREST, borderMode=cv2.BORDER_CONSTANT, borderValue=float(241))
+            for i, channel in enumerate(cv2.split(im_moving))
+        ]
+        im_moving_elastic = cv2.merge(remapped_channels)
+
+        # Convert back to pixmap
+        self.imMovingRegElastic = self.array_to_pixmap(im_moving_elastic)
+
+        # convert the elastically registered image back to a pixmap and view an overlay
+        pixmap_fixed = self.adjust_brightness_contrast(self.imFixed0, self.fixed_contrast, self.fixed_brightness)
+        pixmap_moving = self.adjust_brightness_contrast(self.imMovingRegElastic, self.moving_contrast, self.moving_brightness)
+        self.imOverlay0 = self.make_overlay_image(pixmap_fixed, pixmap_moving)
+        self.editWhichImage = 0
+        self.reset_transformations()
+        self.ui.UnregisteredImageFrameHeaderText.setText("Test view elastic reg overlay (ignore fiducials)")
+        QtWidgets.QApplication.processEvents()
+
+        print("transformed image")
+
+    def enable_elastic_registration(self):
+
+        if self.view_elastic_settings == 0:
+            # enter elastic registration mode
+            self.view_elastic_settings = 1
+            self.ui.ElasticRegistrationControlsFrame.setVisible(True)
+            self.ui.SaveElasticRegistrationButton.setVisible(False)
+            self.ui.TryElasticRegButton.setText("Quit Elastic Registration")
+            self.ui.TileSizeText.setText(f"Size: {self.elastic_tilesize}")
+            self.ui.TileSpacingText.setText(f"Spacing: {self.elastic_tilespacing}")
+
+        else:
+            # exist elastic registration mode
+            self.view_elastic_settings = 0
+            self.ui.ElasticRegistrationControlsFrame.setVisible(False)
+            self.ui.TryElasticRegButton.setText("Try Elastic Registration")
+
+    def increase_elastic_tilesize(self):
+
+        # increase the tile size for elastic registration
+        self.elastic_tilesize = self.elastic_tilesize + 25
+        self.ui.TileSizeText.setText(f"Size: {self.elastic_tilesize}")
+        print("increase tile size")
+
+    def decrease_elastic_tilesize(self):
+
+        # decrease the tile size for elastic registration
+        self.elastic_tilesize = self.elastic_tilesize - 25
+        self.ui.TileSizeText.setText(f"Size: {self.elastic_tilesize}")
+
+    def increase_elastic_tilespacing(self):
+
+        # increase the tile spacing for elastic registration
+        self.elastic_tilespacing = self.elastic_tilespacing + 25
+        self.ui.TileSpacingText.setText(f"Spacing: {self.elastic_tilespacing}")
+        print("increase tile spacing")
+
+    def decrease_elastic_tilespacing(self):
+
+        # decrease the tile spacing for elastic registration
+        self.elastic_tilespacing = self.elastic_tilespacing - 25
+        self.ui.TileSpacingText.setText(f"Spacing: {self.elastic_tilespacing}")
 
     def initiate_import_project_tab(self):
 
@@ -2333,12 +2440,6 @@ class MainWindow(QMainWindow):
         for row in check_file_status:
             # fiducial point setting
             self.ui.JobStatusTableWidget.setItem(row_count, 1, QtWidgets.QTableWidgetItem(f"{row[0]} pairs"))
-            #cell_item = QtWidgets.QTableWidgetItem(f"{row[0]} pairs")
-            #if row[0] >= 10:
-            #    cell_item.setBackground(QBrush(QColor("#40ad40")))
-            #else:
-            #    cell_item.setBackground(QBrush(QColor("#40ad40")))
-            #self.ui.JobStatusTableWidget.setItem(row_count, 1, cell_item)
             if row[1]:
                 self.ui.JobStatusTableWidget.setItem(row_count, 2, QtWidgets.QTableWidgetItem(f"RMSE: {str(row[1])} pixels"))
             else:
@@ -2381,7 +2482,7 @@ class MainWindow(QMainWindow):
         # load and display fixed image
         image_path = os.path.join(self.pthFixed, self.nmFixed)
         if self.nmFixed != self.nmLoadedFixed:
-            self.imFixed0, self.MI_Fixed = self.load_image(image_path)  # store the original pixmap
+            self.imFixed0, self.MI_Fixed, self.mode_Fixed = self.load_image(image_path)  # store the original pixmap
             self.nmLoadedFixed = self.nmFixed
 
         # Calculate zoom_default
@@ -2404,9 +2505,9 @@ class MainWindow(QMainWindow):
         self.imMoving0 = []
         self.moving_zoom_default = 1
         self.editWhichImage = 1
-        self.reset_transformations(self.editWhichImage)
+        self.reset_transformations()
         self.editWhichImage = 0
-        self.reset_transformations(self.editWhichImage)
+        self.reset_transformations()
 
     def update_both_images(self):
 
@@ -2423,54 +2524,34 @@ class MainWindow(QMainWindow):
         """Update the image view with all transformations (flip, rotate, zoom, and pan) preserved."""
 
         # define the current frame variables and pixmap
-        self.update_zoom_default(self.editWhichImage)
-        self.define_edit_frame(self.editWhichImage)
-        if self.current_index == self.fiducials_tab:
-            if self.editWhichImage == 0:  # fiducials tab fixed image
-                pixmap = self.imFixed0
-            else: # fiducials tab moving image
-                pixmap = self.imMoving0
-            self.pts = np.delete(self.pts, 0, axis=0)  # remove the first point
-        elif self.current_index == self.overlay_tab:
-            if self.editWhichImage == 0: # overlay tab unregistered images
-                pixmap = self.imOverlay0
-            else:  # overlay tab registered images
-                pixmap = self.imOverlay #self.imMovingReg
+        self.update_zoom_default()
+        define_pixmap = 1
+        self.define_edit_frame(define_pixmap)
+        if self.current_index == self.fiducials_tab or self.current_index == self.overlay_tab:
             self.pts = np.delete(self.pts, 0, axis=0)  # remove the first point
         elif self.current_index == self.apply_to_data_tab:
-            if self.editWhichImage == 0: # register coordinates tab unregistered moving image
-                pixmap = self.imMovingCoords
-            elif self.editWhichImage == 1: # register coordinates tab registered moving image
-                pixmap = self.imMovingCoordsReg
-            else: # Apply to coordinates tab fixed image
-                pixmap = self.imFixed0
             # randomly subsample the coordinate points
             self.pts = self.pts[self.sampled_indices]
         else:
             return
 
         zz = self.zoom_scale / self.zoom_default
-        if pixmap is not None:
-            if pixmap == []:
+        if self.pixmap is not None:
+            if not self.pixmap:
                 self.label.clear()
                 return
 
             if self.brightness != 0 or self.contrast != 1:
-                pixmap = self.adjust_brightness_contrast(pixmap, self.contrast, self.brightness)
+                self.pixmap = self.adjust_brightness_contrast(self.pixmap, self.contrast, self.brightness)
 
-            size_pt = max([int(np.ceil(max([pixmap.width(), pixmap.height()]) / 1000 / zz * self.rad)), 1])
-            #if self.current_index == self.apply_to_data_tab and self.editWhichImage > 0 and zz < 2.5:
-            #    size_pt = max([int(np.ceil(max([pixmap.width(), pixmap.height()]) / 1000 / 2.5 * self.rad)), 1])
-            pixmap = self.add_points_to_image(pixmap, self.pts, size_pt, self.ptsColor)
-
-            #if self.current_index == self.apply_to_data_tab:
-            #    self.imPlotHold = pixmap
+            size_pt = max([int(np.ceil(max([self.pixmap.width(), self.pixmap.height()]) / 1000 / zz * self.rad)), 1])
+            self.pixmap = self.add_points_to_image(self.pixmap, self.pts, size_pt, self.ptsColor)
 
             if self.current_index == self.fiducials_tab : # if in fiducials tab, overlay the potential deletion point if required
                 # update fiducial point count
                 count = self.ptsMoving.shape[0] - 1
                 self.ui.FiducialFrameHeaderText.setText(f"Fiducial Point View (# Pairs : {count})")
-                if count > 9:
+                if count > 5:
                     self.ui.AttemptICPRegistrationButton.setVisible(True)
                 else:
                     self.ui.AttemptICPRegistrationButton.setVisible(False)
@@ -2478,15 +2559,15 @@ class MainWindow(QMainWindow):
                 if self.delete_mode_active and self.potential_deletion != -5:
                     size_pt = size_pt * 2
                     color = QColor(round(self.ptsColor.red() * 0.5), round(self.ptsColor.green() * 0.5), round(self.ptsColor.blue() * 0.5))
-                    pixmap = self.add_points_to_image(pixmap, [self.pts[self.potential_deletion]], size_pt, color)
+                    self.pixmap = self.add_points_to_image(self.pixmap, [self.pts[self.potential_deletion]], size_pt, color)
             elif self.current_index == self.overlay_tab: # if in overlay tab, also overlay the fiducial points of the moving image
                 self.rad = self.rad_tabOb
-                size_pt = max([int(np.ceil(max([pixmap.width(), pixmap.height()]) / 1000 / zz * self.rad)), 1])
+                size_pt = max([int(np.ceil(max([self.pixmap.width(), self.pixmap.height()]) / 1000 / zz * self.rad)), 1])
                 if self.editWhichImage == 0:
                     self.pts2 = np.delete(self.pts2, 0, axis=0)
 
                 color = self.ptsColor_tabOb
-                pixmap = self.add_points_to_image(pixmap, self.pts2, size_pt, color)
+                self.pixmap = self.add_points_to_image(self.pixmap, self.pts2, size_pt, color)
 
             # Create a transformation matrix,apply flip, rotation, and zoom
             transform = QTransform()
@@ -2494,7 +2575,7 @@ class MainWindow(QMainWindow):
                 transform.scale(-1, 1)
             transform.rotate(self.rotation_angle)
             transform.scale(self.zoom_scale, self.zoom_scale)
-            transformed_pixmap = pixmap.transformed(transform, mode=Qt.SmoothTransformation)
+            transformed_pixmap = self.pixmap.transformed(transform, mode=Qt.SmoothTransformation)
             self.label.setPixmap(transformed_pixmap)
             self.label.resize(transformed_pixmap.size())
 
@@ -2509,17 +2590,9 @@ class MainWindow(QMainWindow):
 
         pts = np.round(pts).astype(int)
 
-        # overlay the fiducial points
-        image = pixmap.toImage()
-        width = image.width()
-        height = image.height()
-        bytes_per_line = image.bytesPerLine()
-
         # Convert QImage to NumPy array
-        ptr = image.bits()
-        channels = int(np.size(ptr) / width / height)
-        ptr = np.array(ptr).reshape((height, bytes_per_line))  # Convert memoryview to NumPy array
-        array = np.frombuffer(ptr, dtype=np.uint8).reshape((height, width, channels))
+        array = self.pixmap_to_array(pixmap)
+        height, width, channels = array.shape[:3]
 
         # Define the square region bounds
         x_start = np.maximum(pts[:, 0] - size_pt, 0)  # Ensure within image bounds
@@ -2536,10 +2609,9 @@ class MainWindow(QMainWindow):
         array[mask, 2] = color.red()  # Red channel
 
         # Convert the modified array back to QImage
-        new_image = QImage(array.data, width, height, QImage.Format_ARGB32 if channels == 4 else QImage.Format_RGB888)
-        image_pts = QPixmap.fromImage(new_image)
+        pixmap_pts = self.array_to_pixmap(array)
 
-        return image_pts
+        return pixmap_pts
 
     def _apply_flip_and_rotation(self):
 
@@ -2632,7 +2704,7 @@ class MainWindow(QMainWindow):
                 return
 
             # Get the mouse position relative to the target label
-            self.define_edit_frame(self.editWhichImage)
+            self.define_edit_frame()
             self.panning = 1
             self.last_mouse_position = event.globalPosition()  # Store the initial mouse position
 
@@ -2670,7 +2742,7 @@ class MainWindow(QMainWindow):
             # Update pan offsets
             self.pan_offset_x += offset_x
             self.pan_offset_y += offset_y
-            self.return_edit_frame(self.editWhichImage)
+            self.return_edit_frame()
 
             # Reapply transformations
             self.update_image_view()
@@ -2736,7 +2808,7 @@ class MainWindow(QMainWindow):
             return
 
         # Get the mouse position relative to the target label
-        self.define_edit_frame(self.editWhichImage)
+        self.define_edit_frame()
         cursor_pos = self.label.mapFromGlobal(event.globalPosition().toPoint())
 
         # remove the effect of rotation and flipping
@@ -2774,7 +2846,7 @@ class MainWindow(QMainWindow):
         self.zoom_scale = new_zoom_scale
 
         # Update the zoom scale and pan offsets
-        self.return_edit_frame(self.editWhichImage)
+        self.return_edit_frame()
 
         # Reapply transformations
         self.update_image_view()
@@ -2905,7 +2977,7 @@ class MainWindow(QMainWindow):
         if not os.path.exists(image_path):
             print(f"Image file not found: {image_path}")
             return
-        self.imMoving0, self.MI_Moving = self.load_image(image_path)  # store the original pixmap
+        self.imMoving0, self.MI_Moving, self.mode_Moving = self.load_image(image_path)  # store the original pixmap
 
         # check if saved fiducial points exist
         tmp = self.nmMoving[:self.nmMoving.rfind('.')] + ".pkl"
@@ -2921,9 +2993,9 @@ class MainWindow(QMainWindow):
             self.moving_zoom_default = min(width_scale, height_scale)
 
             self.editWhichImage = 0
-            self.reset_transformations(self.editWhichImage, 0)
+            self.reset_transformations(0)
             self.editWhichImage = 1
-            self.reset_transformations(self.editWhichImage)
+            self.reset_transformations()
 
         # display image
         self.update_button_color()
@@ -3031,7 +3103,7 @@ class MainWindow(QMainWindow):
                 text = f"The entered value {new_value} is not a valid folder name. Please try again."
                 self.show_error_message(text)
             else:
-                self.ResultsName = new_value
+                self.ResultsName = new_value.strip()
             self.populate_project_table()
 
     def doubleclick_moving_table(self, row, column):
@@ -3433,36 +3505,29 @@ class MainWindow(QMainWindow):
             # Pass the event to the base class for default handling
             super().keyPressEvent(event)
 
-        #print(f"updown: {self.updown_key}, view_key: {self.view_key}, shift_key: {self.shift_key}")
-        #print(f"  increase contrast for updown=2 and view_key=5")
-        #print(f"  decrease contrast for updown=1 and view_key=5")
-
         ff = [0, 1]
-        bb = [0, -5, 5, -20, 20]
-        cc = [0, -0.05, 0.05, -5, 5]
-        whichImage = ff[self.shift_key]
-        deltaval_b = bb[self.updown_key]
-        deltaval_c = cc[self.updown_key]
-        print("left" if whichImage == 0 else "right")
-
+        self.editWhichImage = ff[self.shift_key]
+        print("left" if self.editWhichImage == 0 else "right")
         if self.view_key == 1:
             print(" rotate")
-            self.rotate_label_ui(whichImage)
+            self.rotate_label_ui()
         elif self.view_key == 2:
             print(" flip")
-            self.flip_image_y(whichImage)
+            self.flip_image_y()
         elif self.view_key == 3:
             print(" return")
-            self.reset_transformations(whichImage)
+            self.reset_transformations()
         elif self.view_key == 4: # brightness
             print(" brightness")
-            self.change_brightness(whichImage, deltaval_b)
+            bb = [0, -5, 5, -20, 20]
+            self.change_brightness(bb[self.updown_key])
         elif self.view_key == 5:  # contrast
             print(" contrast")
-            self.change_contrast(whichImage, deltaval_c)
+            cc = [0, -0.05, 0.05, -5, 5]
+            self.change_contrast(cc[self.updown_key])
         elif self.view_key == 6:
             print(" auto adjust contrast")
-            self.auto_adjust_contrast(whichImage)
+            self.auto_adjust_contrast()
 
     def load_image(self, image_path):
 
@@ -3486,9 +3551,18 @@ class MainWindow(QMainWindow):
             image = np.clip(image, 0, 1)  # Ensure values are in [0,1] before scaling
             image = (image * 255).astype(np.uint8)
 
+        # max intensity of image
         max_intensity = np.max(image)
+
+        # mode of image
+        r = mode(image[..., 0].flatten(), axis=None).mode
+        g = mode(image[..., 1].flatten(), axis=None).mode
+        b = mode(image[..., 2].flatten(), axis=None).mode
+        mode_val = [r, g, b]
+
+
         pixmap = self.array_to_pixmap(image)
-        return pixmap, max_intensity
+        return pixmap, max_intensity, mode_val
 
     def resizeEvent(self, event):
         # Get the new size of the main window
@@ -3554,7 +3628,8 @@ if __name__ == '__main__':
     import sys
 
     app = QtWidgets.QApplication(sys.argv)
-    from CODApivot_v0 import Ui_MainWindow  # Replace with your actual UI import
+    from CODApivot_v0 import Ui_MainWindow
+
 
     window = MainWindow()
     window.show()
