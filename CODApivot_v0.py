@@ -531,7 +531,7 @@ class Ui_MainWindow(object):
 "}")
         self.WhatNextControlFrame = QFrame(self.ImportProjectTabName)
         self.WhatNextControlFrame.setObjectName(u"WhatNextControlFrame")
-        self.WhatNextControlFrame.setGeometry(QRect(365, 605, 465, 75))
+        self.WhatNextControlFrame.setGeometry(QRect(425, 605, 405, 75))
         self.WhatNextControlFrame.setStyleSheet(u"QFrame { \n"
 "	background-color: #4b4b4b;\n"
 "	border: 1px solid #e6e6e6; /* Border  */\n"
@@ -540,7 +540,7 @@ class Ui_MainWindow(object):
         self.WhatNextControlFrame.setFrameShadow(QFrame.Raised)
         self.WhatNextText = QTextEdit(self.WhatNextControlFrame)
         self.WhatNextText.setObjectName(u"WhatNextText")
-        self.WhatNextText.setGeometry(QRect(0, 0, 465, 25))
+        self.WhatNextText.setGeometry(QRect(0, 0, 405, 25))
         self.WhatNextText.setFont(font1)
         self.WhatNextText.setStyleSheet(u"QTextEdit { \n"
 "	background-color: #4b4b4b;\n"
@@ -590,7 +590,7 @@ class Ui_MainWindow(object):
 "}")
         self.GoToJobStatusTab = QPushButton(self.WhatNextControlFrame)
         self.GoToJobStatusTab.setObjectName(u"GoToJobStatusTab")
-        self.GoToJobStatusTab.setGeometry(QRect(285, 35, 90, 30))
+        self.GoToJobStatusTab.setGeometry(QRect(275, 35, 57, 30))
         self.GoToJobStatusTab.setFont(font1)
         self.GoToJobStatusTab.setStyleSheet(u"QPushButton {\n"
 "    background-color: #5a5a5a;\n"
@@ -609,7 +609,7 @@ class Ui_MainWindow(object):
 "}")
         self.GoToCoordsTab = QPushButton(self.WhatNextControlFrame)
         self.GoToCoordsTab.setObjectName(u"GoToCoordsTab")
-        self.GoToCoordsTab.setGeometry(QRect(190, 35, 90, 30))
+        self.GoToCoordsTab.setGeometry(QRect(190, 35, 80, 30))
         self.GoToCoordsTab.setFont(font1)
         self.GoToCoordsTab.setStyleSheet(u"QPushButton {\n"
 "    background-color: #5a5a5a;\n"
@@ -628,7 +628,7 @@ class Ui_MainWindow(object):
 "}")
         self.CloseNavigationButton = QPushButton(self.WhatNextControlFrame)
         self.CloseNavigationButton.setObjectName(u"CloseNavigationButton")
-        self.CloseNavigationButton.setGeometry(QRect(380, 35, 75, 30))
+        self.CloseNavigationButton.setGeometry(QRect(337, 35, 58, 30))
         self.CloseNavigationButton.setFont(font1)
         self.CloseNavigationButton.setStyleSheet(u"QPushButton {\n"
 "    background-color: #5a5a5a;\n"
@@ -958,7 +958,7 @@ class Ui_MainWindow(object):
 "")
         self.PickNewMovingImageButton = QPushButton(self.AddFiducialsTabName)
         self.PickNewMovingImageButton.setObjectName(u"PickNewMovingImageButton")
-        self.PickNewMovingImageButton.setGeometry(QRect(10, 565, 120, 30))
+        self.PickNewMovingImageButton.setGeometry(QRect(270, 610, 125, 30))
         self.PickNewMovingImageButton.setFont(font1)
         self.PickNewMovingImageButton.setStyleSheet(u"QPushButton {\n"
 "    background-color: #5a5a5a;\n"
@@ -977,7 +977,7 @@ class Ui_MainWindow(object):
 "}")
         self.AttemptICPRegistrationButton = QPushButton(self.AddFiducialsTabName)
         self.AttemptICPRegistrationButton.setObjectName(u"AttemptICPRegistrationButton")
-        self.AttemptICPRegistrationButton.setGeometry(QRect(135, 565, 125, 30))
+        self.AttemptICPRegistrationButton.setGeometry(QRect(270, 650, 125, 30))
         self.AttemptICPRegistrationButton.setFont(font1)
         self.AttemptICPRegistrationButton.setStyleSheet(u"QPushButton {\n"
 "    background-color: #447544;\n"
@@ -1015,7 +1015,7 @@ class Ui_MainWindow(object):
 "}")
         self.WhatNextControlFrame_F = QFrame(self.AddFiducialsTabName)
         self.WhatNextControlFrame_F.setObjectName(u"WhatNextControlFrame_F")
-        self.WhatNextControlFrame_F.setGeometry(QRect(365, 605, 465, 75))
+        self.WhatNextControlFrame_F.setGeometry(QRect(425, 605, 405, 75))
         self.WhatNextControlFrame_F.setStyleSheet(u"QFrame { \n"
 "	background-color: #4b4b4b;\n"
 "	border: 1px solid #e6e6e6; /* Border  */\n"
@@ -1024,7 +1024,7 @@ class Ui_MainWindow(object):
         self.WhatNextControlFrame_F.setFrameShadow(QFrame.Raised)
         self.WhatNextText_F = QTextEdit(self.WhatNextControlFrame_F)
         self.WhatNextText_F.setObjectName(u"WhatNextText_F")
-        self.WhatNextText_F.setGeometry(QRect(0, 0, 465, 25))
+        self.WhatNextText_F.setGeometry(QRect(0, 0, 405, 25))
         self.WhatNextText_F.setFont(font1)
         self.WhatNextText_F.setStyleSheet(u"QTextEdit { \n"
 "	background-color: #4b4b4b;\n"
@@ -1074,7 +1074,7 @@ class Ui_MainWindow(object):
 "}")
         self.GoToJobStatusTab_F = QPushButton(self.WhatNextControlFrame_F)
         self.GoToJobStatusTab_F.setObjectName(u"GoToJobStatusTab_F")
-        self.GoToJobStatusTab_F.setGeometry(QRect(285, 35, 90, 30))
+        self.GoToJobStatusTab_F.setGeometry(QRect(275, 35, 57, 30))
         self.GoToJobStatusTab_F.setFont(font1)
         self.GoToJobStatusTab_F.setStyleSheet(u"QPushButton {\n"
 "    background-color: #5a5a5a;\n"
@@ -1093,7 +1093,7 @@ class Ui_MainWindow(object):
 "}")
         self.GoToCoordsTab_F = QPushButton(self.WhatNextControlFrame_F)
         self.GoToCoordsTab_F.setObjectName(u"GoToCoordsTab_F")
-        self.GoToCoordsTab_F.setGeometry(QRect(190, 35, 90, 30))
+        self.GoToCoordsTab_F.setGeometry(QRect(190, 35, 80, 30))
         self.GoToCoordsTab_F.setFont(font1)
         self.GoToCoordsTab_F.setStyleSheet(u"QPushButton {\n"
 "    background-color: #5a5a5a;\n"
@@ -1112,7 +1112,7 @@ class Ui_MainWindow(object):
 "}")
         self.CloseNavigationButton_F = QPushButton(self.WhatNextControlFrame_F)
         self.CloseNavigationButton_F.setObjectName(u"CloseNavigationButton_F")
-        self.CloseNavigationButton_F.setGeometry(QRect(380, 35, 75, 30))
+        self.CloseNavigationButton_F.setGeometry(QRect(337, 35, 58, 30))
         self.CloseNavigationButton_F.setFont(font1)
         self.CloseNavigationButton_F.setStyleSheet(u"QPushButton {\n"
 "    background-color: #5a5a5a;\n"
@@ -1607,122 +1607,6 @@ class Ui_MainWindow(object):
 "}")
         self.DisableFrame_C.setFrameShape(QFrame.StyledPanel)
         self.DisableFrame_C.setFrameShadow(QFrame.Raised)
-        self.WhatNextControlFrame_C = QFrame(self.ApplyToCoordsTabName)
-        self.WhatNextControlFrame_C.setObjectName(u"WhatNextControlFrame_C")
-        self.WhatNextControlFrame_C.setGeometry(QRect(365, 605, 465, 75))
-        self.WhatNextControlFrame_C.setStyleSheet(u"QFrame { \n"
-"	background-color: #4b4b4b;\n"
-"	border: 1px solid #e6e6e6; /* Border  */\n"
-"}")
-        self.WhatNextControlFrame_C.setFrameShape(QFrame.StyledPanel)
-        self.WhatNextControlFrame_C.setFrameShadow(QFrame.Raised)
-        self.WhatNextText_C = QTextEdit(self.WhatNextControlFrame_C)
-        self.WhatNextText_C.setObjectName(u"WhatNextText_C")
-        self.WhatNextText_C.setGeometry(QRect(0, 0, 465, 25))
-        self.WhatNextText_C.setFont(font1)
-        self.WhatNextText_C.setStyleSheet(u"QTextEdit { \n"
-"	background-color: #4b4b4b;\n"
-"	color: #e6e6e6; /* Text color */\n"
-"	border: 1px solid #e6e6e6; /* Border  */\n"
-"}")
-        self.WhatNextText_C.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.WhatNextText_C.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.WhatNextText_C.setReadOnly(True)
-        self.GoToImportProjectTab_C = QPushButton(self.WhatNextControlFrame_C)
-        self.GoToImportProjectTab_C.setObjectName(u"GoToImportProjectTab_C")
-        self.GoToImportProjectTab_C.setGeometry(QRect(10, 35, 80, 30))
-        self.GoToImportProjectTab_C.setFont(font1)
-        self.GoToImportProjectTab_C.setStyleSheet(u"QPushButton {\n"
-"    background-color: #5a5a5a;\n"
-"    color: #e6e6e6; /* Text color */\n"
-"    border: 1px solid #e6e6e6; /* Border  */\n"
-"    border-radius: 5px; /* Optional: Rounded corners */\n"
-"    padding: 5px; /* Optional: Padding around text */\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background-color: #666f75; /* Grey-blue when hovered */\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"    background-color: #7b8e9c; /* More blue when pressed */\n"
-"}")
-        self.GoToFiducialsTab_C = QPushButton(self.WhatNextControlFrame_C)
-        self.GoToFiducialsTab_C.setObjectName(u"GoToFiducialsTab_C")
-        self.GoToFiducialsTab_C.setGeometry(QRect(95, 35, 90, 30))
-        self.GoToFiducialsTab_C.setFont(font1)
-        self.GoToFiducialsTab_C.setStyleSheet(u"QPushButton {\n"
-"    background-color: #5a5a5a;\n"
-"    color: #e6e6e6; /* Text color */\n"
-"    border: 1px solid #e6e6e6; /* Border  */\n"
-"    border-radius: 5px; /* Optional: Rounded corners */\n"
-"    padding: 5px; /* Optional: Padding around text */\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background-color: #666f75; /* Grey-blue when hovered */\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"    background-color: #7b8e9c; /* More blue when pressed */\n"
-"}")
-        self.GoToJobStatusTab_C = QPushButton(self.WhatNextControlFrame_C)
-        self.GoToJobStatusTab_C.setObjectName(u"GoToJobStatusTab_C")
-        self.GoToJobStatusTab_C.setGeometry(QRect(285, 35, 90, 30))
-        self.GoToJobStatusTab_C.setFont(font1)
-        self.GoToJobStatusTab_C.setStyleSheet(u"QPushButton {\n"
-"    background-color: #5a5a5a;\n"
-"    color: #e6e6e6; /* Text color */\n"
-"    border: 1px solid #e6e6e6; /* Border  */\n"
-"    border-radius: 5px; /* Optional: Rounded corners */\n"
-"    padding: 5px; /* Optional: Padding around text */\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background-color: #666f75; /* Grey-blue when hovered */\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"    background-color: #7b8e9c; /* More blue when pressed */\n"
-"}")
-        self.GoToCoordsTab_C = QPushButton(self.WhatNextControlFrame_C)
-        self.GoToCoordsTab_C.setObjectName(u"GoToCoordsTab_C")
-        self.GoToCoordsTab_C.setGeometry(QRect(190, 35, 90, 30))
-        self.GoToCoordsTab_C.setFont(font1)
-        self.GoToCoordsTab_C.setStyleSheet(u"QPushButton {\n"
-"    background-color: #5a5a5a;\n"
-"    color: #e6e6e6; /* Text color */\n"
-"    border: 1px solid #e6e6e6; /* Border  */\n"
-"    border-radius: 5px; /* Optional: Rounded corners */\n"
-"    padding: 5px; /* Optional: Padding around text */\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background-color: #666f75; /* Grey-blue when hovered */\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"    background-color: #7b8e9c; /* More blue when pressed */\n"
-"}")
-        self.CloseNavigationButton_C = QPushButton(self.WhatNextControlFrame_C)
-        self.CloseNavigationButton_C.setObjectName(u"CloseNavigationButton_C")
-        self.CloseNavigationButton_C.setGeometry(QRect(380, 35, 75, 30))
-        self.CloseNavigationButton_C.setFont(font1)
-        self.CloseNavigationButton_C.setStyleSheet(u"QPushButton {\n"
-"    background-color: #5a5a5a;\n"
-"    color: #e6e6e6; /* Text color */\n"
-"    border: 1px solid #e6e6e6; /* Border  */\n"
-"    border-radius: 5px; /* Optional: Rounded corners */\n"
-"    padding: 5px; /* Optional: Padding around text */\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background-color: #666f75; /* Grey-blue when hovered */\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"    background-color: #7b8e9c; /* More blue when pressed */\n"
-"}")
         self.NavigationButton_C = QPushButton(self.ApplyToCoordsTabName)
         self.NavigationButton_C.setObjectName(u"NavigationButton_C")
         self.NavigationButton_C.setGeometry(QRect(755, 550, 65, 30))
@@ -1784,6 +1668,122 @@ class Ui_MainWindow(object):
 "}")
         self.MakingCoordOverlayText.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.MakingCoordOverlayText.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.WhatNextControlFrame_C = QFrame(self.ApplyToCoordsTabName)
+        self.WhatNextControlFrame_C.setObjectName(u"WhatNextControlFrame_C")
+        self.WhatNextControlFrame_C.setGeometry(QRect(425, 605, 405, 75))
+        self.WhatNextControlFrame_C.setStyleSheet(u"QFrame { \n"
+"	background-color: #4b4b4b;\n"
+"	border: 1px solid #e6e6e6; /* Border  */\n"
+"}")
+        self.WhatNextControlFrame_C.setFrameShape(QFrame.StyledPanel)
+        self.WhatNextControlFrame_C.setFrameShadow(QFrame.Raised)
+        self.WhatNextText_C = QTextEdit(self.WhatNextControlFrame_C)
+        self.WhatNextText_C.setObjectName(u"WhatNextText_C")
+        self.WhatNextText_C.setGeometry(QRect(0, 0, 405, 25))
+        self.WhatNextText_C.setFont(font1)
+        self.WhatNextText_C.setStyleSheet(u"QTextEdit { \n"
+"	background-color: #4b4b4b;\n"
+"	color: #e6e6e6; /* Text color */\n"
+"	border: 1px solid #e6e6e6; /* Border  */\n"
+"}")
+        self.WhatNextText_C.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.WhatNextText_C.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.WhatNextText_C.setReadOnly(True)
+        self.GoToImportProjectTab_C = QPushButton(self.WhatNextControlFrame_C)
+        self.GoToImportProjectTab_C.setObjectName(u"GoToImportProjectTab_C")
+        self.GoToImportProjectTab_C.setGeometry(QRect(10, 35, 80, 30))
+        self.GoToImportProjectTab_C.setFont(font1)
+        self.GoToImportProjectTab_C.setStyleSheet(u"QPushButton {\n"
+"    background-color: #5a5a5a;\n"
+"    color: #e6e6e6; /* Text color */\n"
+"    border: 1px solid #e6e6e6; /* Border  */\n"
+"    border-radius: 5px; /* Optional: Rounded corners */\n"
+"    padding: 5px; /* Optional: Padding around text */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #666f75; /* Grey-blue when hovered */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: #7b8e9c; /* More blue when pressed */\n"
+"}")
+        self.GoToFiducialsTab_C = QPushButton(self.WhatNextControlFrame_C)
+        self.GoToFiducialsTab_C.setObjectName(u"GoToFiducialsTab_C")
+        self.GoToFiducialsTab_C.setGeometry(QRect(95, 35, 90, 30))
+        self.GoToFiducialsTab_C.setFont(font1)
+        self.GoToFiducialsTab_C.setStyleSheet(u"QPushButton {\n"
+"    background-color: #5a5a5a;\n"
+"    color: #e6e6e6; /* Text color */\n"
+"    border: 1px solid #e6e6e6; /* Border  */\n"
+"    border-radius: 5px; /* Optional: Rounded corners */\n"
+"    padding: 5px; /* Optional: Padding around text */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #666f75; /* Grey-blue when hovered */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: #7b8e9c; /* More blue when pressed */\n"
+"}")
+        self.GoToJobStatusTab_C = QPushButton(self.WhatNextControlFrame_C)
+        self.GoToJobStatusTab_C.setObjectName(u"GoToJobStatusTab_C")
+        self.GoToJobStatusTab_C.setGeometry(QRect(275, 35, 57, 30))
+        self.GoToJobStatusTab_C.setFont(font1)
+        self.GoToJobStatusTab_C.setStyleSheet(u"QPushButton {\n"
+"    background-color: #5a5a5a;\n"
+"    color: #e6e6e6; /* Text color */\n"
+"    border: 1px solid #e6e6e6; /* Border  */\n"
+"    border-radius: 5px; /* Optional: Rounded corners */\n"
+"    padding: 5px; /* Optional: Padding around text */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #666f75; /* Grey-blue when hovered */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: #7b8e9c; /* More blue when pressed */\n"
+"}")
+        self.GoToCoordsTab_C = QPushButton(self.WhatNextControlFrame_C)
+        self.GoToCoordsTab_C.setObjectName(u"GoToCoordsTab_C")
+        self.GoToCoordsTab_C.setGeometry(QRect(190, 35, 80, 30))
+        self.GoToCoordsTab_C.setFont(font1)
+        self.GoToCoordsTab_C.setStyleSheet(u"QPushButton {\n"
+"    background-color: #5a5a5a;\n"
+"    color: #e6e6e6; /* Text color */\n"
+"    border: 1px solid #e6e6e6; /* Border  */\n"
+"    border-radius: 5px; /* Optional: Rounded corners */\n"
+"    padding: 5px; /* Optional: Padding around text */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #666f75; /* Grey-blue when hovered */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: #7b8e9c; /* More blue when pressed */\n"
+"}")
+        self.CloseNavigationButton_C = QPushButton(self.WhatNextControlFrame_C)
+        self.CloseNavigationButton_C.setObjectName(u"CloseNavigationButton_C")
+        self.CloseNavigationButton_C.setGeometry(QRect(337, 35, 58, 30))
+        self.CloseNavigationButton_C.setFont(font1)
+        self.CloseNavigationButton_C.setStyleSheet(u"QPushButton {\n"
+"    background-color: #5a5a5a;\n"
+"    color: #e6e6e6; /* Text color */\n"
+"    border: 1px solid #e6e6e6; /* Border  */\n"
+"    border-radius: 5px; /* Optional: Rounded corners */\n"
+"    padding: 5px; /* Optional: Padding around text */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #666f75; /* Grey-blue when hovered */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: #7b8e9c; /* More blue when pressed */\n"
+"}")
         self.tabWidget.addTab(self.ApplyToCoordsTabName, "")
         self.RegisterCoordinatesFrame.raise_()
         self.RegisterCoordsImageBorder.raise_()
@@ -1792,12 +1792,12 @@ class Ui_MainWindow(object):
         self.ImageViewControlsFrame_C.raise_()
         self.CoordinatesOverlayControlsFrame.raise_()
         self.DisableFrame_C.raise_()
-        self.WhatNextControlFrame_C.raise_()
         self.NavigationButton_C.raise_()
         self.PlottingImageText.raise_()
         self.DisableFrame_C_2.raise_()
         self.DisableFrame_C_3.raise_()
         self.MakingCoordOverlayText.raise_()
+        self.WhatNextControlFrame_C.raise_()
         self.JobStatusTabName = QWidget()
         self.JobStatusTabName.setObjectName(u"JobStatusTabName")
         self.JobStatusFrame = QFrame(self.JobStatusTabName)
@@ -1910,7 +1910,7 @@ class Ui_MainWindow(object):
 "}")
         self.WhatNextControlFrame_J = QFrame(self.JobStatusTabName)
         self.WhatNextControlFrame_J.setObjectName(u"WhatNextControlFrame_J")
-        self.WhatNextControlFrame_J.setGeometry(QRect(365, 605, 465, 75))
+        self.WhatNextControlFrame_J.setGeometry(QRect(425, 605, 405, 75))
         self.WhatNextControlFrame_J.setStyleSheet(u"QFrame { \n"
 "	background-color: #4b4b4b;\n"
 "	border: 1px solid #e6e6e6; /* Border  */\n"
@@ -1919,7 +1919,7 @@ class Ui_MainWindow(object):
         self.WhatNextControlFrame_J.setFrameShadow(QFrame.Raised)
         self.WhatNextText_J = QTextEdit(self.WhatNextControlFrame_J)
         self.WhatNextText_J.setObjectName(u"WhatNextText_J")
-        self.WhatNextText_J.setGeometry(QRect(0, 0, 465, 25))
+        self.WhatNextText_J.setGeometry(QRect(0, 0, 405, 25))
         self.WhatNextText_J.setFont(font1)
         self.WhatNextText_J.setStyleSheet(u"QTextEdit { \n"
 "	background-color: #4b4b4b;\n"
@@ -1969,7 +1969,7 @@ class Ui_MainWindow(object):
 "}")
         self.GoToJobStatusTab_J = QPushButton(self.WhatNextControlFrame_J)
         self.GoToJobStatusTab_J.setObjectName(u"GoToJobStatusTab_J")
-        self.GoToJobStatusTab_J.setGeometry(QRect(285, 35, 90, 30))
+        self.GoToJobStatusTab_J.setGeometry(QRect(275, 35, 57, 30))
         self.GoToJobStatusTab_J.setFont(font1)
         self.GoToJobStatusTab_J.setStyleSheet(u"QPushButton {\n"
 "    background-color: #5a5a5a;\n"
@@ -1988,7 +1988,7 @@ class Ui_MainWindow(object):
 "}")
         self.GoToCoordsTab_J = QPushButton(self.WhatNextControlFrame_J)
         self.GoToCoordsTab_J.setObjectName(u"GoToCoordsTab_J")
-        self.GoToCoordsTab_J.setGeometry(QRect(190, 35, 90, 30))
+        self.GoToCoordsTab_J.setGeometry(QRect(190, 35, 80, 30))
         self.GoToCoordsTab_J.setFont(font1)
         self.GoToCoordsTab_J.setStyleSheet(u"QPushButton {\n"
 "    background-color: #5a5a5a;\n"
@@ -2007,7 +2007,7 @@ class Ui_MainWindow(object):
 "}")
         self.CloseNavigationButton_J = QPushButton(self.WhatNextControlFrame_J)
         self.CloseNavigationButton_J.setObjectName(u"CloseNavigationButton_J")
-        self.CloseNavigationButton_J.setGeometry(QRect(380, 35, 75, 30))
+        self.CloseNavigationButton_J.setGeometry(QRect(337, 35, 58, 30))
         self.CloseNavigationButton_J.setFont(font1)
         self.CloseNavigationButton_J.setStyleSheet(u"QPushButton {\n"
 "    background-color: #5a5a5a;\n"
@@ -2324,9 +2324,37 @@ class Ui_MainWindow(object):
 "QPushButton:pressed {\n"
 "    background-color: #7b8e9c; /* More blue when pressed */\n"
 "}")
+        self.TryElasticRegButton = QPushButton(self.ViewOverlaysTabName)
+        self.TryElasticRegButton.setObjectName(u"TryElasticRegButton")
+        self.TryElasticRegButton.setGeometry(QRect(670, 560, 161, 30))
+        self.TryElasticRegButton.setFont(font1)
+        self.TryElasticRegButton.setStyleSheet(u"QPushButton {\n"
+"    background-color: #5a5a5a;\n"
+"    color: #e6e6e6; /* Text color */\n"
+"    border: 1px solid #e6e6e6; /* Border  */\n"
+"    border-radius: 5px; /* Optional: Rounded corners */\n"
+"    padding: 5px; /* Optional: Padding around text */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #666f75; /* Grey-blue when hovered */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: #7b8e9c; /* More blue when pressed */\n"
+"}")
+        self.DisableFrame_O3 = QFrame(self.ViewOverlaysTabName)
+        self.DisableFrame_O3.setObjectName(u"DisableFrame_O3")
+        self.DisableFrame_O3.setGeometry(QRect(460, 10, 31, 31))
+        self.DisableFrame_O3.setStyleSheet(u"QFrame { \n"
+"	background-color: rgba(255, 255, 255, 0.4);\n"
+"	border: 1px solid #e6e6e6; /* Border  */\n"
+"}")
+        self.DisableFrame_O3.setFrameShape(QFrame.StyledPanel)
+        self.DisableFrame_O3.setFrameShadow(QFrame.Raised)
         self.WhatNextControlFrame_O = QFrame(self.ViewOverlaysTabName)
         self.WhatNextControlFrame_O.setObjectName(u"WhatNextControlFrame_O")
-        self.WhatNextControlFrame_O.setGeometry(QRect(365, 605, 465, 75))
+        self.WhatNextControlFrame_O.setGeometry(QRect(425, 605, 405, 75))
         self.WhatNextControlFrame_O.setStyleSheet(u"QFrame { \n"
 "	background-color: #4b4b4b;\n"
 "	border: 1px solid #e6e6e6; /* Border  */\n"
@@ -2335,7 +2363,7 @@ class Ui_MainWindow(object):
         self.WhatNextControlFrame_O.setFrameShadow(QFrame.Raised)
         self.WhatNextText_O = QTextEdit(self.WhatNextControlFrame_O)
         self.WhatNextText_O.setObjectName(u"WhatNextText_O")
-        self.WhatNextText_O.setGeometry(QRect(0, 0, 465, 25))
+        self.WhatNextText_O.setGeometry(QRect(0, 0, 405, 25))
         self.WhatNextText_O.setFont(font1)
         self.WhatNextText_O.setStyleSheet(u"QTextEdit { \n"
 "	background-color: #4b4b4b;\n"
@@ -2385,7 +2413,7 @@ class Ui_MainWindow(object):
 "}")
         self.GoToJobStatusTab_O = QPushButton(self.WhatNextControlFrame_O)
         self.GoToJobStatusTab_O.setObjectName(u"GoToJobStatusTab_O")
-        self.GoToJobStatusTab_O.setGeometry(QRect(285, 35, 90, 30))
+        self.GoToJobStatusTab_O.setGeometry(QRect(275, 35, 57, 30))
         self.GoToJobStatusTab_O.setFont(font1)
         self.GoToJobStatusTab_O.setStyleSheet(u"QPushButton {\n"
 "    background-color: #5a5a5a;\n"
@@ -2404,7 +2432,7 @@ class Ui_MainWindow(object):
 "}")
         self.GoToCoordsTab_O = QPushButton(self.WhatNextControlFrame_O)
         self.GoToCoordsTab_O.setObjectName(u"GoToCoordsTab_O")
-        self.GoToCoordsTab_O.setGeometry(QRect(190, 35, 90, 30))
+        self.GoToCoordsTab_O.setGeometry(QRect(190, 35, 80, 30))
         self.GoToCoordsTab_O.setFont(font1)
         self.GoToCoordsTab_O.setStyleSheet(u"QPushButton {\n"
 "    background-color: #5a5a5a;\n"
@@ -2423,7 +2451,7 @@ class Ui_MainWindow(object):
 "}")
         self.CloseNavigationButton_O = QPushButton(self.WhatNextControlFrame_O)
         self.CloseNavigationButton_O.setObjectName(u"CloseNavigationButton_O")
-        self.CloseNavigationButton_O.setGeometry(QRect(380, 35, 75, 30))
+        self.CloseNavigationButton_O.setGeometry(QRect(337, 35, 58, 30))
         self.CloseNavigationButton_O.setFont(font1)
         self.CloseNavigationButton_O.setStyleSheet(u"QPushButton {\n"
 "    background-color: #5a5a5a;\n"
@@ -2440,34 +2468,6 @@ class Ui_MainWindow(object):
 "QPushButton:pressed {\n"
 "    background-color: #7b8e9c; /* More blue when pressed */\n"
 "}")
-        self.TryElasticRegButton = QPushButton(self.ViewOverlaysTabName)
-        self.TryElasticRegButton.setObjectName(u"TryElasticRegButton")
-        self.TryElasticRegButton.setGeometry(QRect(670, 560, 161, 30))
-        self.TryElasticRegButton.setFont(font1)
-        self.TryElasticRegButton.setStyleSheet(u"QPushButton {\n"
-"    background-color: #5a5a5a;\n"
-"    color: #e6e6e6; /* Text color */\n"
-"    border: 1px solid #e6e6e6; /* Border  */\n"
-"    border-radius: 5px; /* Optional: Rounded corners */\n"
-"    padding: 5px; /* Optional: Padding around text */\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background-color: #666f75; /* Grey-blue when hovered */\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"    background-color: #7b8e9c; /* More blue when pressed */\n"
-"}")
-        self.DisableFrame_O3 = QFrame(self.ViewOverlaysTabName)
-        self.DisableFrame_O3.setObjectName(u"DisableFrame_O3")
-        self.DisableFrame_O3.setGeometry(QRect(460, 10, 31, 31))
-        self.DisableFrame_O3.setStyleSheet(u"QFrame { \n"
-"	background-color: rgba(255, 255, 255, 0.4);\n"
-"	border: 1px solid #e6e6e6; /* Border  */\n"
-"}")
-        self.DisableFrame_O3.setFrameShape(QFrame.StyledPanel)
-        self.DisableFrame_O3.setFrameShadow(QFrame.Raised)
         self.tabWidget.addTab(self.ViewOverlaysTabName, "")
         self.UnregisteredImageBorder.raise_()
         self.ImageViewControlsFrame_O.raise_()
@@ -2480,10 +2480,10 @@ class Ui_MainWindow(object):
         self.DisableFrame_O2.raise_()
         self.RegisteredImageDisplayFrame.raise_()
         self.NavigationButton_O.raise_()
-        self.WhatNextControlFrame_O.raise_()
         self.SavingRegistrationResultsText.raise_()
         self.TryElasticRegButton.raise_()
         self.DisableFrame_O3.raise_()
+        self.WhatNextControlFrame_O.raise_()
         self.tab = QWidget()
         self.tab.setObjectName(u"tab")
         self.FiducialRegisteredImageDisplayFrame = QFrame(self.tab)
@@ -2523,7 +2523,7 @@ class Ui_MainWindow(object):
 "")
         self.WhatNextControlFrame_E = QFrame(self.tab)
         self.WhatNextControlFrame_E.setObjectName(u"WhatNextControlFrame_E")
-        self.WhatNextControlFrame_E.setGeometry(QRect(365, 605, 465, 75))
+        self.WhatNextControlFrame_E.setGeometry(QRect(425, 605, 405, 75))
         self.WhatNextControlFrame_E.setStyleSheet(u"QFrame { \n"
 "	background-color: #4b4b4b;\n"
 "	border: 1px solid #e6e6e6; /* Border  */\n"
@@ -2532,7 +2532,7 @@ class Ui_MainWindow(object):
         self.WhatNextControlFrame_E.setFrameShadow(QFrame.Raised)
         self.WhatNextText_E = QTextEdit(self.WhatNextControlFrame_E)
         self.WhatNextText_E.setObjectName(u"WhatNextText_E")
-        self.WhatNextText_E.setGeometry(QRect(0, 0, 465, 25))
+        self.WhatNextText_E.setGeometry(QRect(0, 0, 405, 25))
         self.WhatNextText_E.setFont(font1)
         self.WhatNextText_E.setStyleSheet(u"QTextEdit { \n"
 "	background-color: #4b4b4b;\n"
@@ -2582,7 +2582,7 @@ class Ui_MainWindow(object):
 "}")
         self.GoToJobStatusTab_E = QPushButton(self.WhatNextControlFrame_E)
         self.GoToJobStatusTab_E.setObjectName(u"GoToJobStatusTab_E")
-        self.GoToJobStatusTab_E.setGeometry(QRect(285, 35, 90, 30))
+        self.GoToJobStatusTab_E.setGeometry(QRect(275, 35, 57, 30))
         self.GoToJobStatusTab_E.setFont(font1)
         self.GoToJobStatusTab_E.setStyleSheet(u"QPushButton {\n"
 "    background-color: #5a5a5a;\n"
@@ -2601,7 +2601,7 @@ class Ui_MainWindow(object):
 "}")
         self.GoToCoordsTab_E = QPushButton(self.WhatNextControlFrame_E)
         self.GoToCoordsTab_E.setObjectName(u"GoToCoordsTab_E")
-        self.GoToCoordsTab_E.setGeometry(QRect(190, 35, 90, 30))
+        self.GoToCoordsTab_E.setGeometry(QRect(190, 35, 80, 30))
         self.GoToCoordsTab_E.setFont(font1)
         self.GoToCoordsTab_E.setStyleSheet(u"QPushButton {\n"
 "    background-color: #5a5a5a;\n"
@@ -2620,7 +2620,7 @@ class Ui_MainWindow(object):
 "}")
         self.CloseNavigationButton_E = QPushButton(self.WhatNextControlFrame_E)
         self.CloseNavigationButton_E.setObjectName(u"CloseNavigationButton_E")
-        self.CloseNavigationButton_E.setGeometry(QRect(380, 35, 75, 30))
+        self.CloseNavigationButton_E.setGeometry(QRect(337, 35, 58, 30))
         self.CloseNavigationButton_E.setFont(font1)
         self.CloseNavigationButton_E.setStyleSheet(u"QPushButton {\n"
 "    background-color: #5a5a5a;\n"
@@ -3113,7 +3113,7 @@ class Ui_MainWindow(object):
 "}")
         self.DisableFrame_E1 = QFrame(self.tab)
         self.DisableFrame_E1.setObjectName(u"DisableFrame_E1")
-        self.DisableFrame_E1.setGeometry(QRect(510, 540, 31, 31))
+        self.DisableFrame_E1.setGeometry(QRect(460, 540, 31, 31))
         self.DisableFrame_E1.setStyleSheet(u"QFrame { \n"
 "	background-color: rgba(255, 255, 255, 0.4);\n"
 "	border: 1px solid #e6e6e6; /* Border  */\n"
@@ -3129,16 +3129,16 @@ class Ui_MainWindow(object):
 "}")
         self.DisableFrame_E1_2.setFrameShape(QFrame.StyledPanel)
         self.DisableFrame_E1_2.setFrameShadow(QFrame.Raised)
-        self.ClockFrame_E1_1 = QFrame(self.tab)
-        self.ClockFrame_E1_1.setObjectName(u"ClockFrame_E1_1")
-        self.ClockFrame_E1_1.setGeometry(QRect(550, 540, 20, 15))
-        self.ClockFrame_E1_1.setStyleSheet(u"QFrame { \n"
+        self.ClockFrame_E = QFrame(self.tab)
+        self.ClockFrame_E.setObjectName(u"ClockFrame_E")
+        self.ClockFrame_E.setGeometry(QRect(620, 540, 20, 15))
+        self.ClockFrame_E.setStyleSheet(u"QFrame { \n"
 "	background-color: rgba(255, 255, 255, 0.4);\n"
 "	border: 1px solid #e6e6e6; /* Border  */\n"
 "}")
-        self.ClockFrame_E1_1.setFrameShape(QFrame.StyledPanel)
-        self.ClockFrame_E1_1.setFrameShadow(QFrame.Raised)
-        self.DisableFrame_E1_8 = QFrame(self.ClockFrame_E1_1)
+        self.ClockFrame_E.setFrameShape(QFrame.StyledPanel)
+        self.ClockFrame_E.setFrameShadow(QFrame.Raised)
+        self.DisableFrame_E1_8 = QFrame(self.ClockFrame_E)
         self.DisableFrame_E1_8.setObjectName(u"DisableFrame_E1_8")
         self.DisableFrame_E1_8.setGeometry(QRect(-190, 30, 31, 31))
         self.DisableFrame_E1_8.setStyleSheet(u"QFrame { \n"
@@ -3147,7 +3147,7 @@ class Ui_MainWindow(object):
 "}")
         self.DisableFrame_E1_8.setFrameShape(QFrame.StyledPanel)
         self.DisableFrame_E1_8.setFrameShadow(QFrame.Raised)
-        self.ClockFrame_E1_2 = QFrame(self.ClockFrame_E1_1)
+        self.ClockFrame_E1_2 = QFrame(self.ClockFrame_E)
         self.ClockFrame_E1_2.setObjectName(u"ClockFrame_E1_2")
         self.ClockFrame_E1_2.setGeometry(QRect(0, 20, 20, 15))
         self.ClockFrame_E1_2.setStyleSheet(u"QFrame { \n"
@@ -3321,6 +3321,42 @@ class Ui_MainWindow(object):
         self.CalculatingElasticRegistrationText.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.CalculatingElasticRegistrationText.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.CalculatingElasticRegistrationText.setReadOnly(True)
+        self.DisableFrame_E2 = QFrame(self.tab)
+        self.DisableFrame_E2.setObjectName(u"DisableFrame_E2")
+        self.DisableFrame_E2.setGeometry(QRect(500, 540, 31, 31))
+        self.DisableFrame_E2.setStyleSheet(u"QFrame { \n"
+"	background-color: rgba(255, 255, 255, 0.4);\n"
+"	border: 1px solid #e6e6e6; /* Border  */\n"
+"}")
+        self.DisableFrame_E2.setFrameShape(QFrame.StyledPanel)
+        self.DisableFrame_E2.setFrameShadow(QFrame.Raised)
+        self.DisableFrame_E1_5 = QFrame(self.DisableFrame_E2)
+        self.DisableFrame_E1_5.setObjectName(u"DisableFrame_E1_5")
+        self.DisableFrame_E1_5.setGeometry(QRect(-190, 30, 31, 31))
+        self.DisableFrame_E1_5.setStyleSheet(u"QFrame { \n"
+"	background-color: rgba(255, 255, 255, 0.4);\n"
+"	border: 1px solid #e6e6e6; /* Border  */\n"
+"}")
+        self.DisableFrame_E1_5.setFrameShape(QFrame.StyledPanel)
+        self.DisableFrame_E1_5.setFrameShadow(QFrame.Raised)
+        self.DisableFrame_E3 = QFrame(self.tab)
+        self.DisableFrame_E3.setObjectName(u"DisableFrame_E3")
+        self.DisableFrame_E3.setGeometry(QRect(540, 540, 31, 31))
+        self.DisableFrame_E3.setStyleSheet(u"QFrame { \n"
+"	background-color: rgba(255, 255, 255, 0.4);\n"
+"	border: 1px solid #e6e6e6; /* Border  */\n"
+"}")
+        self.DisableFrame_E3.setFrameShape(QFrame.StyledPanel)
+        self.DisableFrame_E3.setFrameShadow(QFrame.Raised)
+        self.DisableFrame_E1_9 = QFrame(self.DisableFrame_E3)
+        self.DisableFrame_E1_9.setObjectName(u"DisableFrame_E1_9")
+        self.DisableFrame_E1_9.setGeometry(QRect(-190, 30, 31, 31))
+        self.DisableFrame_E1_9.setStyleSheet(u"QFrame { \n"
+"	background-color: rgba(255, 255, 255, 0.4);\n"
+"	border: 1px solid #e6e6e6; /* Border  */\n"
+"}")
+        self.DisableFrame_E1_9.setFrameShape(QFrame.StyledPanel)
+        self.DisableFrame_E1_9.setFrameShadow(QFrame.Raised)
         self.tabWidget.addTab(self.tab, "")
         self.CalculatingElasticRegistrationText.raise_()
         self.ImageViewControlsFrame_E.raise_()
@@ -3335,8 +3371,10 @@ class Ui_MainWindow(object):
         self.QuitElasticRegistrationButton.raise_()
         self.NavigationButton_E.raise_()
         self.ElasticRegistrationControlsFrame.raise_()
+        self.ClockFrame_E.raise_()
         self.DisableFrame_E1.raise_()
-        self.ClockFrame_E1_1.raise_()
+        self.DisableFrame_E2.raise_()
+        self.DisableFrame_E3.raise_()
         MainWindow.setCentralWidget(self.centralWidget)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
@@ -3385,7 +3423,7 @@ class Ui_MainWindow(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">App Navigation</p></body></html>", None))
         self.GoToImportProjectTab.setText(QCoreApplication.translate("MainWindow", u"Define Job", None))
         self.GoToFiducialsTab.setText(QCoreApplication.translate("MainWindow", u"Pick Fiducials", None))
-        self.GoToJobStatusTab.setText(QCoreApplication.translate("MainWindow", u"Job Status", None))
+        self.GoToJobStatusTab.setText(QCoreApplication.translate("MainWindow", u"Status", None))
         self.GoToCoordsTab.setText(QCoreApplication.translate("MainWindow", u"Align Data", None))
         self.CloseNavigationButton.setText(QCoreApplication.translate("MainWindow", u"Close", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.ImportProjectTabName), QCoreApplication.translate("MainWindow", u"Define Job", None))
@@ -3430,7 +3468,7 @@ class Ui_MainWindow(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">App Navigation</p></body></html>", None))
         self.GoToImportProjectTab_F.setText(QCoreApplication.translate("MainWindow", u"Define Job", None))
         self.GoToFiducialsTab_F.setText(QCoreApplication.translate("MainWindow", u"Pick Fiducials", None))
-        self.GoToJobStatusTab_F.setText(QCoreApplication.translate("MainWindow", u"Job Status", None))
+        self.GoToJobStatusTab_F.setText(QCoreApplication.translate("MainWindow", u"Status", None))
         self.GoToCoordsTab_F.setText(QCoreApplication.translate("MainWindow", u"Align Data", None))
         self.CloseNavigationButton_F.setText(QCoreApplication.translate("MainWindow", u"Close", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.AddFiducialsTabName), QCoreApplication.translate("MainWindow", u"Pick Fiducials", None))
@@ -3475,16 +3513,6 @@ class Ui_MainWindow(object):
         self.FixedCheckBox.setText(QCoreApplication.translate("MainWindow", u"Looks Good?", None))
         self.ViewRegisteredMovingButton.setText(QCoreApplication.translate("MainWindow", u"Registered Moving", None))
         self.SaveRegisteredCoordinatesButton.setText(QCoreApplication.translate("MainWindow", u"Save Registered Data", None))
-        self.WhatNextText_C.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:9pt; font-weight:600; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">App Navigation</p></body></html>", None))
-        self.GoToImportProjectTab_C.setText(QCoreApplication.translate("MainWindow", u"Define Job", None))
-        self.GoToFiducialsTab_C.setText(QCoreApplication.translate("MainWindow", u"Pick Fiducials", None))
-        self.GoToJobStatusTab_C.setText(QCoreApplication.translate("MainWindow", u"Job Status", None))
-        self.GoToCoordsTab_C.setText(QCoreApplication.translate("MainWindow", u"Align Data", None))
-        self.CloseNavigationButton_C.setText(QCoreApplication.translate("MainWindow", u"Close", None))
         self.NavigationButton_C.setText(QCoreApplication.translate("MainWindow", u"Navigate", None))
         self.PlottingImageText.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
@@ -3496,6 +3524,16 @@ class Ui_MainWindow(object):
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Making the Coordinate Overlay Image. Please Wait...</span></p></body></html>", None))
+        self.WhatNextText_C.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:9pt; font-weight:600; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">App Navigation</p></body></html>", None))
+        self.GoToImportProjectTab_C.setText(QCoreApplication.translate("MainWindow", u"Define Job", None))
+        self.GoToFiducialsTab_C.setText(QCoreApplication.translate("MainWindow", u"Pick Fiducials", None))
+        self.GoToJobStatusTab_C.setText(QCoreApplication.translate("MainWindow", u"Status", None))
+        self.GoToCoordsTab_C.setText(QCoreApplication.translate("MainWindow", u"Align Data", None))
+        self.CloseNavigationButton_C.setText(QCoreApplication.translate("MainWindow", u"Close", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.ApplyToCoordsTabName), QCoreApplication.translate("MainWindow", u"Align Data", None))
         self.JobStatusHeaderText.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
@@ -3510,14 +3548,14 @@ class Ui_MainWindow(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">App Navigation</p></body></html>", None))
         self.GoToImportProjectTab_J.setText(QCoreApplication.translate("MainWindow", u"Define Job", None))
         self.GoToFiducialsTab_J.setText(QCoreApplication.translate("MainWindow", u"Pick Fiducials", None))
-        self.GoToJobStatusTab_J.setText(QCoreApplication.translate("MainWindow", u"Job Status", None))
+        self.GoToJobStatusTab_J.setText(QCoreApplication.translate("MainWindow", u"Status", None))
         self.GoToCoordsTab_J.setText(QCoreApplication.translate("MainWindow", u"Align Data", None))
         self.CloseNavigationButton_J.setText(QCoreApplication.translate("MainWindow", u"Close", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.JobStatusTabName), QCoreApplication.translate("MainWindow", u"Job Status", None))
         self.SavingRegistrationResultsText.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:4.125pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9pt; font-weight:600;\">Saving Registration Results. Please Wait...</span></p></body></html>", None))
         self.ImageViewFrameHeaderText_O.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
@@ -3542,6 +3580,7 @@ class Ui_MainWindow(object):
         self.SaveRegistrationResultsButton_O.setText(QCoreApplication.translate("MainWindow", u"Yes", None))
         self.ReturnToFiducialsTab_O.setText(QCoreApplication.translate("MainWindow", u"Edit", None))
         self.NavigationButton_O.setText(QCoreApplication.translate("MainWindow", u"Navigate", None))
+        self.TryElasticRegButton.setText(QCoreApplication.translate("MainWindow", u"Try Elastic Registration", None))
         self.WhatNextText_O.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
@@ -3549,10 +3588,9 @@ class Ui_MainWindow(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">App Navigation</p></body></html>", None))
         self.GoToImportProjectTab_O.setText(QCoreApplication.translate("MainWindow", u"Define Job", None))
         self.GoToFiducialsTab_O.setText(QCoreApplication.translate("MainWindow", u"Pick Fiducials", None))
-        self.GoToJobStatusTab_O.setText(QCoreApplication.translate("MainWindow", u"Job Status", None))
+        self.GoToJobStatusTab_O.setText(QCoreApplication.translate("MainWindow", u"Status", None))
         self.GoToCoordsTab_O.setText(QCoreApplication.translate("MainWindow", u"Align Data", None))
         self.CloseNavigationButton_O.setText(QCoreApplication.translate("MainWindow", u"Close", None))
-        self.TryElasticRegButton.setText(QCoreApplication.translate("MainWindow", u"Try Elastic Registration", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.ViewOverlaysTabName), QCoreApplication.translate("MainWindow", u"View Overlay", None))
         self.FiducialRegisteredImageFrameHeaderText.setText(QCoreApplication.translate("MainWindow", u"Fiducial Registration Overlay", None))
         self.ElasticRegisteredImageBorder.setText("")
@@ -3564,7 +3602,7 @@ class Ui_MainWindow(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">App Navigation</p></body></html>", None))
         self.GoToImportProjectTab_E.setText(QCoreApplication.translate("MainWindow", u"Define Job", None))
         self.GoToFiducialsTab_E.setText(QCoreApplication.translate("MainWindow", u"Pick Fiducials", None))
-        self.GoToJobStatusTab_E.setText(QCoreApplication.translate("MainWindow", u"Job Status", None))
+        self.GoToJobStatusTab_E.setText(QCoreApplication.translate("MainWindow", u"Status", None))
         self.GoToCoordsTab_E.setText(QCoreApplication.translate("MainWindow", u"Align Data", None))
         self.CloseNavigationButton_E.setText(QCoreApplication.translate("MainWindow", u"Close", None))
         self.ElasticRegisteredImageFrameHeaderText.setText(QCoreApplication.translate("MainWindow", u"Fiducial + Elastic Registration Overlay", None))
@@ -3615,7 +3653,7 @@ class Ui_MainWindow(object):
         self.CalculatingElasticRegistrationText.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:4.125pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9pt; font-weight:600;\">Calculating Elastic Registration. Please Wait...</span></p></body></html>", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"Align Elastic", None))
     # retranslateUi

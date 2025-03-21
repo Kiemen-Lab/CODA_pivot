@@ -942,9 +942,9 @@ QPushButton:pressed {
      <widget class="QFrame" name="WhatNextControlFrame">
       <property name="geometry">
        <rect>
-        <x>365</x>
+        <x>425</x>
         <y>605</y>
-        <width>465</width>
+        <width>405</width>
         <height>75</height>
        </rect>
       </property>
@@ -965,7 +965,7 @@ QPushButton:pressed {
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>465</width>
+         <width>405</width>
          <height>25</height>
         </rect>
        </property>
@@ -1077,9 +1077,9 @@ QPushButton:pressed {
       <widget class="QPushButton" name="GoToJobStatusTab">
        <property name="geometry">
         <rect>
-         <x>285</x>
+         <x>275</x>
          <y>35</y>
-         <width>90</width>
+         <width>57</width>
          <height>30</height>
         </rect>
        </property>
@@ -1108,7 +1108,7 @@ QPushButton:pressed {
 }</string>
        </property>
        <property name="text">
-        <string>Job Status</string>
+        <string>Status</string>
        </property>
       </widget>
       <widget class="QPushButton" name="GoToCoordsTab">
@@ -1116,7 +1116,7 @@ QPushButton:pressed {
         <rect>
          <x>190</x>
          <y>35</y>
-         <width>90</width>
+         <width>80</width>
          <height>30</height>
         </rect>
        </property>
@@ -1151,9 +1151,9 @@ QPushButton:pressed {
       <widget class="QPushButton" name="CloseNavigationButton">
        <property name="geometry">
         <rect>
-         <x>380</x>
+         <x>337</x>
          <y>35</y>
-         <width>75</width>
+         <width>58</width>
          <height>30</height>
         </rect>
        </property>
@@ -1863,9 +1863,9 @@ p, li { white-space: pre-wrap; }
      <widget class="QPushButton" name="PickNewMovingImageButton">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>565</y>
-        <width>120</width>
+        <x>270</x>
+        <y>610</y>
+        <width>125</width>
         <height>30</height>
        </rect>
       </property>
@@ -1900,8 +1900,8 @@ QPushButton:pressed {
      <widget class="QPushButton" name="AttemptICPRegistrationButton">
       <property name="geometry">
        <rect>
-        <x>135</x>
-        <y>565</y>
+        <x>270</x>
+        <y>650</y>
         <width>125</width>
         <height>30</height>
        </rect>
@@ -1974,9 +1974,9 @@ QPushButton:pressed {
      <widget class="QFrame" name="WhatNextControlFrame_F">
       <property name="geometry">
        <rect>
-        <x>365</x>
+        <x>425</x>
         <y>605</y>
-        <width>465</width>
+        <width>405</width>
         <height>75</height>
        </rect>
       </property>
@@ -1997,7 +1997,7 @@ QPushButton:pressed {
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>465</width>
+         <width>405</width>
          <height>25</height>
         </rect>
        </property>
@@ -2109,9 +2109,9 @@ QPushButton:pressed {
       <widget class="QPushButton" name="GoToJobStatusTab_F">
        <property name="geometry">
         <rect>
-         <x>285</x>
+         <x>275</x>
          <y>35</y>
-         <width>90</width>
+         <width>57</width>
          <height>30</height>
         </rect>
        </property>
@@ -2140,7 +2140,7 @@ QPushButton:pressed {
 }</string>
        </property>
        <property name="text">
-        <string>Job Status</string>
+        <string>Status</string>
        </property>
       </widget>
       <widget class="QPushButton" name="GoToCoordsTab_F">
@@ -2148,7 +2148,7 @@ QPushButton:pressed {
         <rect>
          <x>190</x>
          <y>35</y>
-         <width>90</width>
+         <width>80</width>
          <height>30</height>
         </rect>
        </property>
@@ -2183,9 +2183,9 @@ QPushButton:pressed {
       <widget class="QPushButton" name="CloseNavigationButton_F">
        <property name="geometry">
         <rect>
-         <x>380</x>
+         <x>337</x>
          <y>35</y>
-         <width>75</width>
+         <width>58</width>
          <height>30</height>
         </rect>
        </property>
@@ -3240,253 +3240,6 @@ QPushButton:pressed {
        <enum>QFrame::Raised</enum>
       </property>
      </widget>
-     <widget class="QFrame" name="WhatNextControlFrame_C">
-      <property name="geometry">
-       <rect>
-        <x>365</x>
-        <y>605</y>
-        <width>465</width>
-        <height>75</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QFrame { 
-	background-color: #4b4b4b;
-	border: 1px solid #e6e6e6; /* Border  */
-}</string>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <widget class="QTextEdit" name="WhatNextText_C">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>465</width>
-         <height>25</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QTextEdit { 
-	background-color: #4b4b4b;
-	color: #e6e6e6; /* Text color */
-	border: 1px solid #e6e6e6; /* Border  */
-}</string>
-       </property>
-       <property name="verticalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-       <property name="horizontalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-       <property name="html">
-        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:9pt; font-weight:600; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;App Navigation&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="GoToImportProjectTab_C">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>35</y>
-         <width>80</width>
-         <height>30</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    background-color: #5a5a5a;
-    color: #e6e6e6; /* Text color */
-    border: 1px solid #e6e6e6; /* Border  */
-    border-radius: 5px; /* Optional: Rounded corners */
-    padding: 5px; /* Optional: Padding around text */
-}
-
-QPushButton:hover {
-    background-color: #666f75; /* Grey-blue when hovered */
-}
-
-QPushButton:pressed {
-    background-color: #7b8e9c; /* More blue when pressed */
-}</string>
-       </property>
-       <property name="text">
-        <string>Define Job</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="GoToFiducialsTab_C">
-       <property name="geometry">
-        <rect>
-         <x>95</x>
-         <y>35</y>
-         <width>90</width>
-         <height>30</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    background-color: #5a5a5a;
-    color: #e6e6e6; /* Text color */
-    border: 1px solid #e6e6e6; /* Border  */
-    border-radius: 5px; /* Optional: Rounded corners */
-    padding: 5px; /* Optional: Padding around text */
-}
-
-QPushButton:hover {
-    background-color: #666f75; /* Grey-blue when hovered */
-}
-
-QPushButton:pressed {
-    background-color: #7b8e9c; /* More blue when pressed */
-}</string>
-       </property>
-       <property name="text">
-        <string>Pick Fiducials</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="GoToJobStatusTab_C">
-       <property name="geometry">
-        <rect>
-         <x>285</x>
-         <y>35</y>
-         <width>90</width>
-         <height>30</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    background-color: #5a5a5a;
-    color: #e6e6e6; /* Text color */
-    border: 1px solid #e6e6e6; /* Border  */
-    border-radius: 5px; /* Optional: Rounded corners */
-    padding: 5px; /* Optional: Padding around text */
-}
-
-QPushButton:hover {
-    background-color: #666f75; /* Grey-blue when hovered */
-}
-
-QPushButton:pressed {
-    background-color: #7b8e9c; /* More blue when pressed */
-}</string>
-       </property>
-       <property name="text">
-        <string>Job Status</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="GoToCoordsTab_C">
-       <property name="geometry">
-        <rect>
-         <x>190</x>
-         <y>35</y>
-         <width>90</width>
-         <height>30</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    background-color: #5a5a5a;
-    color: #e6e6e6; /* Text color */
-    border: 1px solid #e6e6e6; /* Border  */
-    border-radius: 5px; /* Optional: Rounded corners */
-    padding: 5px; /* Optional: Padding around text */
-}
-
-QPushButton:hover {
-    background-color: #666f75; /* Grey-blue when hovered */
-}
-
-QPushButton:pressed {
-    background-color: #7b8e9c; /* More blue when pressed */
-}</string>
-       </property>
-       <property name="text">
-        <string>Align Data</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="CloseNavigationButton_C">
-       <property name="geometry">
-        <rect>
-         <x>380</x>
-         <y>35</y>
-         <width>75</width>
-         <height>30</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    background-color: #5a5a5a;
-    color: #e6e6e6; /* Text color */
-    border: 1px solid #e6e6e6; /* Border  */
-    border-radius: 5px; /* Optional: Rounded corners */
-    padding: 5px; /* Optional: Padding around text */
-}
-
-QPushButton:hover {
-    background-color: #666f75; /* Grey-blue when hovered */
-}
-
-QPushButton:pressed {
-    background-color: #7b8e9c; /* More blue when pressed */
-}</string>
-       </property>
-       <property name="text">
-        <string>Close</string>
-       </property>
-      </widget>
-     </widget>
      <widget class="QPushButton" name="NavigationButton_C">
       <property name="geometry">
        <rect>
@@ -3640,6 +3393,253 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Making the Coordinate Overlay Image. Please Wait...&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
+     <widget class="QFrame" name="WhatNextControlFrame_C">
+      <property name="geometry">
+       <rect>
+        <x>425</x>
+        <y>605</y>
+        <width>405</width>
+        <height>75</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame { 
+	background-color: #4b4b4b;
+	border: 1px solid #e6e6e6; /* Border  */
+}</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QTextEdit" name="WhatNextText_C">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>405</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QTextEdit { 
+	background-color: #4b4b4b;
+	color: #e6e6e6; /* Text color */
+	border: 1px solid #e6e6e6; /* Border  */
+}</string>
+       </property>
+       <property name="verticalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+       <property name="html">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:9pt; font-weight:600; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;App Navigation&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="GoToImportProjectTab_C">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>35</y>
+         <width>80</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Define Job</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="GoToFiducialsTab_C">
+       <property name="geometry">
+        <rect>
+         <x>95</x>
+         <y>35</y>
+         <width>90</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Pick Fiducials</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="GoToJobStatusTab_C">
+       <property name="geometry">
+        <rect>
+         <x>275</x>
+         <y>35</y>
+         <width>57</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Status</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="GoToCoordsTab_C">
+       <property name="geometry">
+        <rect>
+         <x>190</x>
+         <y>35</y>
+         <width>80</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Align Data</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="CloseNavigationButton_C">
+       <property name="geometry">
+        <rect>
+         <x>337</x>
+         <y>35</y>
+         <width>58</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+       </property>
+       <property name="text">
+        <string>Close</string>
+       </property>
+      </widget>
+     </widget>
      <zorder>RegisterCoordinatesFrame</zorder>
      <zorder>RegisterCoordsImageBorder</zorder>
      <zorder>RegisterCoordsFrameHeaderText</zorder>
@@ -3647,12 +3647,12 @@ p, li { white-space: pre-wrap; }
      <zorder>ImageViewControlsFrame_C</zorder>
      <zorder>CoordinatesOverlayControlsFrame</zorder>
      <zorder>DisableFrame_C</zorder>
-     <zorder>WhatNextControlFrame_C</zorder>
      <zorder>NavigationButton_C</zorder>
      <zorder>PlottingImageText</zorder>
      <zorder>DisableFrame_C_2</zorder>
      <zorder>DisableFrame_C_3</zorder>
      <zorder>MakingCoordOverlayText</zorder>
+     <zorder>WhatNextControlFrame_C</zorder>
     </widget>
     <widget class="QWidget" name="JobStatusTabName">
      <attribute name="title">
@@ -3861,9 +3861,9 @@ QPushButton:pressed {
      <widget class="QFrame" name="WhatNextControlFrame_J">
       <property name="geometry">
        <rect>
-        <x>365</x>
+        <x>425</x>
         <y>605</y>
-        <width>465</width>
+        <width>405</width>
         <height>75</height>
        </rect>
       </property>
@@ -3884,7 +3884,7 @@ QPushButton:pressed {
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>465</width>
+         <width>405</width>
          <height>25</height>
         </rect>
        </property>
@@ -3996,9 +3996,9 @@ QPushButton:pressed {
       <widget class="QPushButton" name="GoToJobStatusTab_J">
        <property name="geometry">
         <rect>
-         <x>285</x>
+         <x>275</x>
          <y>35</y>
-         <width>90</width>
+         <width>57</width>
          <height>30</height>
         </rect>
        </property>
@@ -4027,7 +4027,7 @@ QPushButton:pressed {
 }</string>
        </property>
        <property name="text">
-        <string>Job Status</string>
+        <string>Status</string>
        </property>
       </widget>
       <widget class="QPushButton" name="GoToCoordsTab_J">
@@ -4035,7 +4035,7 @@ QPushButton:pressed {
         <rect>
          <x>190</x>
          <y>35</y>
-         <width>90</width>
+         <width>80</width>
          <height>30</height>
         </rect>
        </property>
@@ -4070,9 +4070,9 @@ QPushButton:pressed {
       <widget class="QPushButton" name="CloseNavigationButton_J">
        <property name="geometry">
         <rect>
-         <x>380</x>
+         <x>337</x>
          <y>35</y>
-         <width>75</width>
+         <width>58</width>
          <height>30</height>
         </rect>
        </property>
@@ -4140,7 +4140,7 @@ QPushButton:pressed {
        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:4.125pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:9pt; font-weight:600;&quot;&gt;Saving Registration Results. Please Wait...&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
@@ -4785,12 +4785,71 @@ QPushButton:pressed {
        <string>Navigate</string>
       </property>
      </widget>
+     <widget class="QPushButton" name="TryElasticRegButton">
+      <property name="geometry">
+       <rect>
+        <x>670</x>
+        <y>560</y>
+        <width>161</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: #5a5a5a;
+    color: #e6e6e6; /* Text color */
+    border: 1px solid #e6e6e6; /* Border  */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 5px; /* Optional: Padding around text */
+}
+
+QPushButton:hover {
+    background-color: #666f75; /* Grey-blue when hovered */
+}
+
+QPushButton:pressed {
+    background-color: #7b8e9c; /* More blue when pressed */
+}</string>
+      </property>
+      <property name="text">
+       <string>Try Elastic Registration</string>
+      </property>
+     </widget>
+     <widget class="QFrame" name="DisableFrame_O3">
+      <property name="geometry">
+       <rect>
+        <x>460</x>
+        <y>10</y>
+        <width>31</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame { 
+	background-color: rgba(255, 255, 255, 0.4);
+	border: 1px solid #e6e6e6; /* Border  */
+}</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+     </widget>
      <widget class="QFrame" name="WhatNextControlFrame_O">
       <property name="geometry">
        <rect>
-        <x>365</x>
+        <x>425</x>
         <y>605</y>
-        <width>465</width>
+        <width>405</width>
         <height>75</height>
        </rect>
       </property>
@@ -4811,7 +4870,7 @@ QPushButton:pressed {
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>465</width>
+         <width>405</width>
          <height>25</height>
         </rect>
        </property>
@@ -4923,9 +4982,9 @@ QPushButton:pressed {
       <widget class="QPushButton" name="GoToJobStatusTab_O">
        <property name="geometry">
         <rect>
-         <x>285</x>
+         <x>275</x>
          <y>35</y>
-         <width>90</width>
+         <width>57</width>
          <height>30</height>
         </rect>
        </property>
@@ -4954,7 +5013,7 @@ QPushButton:pressed {
 }</string>
        </property>
        <property name="text">
-        <string>Job Status</string>
+        <string>Status</string>
        </property>
       </widget>
       <widget class="QPushButton" name="GoToCoordsTab_O">
@@ -4962,7 +5021,7 @@ QPushButton:pressed {
         <rect>
          <x>190</x>
          <y>35</y>
-         <width>90</width>
+         <width>80</width>
          <height>30</height>
         </rect>
        </property>
@@ -4997,9 +5056,9 @@ QPushButton:pressed {
       <widget class="QPushButton" name="CloseNavigationButton_O">
        <property name="geometry">
         <rect>
-         <x>380</x>
+         <x>337</x>
          <y>35</y>
-         <width>75</width>
+         <width>58</width>
          <height>30</height>
         </rect>
        </property>
@@ -5032,65 +5091,6 @@ QPushButton:pressed {
        </property>
       </widget>
      </widget>
-     <widget class="QPushButton" name="TryElasticRegButton">
-      <property name="geometry">
-       <rect>
-        <x>670</x>
-        <y>560</y>
-        <width>161</width>
-        <height>30</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>9</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QPushButton {
-    background-color: #5a5a5a;
-    color: #e6e6e6; /* Text color */
-    border: 1px solid #e6e6e6; /* Border  */
-    border-radius: 5px; /* Optional: Rounded corners */
-    padding: 5px; /* Optional: Padding around text */
-}
-
-QPushButton:hover {
-    background-color: #666f75; /* Grey-blue when hovered */
-}
-
-QPushButton:pressed {
-    background-color: #7b8e9c; /* More blue when pressed */
-}</string>
-      </property>
-      <property name="text">
-       <string>Try Elastic Registration</string>
-      </property>
-     </widget>
-     <widget class="QFrame" name="DisableFrame_O3">
-      <property name="geometry">
-       <rect>
-        <x>460</x>
-        <y>10</y>
-        <width>31</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QFrame { 
-	background-color: rgba(255, 255, 255, 0.4);
-	border: 1px solid #e6e6e6; /* Border  */
-}</string>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-     </widget>
      <zorder>UnregisteredImageBorder</zorder>
      <zorder>ImageViewControlsFrame_O</zorder>
      <zorder>UnregisteredImageFrameHeaderText</zorder>
@@ -5102,10 +5102,10 @@ QPushButton:pressed {
      <zorder>DisableFrame_O2</zorder>
      <zorder>RegisteredImageDisplayFrame</zorder>
      <zorder>NavigationButton_O</zorder>
-     <zorder>WhatNextControlFrame_O</zorder>
      <zorder>SavingRegistrationResultsText</zorder>
      <zorder>TryElasticRegButton</zorder>
      <zorder>DisableFrame_O3</zorder>
+     <zorder>WhatNextControlFrame_O</zorder>
     </widget>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -5204,9 +5204,9 @@ QPushButton:pressed {
      <widget class="QFrame" name="WhatNextControlFrame_E">
       <property name="geometry">
        <rect>
-        <x>365</x>
+        <x>425</x>
         <y>605</y>
-        <width>465</width>
+        <width>405</width>
         <height>75</height>
        </rect>
       </property>
@@ -5227,7 +5227,7 @@ QPushButton:pressed {
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>465</width>
+         <width>405</width>
          <height>25</height>
         </rect>
        </property>
@@ -5339,9 +5339,9 @@ QPushButton:pressed {
       <widget class="QPushButton" name="GoToJobStatusTab_E">
        <property name="geometry">
         <rect>
-         <x>285</x>
+         <x>275</x>
          <y>35</y>
-         <width>90</width>
+         <width>57</width>
          <height>30</height>
         </rect>
        </property>
@@ -5370,7 +5370,7 @@ QPushButton:pressed {
 }</string>
        </property>
        <property name="text">
-        <string>Job Status</string>
+        <string>Status</string>
        </property>
       </widget>
       <widget class="QPushButton" name="GoToCoordsTab_E">
@@ -5378,7 +5378,7 @@ QPushButton:pressed {
         <rect>
          <x>190</x>
          <y>35</y>
-         <width>90</width>
+         <width>80</width>
          <height>30</height>
         </rect>
        </property>
@@ -5413,9 +5413,9 @@ QPushButton:pressed {
       <widget class="QPushButton" name="CloseNavigationButton_E">
        <property name="geometry">
         <rect>
-         <x>380</x>
+         <x>337</x>
          <y>35</y>
-         <width>75</width>
+         <width>58</width>
          <height>30</height>
         </rect>
        </property>
@@ -6473,7 +6473,7 @@ QPushButton:pressed {
      <widget class="QFrame" name="DisableFrame_E1">
       <property name="geometry">
        <rect>
-        <x>510</x>
+        <x>460</x>
         <y>540</y>
         <width>31</width>
         <height>31</height>
@@ -6514,10 +6514,10 @@ QPushButton:pressed {
        </property>
       </widget>
      </widget>
-     <widget class="QFrame" name="ClockFrame_E1_1">
+     <widget class="QFrame" name="ClockFrame_E">
       <property name="geometry">
        <rect>
-        <x>550</x>
+        <x>620</x>
         <y>540</y>
         <width>20</width>
         <height>15</height>
@@ -6984,9 +6984,97 @@ QPushButton:pressed {
        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:4.125pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:9pt; font-weight:600;&quot;&gt;Calculating Elastic Registration. Please Wait...&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
+     </widget>
+     <widget class="QFrame" name="DisableFrame_E2">
+      <property name="geometry">
+       <rect>
+        <x>500</x>
+        <y>540</y>
+        <width>31</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame { 
+	background-color: rgba(255, 255, 255, 0.4);
+	border: 1px solid #e6e6e6; /* Border  */
+}</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QFrame" name="DisableFrame_E1_5">
+       <property name="geometry">
+        <rect>
+         <x>-190</x>
+         <y>30</y>
+         <width>31</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QFrame { 
+	background-color: rgba(255, 255, 255, 0.4);
+	border: 1px solid #e6e6e6; /* Border  */
+}</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QFrame" name="DisableFrame_E3">
+      <property name="geometry">
+       <rect>
+        <x>540</x>
+        <y>540</y>
+        <width>31</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame { 
+	background-color: rgba(255, 255, 255, 0.4);
+	border: 1px solid #e6e6e6; /* Border  */
+}</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QFrame" name="DisableFrame_E1_9">
+       <property name="geometry">
+        <rect>
+         <x>-190</x>
+         <y>30</y>
+         <width>31</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QFrame { 
+	background-color: rgba(255, 255, 255, 0.4);
+	border: 1px solid #e6e6e6; /* Border  */
+}</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+      </widget>
      </widget>
      <zorder>CalculatingElasticRegistrationText</zorder>
      <zorder>ImageViewControlsFrame_E</zorder>
@@ -7001,8 +7089,10 @@ p, li { white-space: pre-wrap; }
      <zorder>QuitElasticRegistrationButton</zorder>
      <zorder>NavigationButton_E</zorder>
      <zorder>ElasticRegistrationControlsFrame</zorder>
+     <zorder>ClockFrame_E</zorder>
      <zorder>DisableFrame_E1</zorder>
-     <zorder>ClockFrame_E1_1</zorder>
+     <zorder>DisableFrame_E2</zorder>
+     <zorder>DisableFrame_E3</zorder>
     </widget>
    </widget>
   </widget>

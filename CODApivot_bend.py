@@ -361,16 +361,7 @@ class MainWindow(QMainWindow):
         self.ui.CalculatingElasticRegistrationText.setGeometry(10, 510, 320, 24)
         self.ui.ImageViewControlsFrame_E.setGeometry(self.ui.ImageViewControlsFrame_O.geometry())
         self.ui.SaveRegistrationControlFrame_E.setGeometry(self.ui.SaveRegistrationControlFrame.geometry())
-        self.ui.ClockFrame_E1_1.setGeometry(10, 560, 20, 15)
-        self.ui.ClockFrame_E1_2.setGeometry(46, 560, 20, 15)
-        self.ui.ClockFrame_E1_3.setGeometry(82, 560, 20, 15)
-        self.ui.ClockFrame_E1_4.setGeometry(118, 560, 20, 15)
-        self.ui.ClockFrame_E1_5.setGeometry(154, 560, 20, 15)
-        self.ui.ClockFrame_E1_6.setGeometry(190, 560, 20, 15)
-        self.ui.ClockFrame_E1_7.setGeometry(226, 560, 20, 15)
-        self.ui.ClockFrame_E1_8.setGeometry(262, 560, 20, 15)
-        self.ui.ClockFrame_E1_9.setGeometry(298, 560, 20, 15)
-        self.ui.ClockFrame_E1_10.setGeometry(334, 560, 20, 15)
+        self.ui.ClockFrame_E.setGeometry(0, 560, 20, 15)
         self.ui.DisableFrame_E1.setGeometry(self.ui.ElasticRegistrationControlsFrame.geometry())
         # Make the image frames communicate with mouse clicks and scrolls
         self.overlay0_E_label = ClickableLabel(self.ui.FiducialRegisteredImageDisplayFrame)
@@ -386,6 +377,7 @@ class MainWindow(QMainWindow):
         self.ui.GrowFiducialButton_E.clicked.connect(self.call_increase_fiducial_size0)
         self.ui.GrowFiducialButton2_E.clicked.connect(self.call_increase_fiducial_size1)
         self.ui.ReturnToFiducialsTab_E.clicked.connect(self.initiate_elastic_registration_tab)
+        self.ui.SaveRegistrationResultsButton_E.clicked.connect(self.save_registration_results_E)
         self.ui.ShrinkSquareLineButton.clicked.connect(self.decrease_square_thickness)
         self.ui.GrowSquareLineButton.clicked.connect(self.increase_square_thickness)
         self.ui.ColorSquaresButton.clicked.connect(self.change_fiducial_color)
@@ -556,12 +548,14 @@ class MainWindow(QMainWindow):
         self.ui.WhatNextControlFrame_O.setVisible(True)
         self.ui.WhatNextControlFrame_C.setVisible(True)
         self.ui.WhatNextControlFrame_J.setVisible(True)
+        self.ui.WhatNextControlFrame_E.setVisible(True)
 
         self.ui.NavigationButton.setVisible(False)
         self.ui.NavigationButton_F.setVisible(False)
         self.ui.NavigationButton_O.setVisible(False)
         self.ui.NavigationButton_C.setVisible(False)
         self.ui.NavigationButton_J.setVisible(False)
+        self.ui.NavigationButton_E.setVisible(False)
 
         if not self.ui.FiducialPointControlsFrame.isVisible():
             self.ui.ChooseMovingImageFrame.setVisible(False)
@@ -573,12 +567,14 @@ class MainWindow(QMainWindow):
         self.ui.WhatNextControlFrame_O.setVisible(False)
         self.ui.WhatNextControlFrame_C.setVisible(False)
         self.ui.WhatNextControlFrame_J.setVisible(False)
+        self.ui.WhatNextControlFrame_E.setVisible(False)
 
         self.ui.NavigationButton.setVisible(True)
         self.ui.NavigationButton_F.setVisible(True)
         self.ui.NavigationButton_O.setVisible(True)
         self.ui.NavigationButton_C.setVisible(True)
         self.ui.NavigationButton_J.setVisible(True)
+        self.ui.NavigationButton_E.setVisible(True)
 
         if not self.ui.FiducialPointControlsFrame.isVisible():
             self.ui.ChooseMovingImageFrame.setVisible(True)
@@ -1644,16 +1640,12 @@ class MainWindow(QMainWindow):
             os.makedirs(outputFolder)
         tmp = self.nmMoving[:self.nmMoving.rfind('.')] + ".jpg"
         outfile = os.path.join(outputFolder, tmp)
-        #image = self.imMovingReg.toImage()
-        #image = image.convertToFormat(QImage.Format_RGB888)
         self.imMovingReg.save(outfile, "JPG")
 
         # save the fixed image if it does not already exist
         tmp = self.nmFixed[:self.nmFixed.rfind('.')] + ".jpg"
         outfile = os.path.join(outputFolder, tmp)
         if not os.path.exists(outfile):
-            #image = self.imFixed0.toImage()
-            #image = image.convertToFormat(QImage.Format_RGB888)
             self.imFixed0.save(outfile, "JPG")
 
     def browse_for_coordinates_file(self):
@@ -2349,11 +2341,17 @@ class MainWindow(QMainWindow):
         """Convert a numpy array to QPixmap."""
 
         height, width, channels = array.shape[:3]
-        #print(f" height: {height}, width: {width}, channels: {channels}")
-        pixmap = QImage(array.data, width, height, QImage.Format_ARGB32 if channels == 4 else QImage.Format_RGB888)
-        #ss = array.strides[0]
-        #pixmap = QImage(array.data, height, width, ss, QImage.Format_RGB888)
-        pixmap = QPixmap.fromImage(pixmap)
+        bytesPerLine = array.strides[0]
+        qimage = QImage(array.data, width, height, bytesPerLine,
+                        QImage.Format_ARGB32 if channels == 4 else QImage.Format_RGB888)
+        pixmap = QPixmap.fromImage(qimage)
+
+        #height, width, channels = array.shape[:3]
+        ##print(f" height: {height}, width: {width}, channels: {channels}")
+        #pixmap = QImage(array.data, width, height, QImage.Format_ARGB32 if channels == 4 else QImage.Format_RGB888)
+        ##ss = array.strides[0]
+        ##pixmap = QImage(array.data, height, width, ss, QImage.Format_RGB888)
+        #pixmap = QPixmap.fromImage(pixmap)
         return pixmap
 
     def pad_images(self, pixmap, width, height, mode_vals, border=None):
@@ -2414,9 +2412,14 @@ class MainWindow(QMainWindow):
         self.ui.RegisteredImageDisplayFrame.setStyleSheet(self.inactiveFrame)
         tmp = self.ui.RegisteredImageDisplayFrame.geometry()
         self.ui.RegisteredImageBorder.setGeometry(tmp.x() - 3, tmp.y() - 3, tmp.width() + 6, tmp.height() + 6)
+        # disable some buttons
+        self.ui.SaveRegistrationControlFrame.setEnabled(False)
+        self.ui.ImageViewControlsFrame_O.setEnabled(False)
+        self.ui.DisableFrame_O1.setVisible(True)
+        self.ui.DisableFrame_O2.setVisible(True)
         QtWidgets.QApplication.processEvents()
 
-        # save registration info info
+        # save registration info
         tmp = self.nmMoving[:self.nmMoving.rfind('.')] + ".pkl"
         outputFolder = os.path.join(self.jobFolder, self.ResultsName, "Registration transforms")
         outfile = os.path.join(outputFolder, tmp)
@@ -2430,17 +2433,12 @@ class MainWindow(QMainWindow):
         RMSE = self.RMSE
         # Save variables to the pkl file
         with open(outfile, 'wb') as file:
-            pickle.dump({'tform': tform,'RMSE': RMSE, 'RMSE0': RMSE0,
-                         }, file)
+            pickle.dump({'tform': tform,'RMSE': RMSE, 'RMSE0': RMSE0,}, file)
 
         # save the images
         self.save_registered_images()
 
         # what to do next
-        self.ui.SaveRegistrationControlFrame.setEnabled(False)
-        self.ui.ImageViewControlsFrame_O.setEnabled(False)
-        self.ui.DisableFrame_O1.setVisible(True)
-        self.ui.DisableFrame_O2.setVisible(True)
         self.ui.TryElasticRegButton.setVisible(True)
 
     def make_tissue_mask(self, array, mode_val):
@@ -2459,6 +2457,61 @@ class MainWindow(QMainWindow):
             mask = array_grey < 215
 
         return array_grey, mask
+
+    def save_registration_results_E(self):
+
+        # change some visibility settings
+        #self.ui.SaveRegistrationControlFrame.setEnabled(False)
+        #self.ui.ImageViewControlsFrame_O.setEnabled(False)
+        #self.ui.DisableFrame_O1.setVisible(True)
+        #self.ui.DisableFrame_O2.setVisible(True)
+        #self.ui.UnregisteredImageBorder.setStyleSheet(self.inactiveLabel)
+        #QtWidgets.QApplication.processEvents()
+
+        # save registration info
+        tmp = self.nmMoving[:self.nmMoving.rfind('.')] + ".pkl"
+        outputFolder = os.path.join(self.jobFolder, self.ResultsName, "Registration transforms", "Elastic")
+        outfile = os.path.join(outputFolder, tmp)
+
+        # Check if the folder exists, and create it if it doesn't
+        if not os.path.exists(outputFolder):
+            os.makedirs(outputFolder)
+
+        elastic_tilesize = self.elastic_tilesize
+        elastic_tilespacing = self.elastic_tilespacing
+        n_buffer_pix = 50
+        D = self.D
+        # Save variables to the pkl file
+        with open(outfile, 'wb') as file:
+            pickle.dump({'D': D, 'elastic_tilesize': elastic_tilesize, 'elastic_tilespacing': elastic_tilespacing,
+                         'n_buffer_pix': n_buffer_pix}, file)
+
+        # save the images
+        self.save_registered_image_elastic()
+
+        # what to do next
+        self.ui.DisableFrame_E2.setVisible(True)
+        self.ui.DisableFrame_E3.setVisible(True)
+        self.ui.QuitElasticRegistrationButton.setVisible(False)
+        self.ui.DisableFrame_E2.setGeometry((self.ui.ImageViewControlsFrame_E.geometry()))
+        self.ui.DisableFrame_E3.setGeometry((self.ui.SaveRegistrationControlFrame_E.geometry()))
+
+    def save_registered_image_elastic(self):
+
+        # save registered moving image
+        outputFolder = os.path.join(self.jobFolder, self.ResultsName, "Registered images", "Elastic")
+        # Check if the folder exists, and create it if it doesn't
+        if not os.path.exists(outputFolder):
+            os.makedirs(outputFolder)
+        tmp = self.nmMoving[:self.nmMoving.rfind('.')] + ".jpg"
+        outfile = os.path.join(outputFolder, tmp)
+        self.imMovingRegElastic.save(outfile, "JPG")
+
+        # save the fixed image if it does not already exist
+        tmp = self.nmFixed[:self.nmFixed.rfind('.')] + ".jpg"
+        outfile = os.path.join(outputFolder, tmp)
+        if not os.path.exists(outfile):
+            self.imFixed0.save(outfile, "JPG")
 
     def call_CODA_elastic_registration(self):
 
@@ -2489,20 +2542,11 @@ class MainWindow(QMainWindow):
 
         # Took below section from pyCODA:
         D = self.calculate_elastic_registration(im_ref_grey, im_moving_grey, mask_ref, mask_moving, tile_size, n_buffer_pix, intertile_distance)
-        D = cv2.resize(D,(im_moving.shape[1], im_moving.shape[0]), interpolation=cv2.INTER_LINEAR,)
+        D = cv2.resize(D,(im_moving.shape[1], im_moving.shape[0]), interpolation=cv2.INTER_LINEAR)
         self.D = D.astype(np.float32)
 
-        # Create the base coordinate grid
-        base_x, base_y = np.meshgrid(np.arange(im_moving.shape[1]), np.arange(im_moving.shape[0]))
-
-        # Convert the displacement map to absolute coordinates
-        map_x = (base_x + self.D[..., 0]).astype(np.float32)
-        map_y = (base_y + self.D[..., 1]).astype(np.float32)
-        remapped_channels = [
-            cv2.remap(channel, map_x, map_y, interpolation=cv2.INTER_NEAREST, borderMode=cv2.BORDER_CONSTANT, borderValue=float(241))
-            for i, channel in enumerate(cv2.split(im_moving))
-        ]
-        im_moving_elastic = cv2.merge(remapped_channels)
+        # apply elastic registration to the moving image
+        im_moving_elastic = self.register_image_elastic(im_moving, self.D)
 
         # Convert back to pixmap
         self.imMovingRegElastic = self.array_to_pixmap(im_moving_elastic)
@@ -2520,6 +2564,7 @@ class MainWindow(QMainWindow):
 
         # change the views
         self.ui.CalculatingElasticRegistrationText.setVisible(False)
+        self.ui.ClockFrame_E.setVisible(False)
         self.ui.ElasticRegistrationControlsFrame.setVisible(False)
         self.ui.SaveRegistrationControlFrame_E.setVisible(True)
         self.ui.ImageViewControlsFrame_E.setVisible(True)
@@ -2536,6 +2581,28 @@ class MainWindow(QMainWindow):
         QtWidgets.QApplication.processEvents()
         print("transformed image")
 
+    def register_image_elastic(self, im_moving, D, scale=None):
+
+        # rescale the transformation matrix
+        D = cv2.resize(D, (im_moving.shape[1], im_moving.shape[0]), interpolation=cv2.INTER_LINEAR)
+        if scale is not None and scale != 1:
+            D = D ** scale
+
+        # Create the base coordinate grid
+        base_x, base_y = np.meshgrid(np.arange(im_moving.shape[1]), np.arange(im_moving.shape[0]))
+
+        # Convert the displacement map to absolute coordinates
+        map_x = (base_x + D[..., 0]).astype(np.float32)
+        map_y = (base_y + D[..., 1]).astype(np.float32)
+        remapped_channels = [
+            cv2.remap(channel, map_x, map_y, interpolation=cv2.INTER_NEAREST, borderMode=cv2.BORDER_CONSTANT, borderValue=float(241))
+            for i, channel in enumerate(cv2.split(im_moving))
+        ]
+        im_moving_elastic = cv2.merge(remapped_channels)
+        im_moving_elastic = cv2.cvtColor(im_moving_elastic, cv2.COLOR_BGR2RGB)
+
+        return im_moving_elastic
+
     def initiate_elastic_registration_tab(self):
 
         # enter elastic registration mode
@@ -2545,17 +2612,10 @@ class MainWindow(QMainWindow):
         self.ui.ElasticRegistrationControlsFrame.setVisible(True)
         self.ui.SaveRegistrationControlFrame_E.setVisible(False)
         self.ui.ImageViewControlsFrame_E.setVisible(False)
-        self.ui.ClockFrame_E1_1.setVisible(False)
-        self.ui.ClockFrame_E1_2.setVisible(False)
-        self.ui.ClockFrame_E1_3.setVisible(False)
-        self.ui.ClockFrame_E1_4.setVisible(False)
-        self.ui.ClockFrame_E1_5.setVisible(False)
-        self.ui.ClockFrame_E1_6.setVisible(False)
-        self.ui.ClockFrame_E1_7.setVisible(False)
-        self.ui.ClockFrame_E1_8.setVisible(False)
-        self.ui.ClockFrame_E1_9.setVisible(False)
-        self.ui.ClockFrame_E1_10.setVisible(False)
+        self.ui.ClockFrame_E.setVisible(False)
         self.ui.DisableFrame_E1.setVisible(False)
+        self.ui.DisableFrame_E2.setVisible(False)
+        self.ui.DisableFrame_E3.setVisible(False)
 
         self.ui.TileSizeText.setText(f"Tile Size: {self.elastic_tilesize}")
         self.ui.TileSpacingText.setText(f"Tile Spacing: {self.elastic_tilespacing}")
@@ -4359,8 +4419,30 @@ class MainWindow(QMainWindow):
         ygg0 = -5000 * np.ones((unique_y_len, unique_x_len))
         # for each window
         num_true = 0
+
+        # make a progress bar
+        total = len(x)
+        progress_step = total // 10 if total >= 10 else 1
+        percstep = 0
+
         for w_i, (x_cent, y_cent) in enumerate(zip(x, y)):
-            #print(f" checking tile {w_i} of {x.shape[0]}")
+
+            # Check if we're at a progress step
+            if (w_i + 1) % progress_step == 0:
+                percstep = percstep + 0.1
+                self.ui.ClockFrame_E.setVisible(True)
+                geo = self.ui.ElasticRegistrationControlsFrame.geometry()
+                hh = geo.height() * 0.2
+                self.ui.ClockFrame_E.setGeometry(geo.x(), geo.y() - hh, geo.width() * percstep, geo.height() * 0.15)
+                QtWidgets.QApplication.processEvents()
+                print(f"{(w_i + 1) / total * 100:.0f}% done, {percstep}% done corresponding to a width of {geo.height() * percstep}")
+            # Print final progress only if it wasn't already printed
+            elif w_i == total - 1 and (w_i + 1) % progress_step != 0:
+                print(f"{(w_i + 1) / total * 100:.0f}% done")
+                geo = self.ui.ElasticRegistrationControlsFrame.geometry()
+                hh = geo.height() * 0.2
+                self.ui.ClockFrame_E.setGeometry(geo.x(), geo.y() - hh, geo.width() * percstep, geo.height() * 0.15)
+                QtWidgets.QApplication.processEvents()
 
             # get the slice for the indices in the window
             window_slice = np.s_[
@@ -4375,9 +4457,9 @@ class MainWindow(QMainWindow):
                 skipthis = 0
                 self.xySquare = (x_cent, y_cent, 1)
 
-            if self.ui.ViewElasticCheckBox.isChecked():
-                self.update_image_view()
-                QtWidgets.QApplication.processEvents()
+                if self.ui.ViewElasticCheckBox.isChecked():
+                    self.update_image_view()
+                    QtWidgets.QApplication.processEvents()
 
             if skipthis == 1:
                 continue
