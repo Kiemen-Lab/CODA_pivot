@@ -20,7 +20,7 @@ from scipy.interpolate import LinearNDInterpolator
 from PySide6 import QtWidgets
 from PySide6.QtCore import Qt, QPointF, Signal, QEvent
 from PySide6.QtWidgets import QDialog, QStyledItemDelegate, QFileDialog, QLabel, QColorDialog, QHeaderView, QMainWindow, QVBoxLayout, QWidget
-from PySide6.QtGui import QPixmap, QTransform, QImage, QPainter, QCursor, QColor, QPen, QMouseEvent
+from PySide6.QtGui import QPixmap, QTransform, QImage, QPainter, QCursor, QColor, QPen
 
 class CustomDelegateTable(QStyledItemDelegate):
     # Define a custom signal
@@ -486,7 +486,7 @@ class MainWindow(QMainWindow):
                                             }
                                                     """
         self.activeFrame = """ QFrame { 
-                                            background-color: #3d4a3d;
+                                            background-color: #375c46;
                                         }
                                                     """
 
@@ -576,7 +576,7 @@ class MainWindow(QMainWindow):
 
     def eventFilter(self, source, event):
         """
-        Intercept events on the tab bar to block mouse clicks on the tab titles.
+        Intercept events on the tab bar to block mouse clicks or scrolls on the tab titles.
         """
         if source == source == self.ui.tabWidget.tabBar() and event.type() in (QEvent.MouseButtonPress, QEvent.Wheel):
             # Ignore mouse clicks on the tab bar to prevent tab switching
@@ -1502,7 +1502,7 @@ class MainWindow(QMainWindow):
 
         # skip if we aren't in an image view tab
         self.define_edit_frame()
-        if self.current_index not in {self.fiducials_tab, self.apply_to_data_tab}:
+        if self.current_index not in {self.fiducials_tab, self.apply_to_data_tab, self.overlay_tab, self.elastic_reg_tab}:
             return
 
         self.contrast = self.contrast + deltaval
@@ -1512,7 +1512,10 @@ class MainWindow(QMainWindow):
 
     def auto_adjust_contrast(self):
 
+        # skip if we aren't in an image view tab
         self.define_edit_frame()
+        if self.current_index not in {self.fiducials_tab, self.apply_to_data_tab, self.overlay_tab, self.elastic_reg_tab}:
+            return
 
         # calculate the maximum image intensity
         max_intensity = self.MI + self.brightness
@@ -1872,7 +1875,11 @@ class MainWindow(QMainWindow):
             self.pthMovingCoords = ""
         else:
             row_number = self.numMovingCoords[0]
-            row_number = row_number[current_index_in_table - 1]
+            try:
+                row_number = row_number[current_index_in_table - 1]
+            except:
+                print("wut")
+
             self.nmMovingCoords = self.movingIMS[row_number][0]
             self.ScaleCoords = self.movingIMS[row_number][1]
             self.pthMovingCoords = self.movingIMS[row_number][2]
@@ -1900,7 +1907,7 @@ class MainWindow(QMainWindow):
 
         # make fixed frame green if completed
         if coordsFrameDone:
-            self.ui.RegisterCoordinatesFrame.setStyleSheet("background-color: #3d4a3d;")
+            self.ui.RegisterCoordinatesFrame.setStyleSheet("background-color: #375c46;")
             self.ui.LoadCoordinatesButton.setVisible(True)
         else:
             self.ui.RegisterCoordinatesFrame.setStyleSheet("background-color: #4b4b4b;")
@@ -2195,10 +2202,8 @@ class MainWindow(QMainWindow):
             with open(outfile, 'rb') as file:
                 data = pickle.load(file)
             self.DinvCoords = data.get('Dinv')
-            szz = (self.imFixed0.width(), self.imFixed0.height())
-            is_inv = 1
-            self.ptsCoordsRegE, tmp = self.register_points_elastic(self.ptsCoordsReg, szz, self.DinvCoords, is_inv)
-            print("check")
+            szz = (self.imFixed0.height(), self.imFixed0.width())
+            self.ptsCoordsRegE, tmp = self.register_points_elastic(self.ptsCoordsReg, szz, self.DinvCoords)
 
     def get_column_number(self, xD):
         if xD.isdigit():  # Check if the input is fully numeric
@@ -2674,6 +2679,7 @@ class MainWindow(QMainWindow):
         # Took below section from pyCODA:
         D = self.calculate_elastic_registration(im_ref_grey, im_moving_grey, mask_ref, mask_moving, tile_size, n_buffer_pix, intertile_distance)
         self.D = D.astype(np.float32)
+        self.Dinv = self.invert_D(self.D)
 
         # apply elastic registration to the moving image
         self.ui.CalculatingElasticRegistrationText.setText("Applying transform to generate the image. Please Wait...")
@@ -2684,9 +2690,8 @@ class MainWindow(QMainWindow):
         # apply elastic registration to the fiducial points
         self.ui.CalculatingElasticRegistrationText.setText("Applying transform to the fiducial points. Please Wait...")
         QtWidgets.QApplication.processEvents()
-        szz = (self.imFixed0.width(), self.imFixed0.height())
-        is_inv = 0
-        self.ptsMovingRegE, self.Dinv = self.register_points_elastic(self.ptsMovingReg, szz, self.D, is_inv, scale=None)
+        szz = (self.imFixed0.height(), self.imFixed0.width())
+        self.ptsMovingRegE, self.Dinv = self.register_points_elastic(self.ptsMovingReg, szz, self.D, scale=None)
 
         pts_fixed = np.delete(self.ptsFixed, 0, axis=0)
         dist = (pts_fixed[:, 0] - self.ptsMovingRegE[:, 0]) ** 2 + (pts_fixed[:, 1] - self.ptsMovingRegE[:, 1]) ** 2
@@ -2734,66 +2739,67 @@ class MainWindow(QMainWindow):
         QtWidgets.QApplication.processEvents()
         #print("transformed image")
 
-    def register_points_elastic(self, pts, szz, D, isinv, scale=None):
+    def invert_D(self, D):
+
+        # downsample factors for the inversion
+        skk = 5
+        skk2 = 5
+
+        # --- Calculate coordinates ---
+        rows, cols, _ = D.shape
+        # Create grids starting at 1 (to mimic MATLAB)
+        xx, yy = np.meshgrid(np.arange(1, cols + 1), np.arange(1, rows + 1))
+        # New positions: each pixel is shifted by the displacement in D
+        xnew = xx + D[:, :, 0]
+        ynew = yy + D[:, :, 1]
+
+        # --- Interpolate D at original positions ---
+        # Flatten the displacement fields and coordinate grids
+        D1 = D[:, :, 0].ravel()
+        D2 = D[:, :, 1].ravel()
+        xnew2 = xnew.ravel()
+        ynew2 = ynew.ravel()
+
+        # Subsample the data (take every skk-th element)
+        points_sub = np.column_stack((xnew2[::skk], ynew2[::skk]))
+        values_D1_sub = D1[::skk]
+        values_D2_sub = D2[::skk]
+
+        # Create interpolators for each displacement component
+        F1 = LinearNDInterpolator(points_sub, values_D1_sub)
+        F2 = LinearNDInterpolator(points_sub, values_D2_sub)
+
+        # Evaluate the interpolants on a coarse grid
+        xx_coarse, yy_coarse = np.meshgrid(np.arange(1, cols + 1, skk2), np.arange(1, rows + 1, skk2))
+        points_coarse = np.column_stack((xx_coarse.ravel(), yy_coarse.ravel()))
+        # Evaluate and negate the transform
+        D1_interp = -F1(points_coarse)
+        D2_interp = -F2(points_coarse)
+        D1_interp = D1_interp.reshape(xx_coarse.shape)
+        D2_interp = D2_interp.reshape(xx_coarse.shape)
+
+        # Resize the interpolated displacement field to the original resolution
+        Dinv = np.zeros((rows, cols, 2))
+        Dinv[:, :, 0] = resize(D1_interp, (rows, cols), preserve_range=True)
+        Dinv[:, :, 1] = resize(D2_interp, (rows, cols), preserve_range=True)
+        Dinv = np.nan_to_num(Dinv)
+
+        return Dinv
+
+    def register_points_elastic(self, pts, szz, Dinv, scale=None):
 
         if scale is None:
             scale = 1
 
-        if isinv == 0: # invert D before translating coordinates
-            # downsample factors for the inversion
-            skk = 5
-            skk2 = 5
-
-            # --- Calculate coordinates ---
-            rows, cols, _ = D.shape
-            # Create grids starting at 1 (to mimic MATLAB)
-            xx, yy = np.meshgrid(np.arange(1, cols + 1), np.arange(1, rows + 1))
-            # New positions: each pixel is shifted by the displacement in D
-            xnew = xx + D[:, :, 0]
-            ynew = yy + D[:, :, 1]
-
-            # --- Interpolate D at original positions ---
-            # Flatten the displacement fields and coordinate grids
-            D1 = D[:, :, 0].ravel()
-            D2 = D[:, :, 1].ravel()
-            xnew2 = xnew.ravel()
-            ynew2 = ynew.ravel()
-
-            # Subsample the data (take every skk-th element)
-            points_sub = np.column_stack((xnew2[::skk], ynew2[::skk]))
-            values_D1_sub = D1[::skk]
-            values_D2_sub = D2[::skk]
-
-            # Create interpolators for each displacement component
-            F1 = LinearNDInterpolator(points_sub, values_D1_sub)
-            F2 = LinearNDInterpolator(points_sub, values_D2_sub)
-
-            # Evaluate the interpolants on a coarse grid
-            xx_coarse, yy_coarse = np.meshgrid(np.arange(1, cols + 1, skk2),
-                                               np.arange(1, rows + 1, skk2))
-            points_coarse = np.column_stack((xx_coarse.ravel(), yy_coarse.ravel()))
-            # Evaluate and negate (as in MATLAB: D1 = -F1(xx,yy))
-            D1_interp = -F1(points_coarse)
-            D2_interp = -F2(points_coarse)
-            D1_interp = D1_interp.reshape(xx_coarse.shape)
-            D2_interp = D2_interp.reshape(xx_coarse.shape)
-
-            # Resize the interpolated displacement field to the original resolution
-            Dinv = np.zeros((rows, cols, 2))
-            Dinv[:, :, 0] = resize(D1_interp, (rows, cols), preserve_range=True)
-            Dinv[:, :, 1] = resize(D2_interp, (rows, cols), preserve_range=True)
-            Dinv = np.nan_to_num(Dinv)
-        else:
-            Dinv = D
-
+        print(f"size Dinv: {Dinv.shape}, resized to size of the image: {szz}")
         D2_resized = resize(Dinv, (szz[0], szz[1], 2), preserve_range=True) * scale
         D2a = D2_resized[:, :, 0]
         D2b = D2_resized[:, :, 1]
 
-        # get the nearest row and column for each point
+        # get the nearest row and column for each point, and clip any indices that exceed the dimensions of the image
         pp = np.round(pts).astype(int)
-        row_indices = pp[:, 1] - 1  # second column corresponds to y (rows)
-        col_indices = pp[:, 0] - 1  # first column corresponds to x (columns)
+        row_indices = np.clip(pp[:, 1] - 1, 0, D2a.shape[0] - 1)
+        col_indices = np.clip(pp[:, 0] - 1, 0, D2a.shape[1] - 1)
 
         # Use advanced indexing to retrieve the displacement for each coordinate.
         xmove = np.column_stack((D2a[row_indices, col_indices], D2b[row_indices, col_indices]))
@@ -2862,7 +2868,6 @@ class MainWindow(QMainWindow):
         self.ui.TileSpacingText.setHtml(f"<div align='right'>Spacing:<br>{self.elastic_tilespacing}</div>")
         self.editWhichImage = 0
         self.update_image_view()
-        print("increase tile spacing")
 
     def decrease_elastic_tilespacing(self):
 
@@ -4187,35 +4192,39 @@ class MainWindow(QMainWindow):
             self.ui.setJobTableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 
     def check_if_tables_are_complete_import_project_tab(self):
-        fixedFrameDone = len(self.nmFixed) > 0 and len(self.ScaleFixed) > 0 and len(self.pthFixed) > 0
-        jobFrameDone = len(self.jobFolder) > 0 and len(self.ResultsName) > 0
-        movingFrameDone = True
+        fixedFrameDone = int(len(self.nmFixed) > 0) + int(len(self.ScaleFixed) > 0) + int(len(self.pthFixed) > 0)
+        jobFrameDone = int(len(self.jobFolder) > 0) + int(len(self.ResultsName) > 0)
+        movingFrameDone = 1 # complete
         if len(self.movingIMS) == 0:
-            movingFrameDone = False
+            movingFrameDone = 0 # not started
         else:
             for row in self.movingIMS:
                 for cell in row:
                     if not isinstance(cell, str) or not cell.strip():
-                        movingFrameDone = False
+                        movingFrameDone = 2 # incomplete
 
         # make fixed frame green if completed
-        if fixedFrameDone:
-            self.ui.DefineFixedImageFrame.setStyleSheet("background-color: #3d4a3d;")
-        else:
+        if fixedFrameDone == 3: # fully complete = green
+            self.ui.DefineFixedImageFrame.setStyleSheet("background-color: #375c46;") #3d4a3d
+        elif fixedFrameDone == 0: # not started = grey
             self.ui.DefineFixedImageFrame.setStyleSheet("background-color: #4b4b4b;")
+        else: # incomplete = red
+            self.ui.DefineFixedImageFrame.setStyleSheet("background-color: #5c3737;")
 
         # make moving frame green if completed
-        if movingFrameDone:
-            self.ui.DefineMovingImageFrame.setStyleSheet("background-color: #3d4a3d;")
-        else:
+        if movingFrameDone == 1: # fully complete = green
+            self.ui.DefineMovingImageFrame.setStyleSheet("background-color: #375c46;")
+        elif movingFrameDone == 0: # not started = grey
             self.ui.DefineMovingImageFrame.setStyleSheet("background-color: #4b4b4b;")
+        else: # incomplete = red
+            self.ui.DefineMovingImageFrame.setStyleSheet("background-color: #5c3737;")
 
         # make project frame green if completed
-        if jobFrameDone:
-            self.ui.SetJobFolderFrame.setStyleSheet("background-color: #3d4a3d;")
-            self.ui.JobFolderCheckBox.setStyleSheet("background-color: #3d4a3d;")
+        if jobFrameDone == 2: # fully complete = green
+            self.ui.SetJobFolderFrame.setStyleSheet("background-color: #375c46;")
+            self.ui.JobFolderCheckBox.setStyleSheet("background-color: #375c46;")
             self.ui.JobFolderCheckBox.setStyleSheet("color: #e6e6e6;")
-        else:
+        else: # not started = grey
             self.ui.SetJobFolderFrame.setStyleSheet("background-color: #4b4b4b;")
             self.ui.JobFolderCheckBox.setStyleSheet("background-color: #4b4b4b;")
             self.ui.JobFolderCheckBox.setStyleSheet("color: #e6e6e6;")
@@ -4301,32 +4310,35 @@ class MainWindow(QMainWindow):
     def keyPressEvent(self, event):
         """Handle key press events."""
 
-        #print(event.key())
+        self.current_index = self.ui.tabWidget.currentIndex()
+
         # Check if the Esc key is pressed
         if event.key() == Qt.Key_Escape:
             if self.add_fiducial_active:
                 self.toggle_add_fiducial_mode()
-        elif event.key() == 16777248:
+        elif event.key() == Qt.Key_Shift: #16777248: # shift
             self.shift_key = 1 # right
-        elif event.key() == 82: # r
+        elif event.key() == Qt.Key_R: #82: # r
             self.view_key = 1 # rotate
-        elif event.key() == 70: # f
+        elif event.key() == Qt.Key_F: #70: # f
             self.view_key = 2 # flip
-        elif event.key() == 68: # d
+        elif event.key() == Qt.Key_D: #68: # d
             self.view_key = 3 # return view
-        elif event.key() == 66: # b
+        elif event.key() == Qt.Key_B: #66: # b
             self.view_key = 4 # brightness
-        elif event.key() == 67: # c
+        elif event.key() == Qt.Key_C: #67: # c
             self.view_key = 5 # contrast
-        elif event.key() == 65: # auto adjust brightness
+        elif event.key() == Qt.Key_A: #65: # auto adjust brightness
             self.view_key = 6 # auto-adjust contrast A
+        elif event.key() == Qt.Key_S: #Qt.Key_S: # z
+            self.view_key = 7 # save screenshot
         elif event.key() in {44,60}: # <
             self.updown_key = 1 # down
         elif event.key() in {46, 62}: # >
             self.updown_key = 2 # up
-        elif event.key() == 75: # k
+        elif event.key() == Qt.Key_K: #75: # k
             self.updown_key = 3
-        elif event.key() == 76: # l
+        elif event.key() == Qt.Key_L: #76: # l
             self.updown_key = 4
         else:
             # Pass the event to the base class for default handling
@@ -4335,7 +4347,6 @@ class MainWindow(QMainWindow):
         ff = [0, 1]
         if self.current_index != self.apply_to_data_tab:
             self.editWhichImage = ff[self.shift_key]
-        #print("left" if self.editWhichImage == 0 else "right")
         if self.view_key == 1:
             #print(" rotate")
             self.rotate_label_ui()
@@ -4356,6 +4367,10 @@ class MainWindow(QMainWindow):
         elif self.view_key == 6:
             #print(" auto adjust contrast")
             self.auto_adjust_contrast()
+        elif self.view_key == 7:
+            print("SAVE SCREENSHOT")
+            self.save_screenshot()
+        self.view_key = 0
 
     def load_image(self, image_path):
 
@@ -4391,6 +4406,28 @@ class MainWindow(QMainWindow):
 
         pixmap = self.array_to_pixmap(image)
         return pixmap, max_intensity, mode_val
+
+    def save_screenshot(self):
+
+        if self.jobFolder == "":
+            print("no screenshot for you")
+            #return
+
+        # Define the folder where screenshots will be saved
+        #folder = os.path.join(self.jobFolder, self.ResultsName, "Screenshots")
+        folder = r'C:\Users\Ashley\Documents\sample data\HE\screenshots for paper'
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+
+        # Grab a screenshot of the entire main window
+        screenshot = self.grab()
+
+        # Save the screenshot to the folder (you can change the filename as needed)
+        now = datetime.now()
+        filename = now.strftime("%Y-%m-%d_%H-%M-%S") + ".png"
+        filename = os.path.join(folder, filename)
+        screenshot.save(filename, "png")
+        print("Screenshot saved!")
 
     def resizeEvent(self, event):
         # Get the new size of the main window
@@ -4806,7 +4843,9 @@ class MainWindow(QMainWindow):
         points = np.column_stack((xmesh.flatten(), ymesh.flatten()))
         xgq = scipy.interpolate.griddata(points, xgg.flatten(), (xq, yq), method="cubic")
         ygq = scipy.interpolate.griddata(points, ygg.flatten(), (xq, yq), method="cubic")
-        return np.stack((xgq, ygq), axis=-1)
+        D = np.stack((xgq, ygq), axis=-1)
+
+        return D
 
     def calculate_elastic_registration(self,
             im_ref: np.ndarray,
@@ -4930,7 +4969,10 @@ class MainWindow(QMainWindow):
             n_buffer_pix = round(n_buffer_pix / 5)
         else:
             szimout = szim
-        return MainWindow.make_final_grids(xgg0, ygg0, n_buffer_pix, x, y, szimout)
+
+        D = MainWindow.make_final_grids(xgg0, ygg0, n_buffer_pix, x, y, szimout)
+
+        return D
 
 if __name__ == '__main__':
     import sys
