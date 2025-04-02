@@ -19,8 +19,8 @@ from skimage.transform import resize
 from scipy.interpolate import LinearNDInterpolator
 from PySide6 import QtWidgets
 from PySide6.QtCore import Qt, QPointF, Signal, QEvent
-from PySide6.QtWidgets import QDialog, QStyledItemDelegate, QFileDialog, QLabel, QColorDialog, QHeaderView, QMainWindow, QVBoxLayout, QWidget
 from PySide6.QtGui import QPixmap, QTransform, QImage, QPainter, QCursor, QColor, QPen
+from PySide6.QtWidgets import QDialog, QStyledItemDelegate, QFileDialog, QLabel, QColorDialog, QHeaderView, QMainWindow, QVBoxLayout, QWidget
 
 class CustomDelegateTable(QStyledItemDelegate):
     # Define a custom signal
@@ -67,199 +67,202 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.ui.centralWidget)  # Set the central widget
         self.setWindowTitle("CODApivot")
 
-        # define some variables
         # define the tab number for each functional tab
-        self.import_project_tab = 0
-        self.fiducials_tab = 1
-        self.overlay_tab = 4
-        self.apply_to_data_tab = 2
-        self.job_status_tab = 3
-        self.elastic_reg_tab = 5
-        self.keyboard_tab = 6
-        self.current_index = self.import_project_tab
+        self.import_project_tab = 0 # first tab
+        self.fiducials_tab = 1 # second tab
+        self.apply_to_data_tab = 2 # third tab
+        self.job_status_tab = 3 # fourth tab
+        self.overlay_tab = 4 # fifth tab
+        self.elastic_reg_tab = 5 # sixth tab
+        self.keyboard_tab = 6 # seventh tab
+        self.current_index = self.import_project_tab # which tab is currently visible
         # variables needed for app rescaling
         self.widget_dimensions = 0
-        self.widgets_list = 0
-        self.original_width = 0
-        self.original_height = 0
+        self.widgets_list = 0 # list of all widgets in the gui that should be rescaled
+        self.original_width = 0 # original width of the gui
+        self.original_height = 0 # original height of the gui
         self.scaleCount = 0
-        # offset of the image view windows from the edge of the app
-        self.padnum = 30
+        self.padnum = 30 # offset of the image view windows from the edge of the app
         # keyboard shortcut variables
         self.which_key_press = 0
         self.shift_key_active = 0
         self.increase_decrease_brightness_contrast_key = 0
-        # current frame variables
-        self.panning = 0  # Flag to indicate if panning is in progress
-        self.last_mouse_position = QPointF()  # Track the last position of the mouse
-        self.flip_state = False
-        self.rotation_angle = 0
-        self.brightness = 0
-        self.contrast = 1
-        self.editWhichImage = 0
-        self.editWhichFid = 0
-        self.zoom_default = 1
-        self.zoom_scale = self.zoom_default
-        self.pan_offset_x = 0
-        self.pan_offset_y = 0
-        self.rad = 10
-        self.ptsColor = QColor(30, 255, 150)  # default color of fiducial points
+        # variables to keep track of what the user is doing right now
+        self.edit_table_active = 0  # is the user currently editing the tables in tab 1
+        self.edit_which_pt_color = 0 # if the user is changing point colors, which points are being edited
+        self.edit_which_image = 0 # if the tab has two image frames, which one is the user currently editing
+        self.edit_which_fid = 0 # if in the fiducials tab, is the user adding fixed or moving image points
+        self.add_fiducial_active = False  # flag to track whether the user is adding fiducial points
+        self.delete_mode_active = False # flack to track if whether the user is deleting fiducial points
+        self.panning_mode_active = 0  # flag to track whether the user is panning
+        self.last_mouse_position = QPointF()  # Track the last position of the mouse during panning
+        self.potential_deletion = -5 # keep track of which point the user is considering deleting
+        # folder and name of images and files to load
+        self.job_folder = ""
+        self.results_name = ""
+        self.fixed_image_folder = ""
+        self.moving_image_folder = ""
+        self.coordinates_file_folder = ""
+        self.moving_image_folder_corresponding_to_coordinates = ""
+        self.fixed_image_filename = ""
+        self.moving_image_filename = ""
+        self.coordinates_filename = ""
+        self.fixed_image_filename_for_coordinates_tab = ""
+        self.moving_image_filename_corresponding_to_coordinates = ""
+        self.loaded_moving_image_filename = "" # keep track of the moving image that is currently loaded
+        self.loaded_coordinates_filename = "" # keep track of the coordinates file that is currently loaded
+        self.moving_images_list = [] # list of all moving images in this project
+        self.num_moving_delete = [[], []] # variable to keep track of a potential moving image to delete
+        self.scale_fixed_image = ""
+        self.scale_moving_image = ""
+        self.scale_coordinates_file = ""
+        # variables that will hold images - these are cleared when not in use to save RAM
+        self.pixmap = [] # the current pixmap being edited (changes based on the current tab)
+        self.im_fixed = [] # fixed image
+        self.im_moving = [] # unregistered moving image
+        self.im_moving_reg = [] # affine registered moving image
+        self.im_moving_reg_elastic = []  # elastically registered moving image
+        self.im_overlay = [] # overlay of fixed image and unregistered moving image
+        self.im_overlay_reg = [] # overlay of fixed image and affine registered moving image
+        self.im_overlay_reg_elastic = [] # overlay of fixed image and elastically registered moving image
+        self.im_moving_coords = [] # moving image for coordinates tab
+        self.im_moving_coords_reg = [] # affine registered moving image for coordinates tab
+        self.im_moving_coords_reg_elastic = [] # elastically registered moving image for coordinates tab
+        # max and mode intensity of each image
+        self.max_intensity = 0
+        self.max_intensity_fixed = 0
+        self.max_intensity_moving = 0
+        self.max_intensity_moving_coords = 0
+        self.max_intensity_moving_coords_reg = 0
+        self.mode_intensity_fixed = [0, 0, 0]
+        self.mode_intensity_moving = [0, 0, 0]
+        # variables that help define which image to edit
+        self.frame = []
+        self.frame_left = []
+        self.frame_right = []
         self.label = []
         self.border_left = []
         self.border_right = []
         self.text_left = []
         self.text_right = []
-        self.pixmap = []
-        self.frame = []
-        self.frame_left = []
-        self.frame_right = []
-        self.ColorButton = []
-        self.fiducial_pts = [] # fiducial points to plot over images
-        self.fiducial_pts2 = []
-        self.ImageWidth = 0
-        self.ImageHeight = 0
-        # import project tab
-        self.ScaleFixed = ""
-        self.pthFixed = ""
-        self.nmFixed = ""
-        self.nmMoving = ""
-        self.pthMoving = ""
-        self.scaleMoving = ""
-        self.moving_images_list = []
-        self.num_moving_delete = [[], []]
-        self.ResultsName = ""
-        self.jobFolder = ""
-        self.editTableActive = 0
-        # add fiducial points tab
-        self.imFixed0 = []
-        self.imMoving0 = []
-        self.MI = 0
-        self.MI_Fixed = 0
-        self.MI_Moving = 0
-        self.mode_Fixed = [0, 0, 0]
-        self.mode_Moving = [0, 0, 0]
-        self.MI_MovingCoords = 0
-        self.MI_MovingCoordsReg = 0
-        self.nmLoadedFixed = ""
+        self.image_width = 0
+        self.image_height = 0
+        self.fiducial_pts_to_plot = []  # fiducial points to plot over the current image
+        self.more_fiducial_pts_to_plot = [] # 2nd set of fiducial points to plot over the current image (for overlays only)
+        # image view variables - flip state
+        self.flip_state = False
         self.fixed_flip_state = False
-        self.fixed_rotation_angle = 0
         self.moving_flip_state = False
+        self.overlay_flip_state = False
+        self.overlay_reg_flip_state = False
+        self.unregistered_E_flip_state = False
+        self.overlay_reg_elastic_flip_state = False
+        self.moving_coords_flip_state = False
+        # image view variables - rotational angle
+        self.rotation_angle = 0
+        self.fixed_rotation_angle = 0
         self.moving_rotation_angle = 0
+        self.overlay_rotation_angle = 0
+        self.overlay_reg_rotation_angle = 0
+        self.unregistered_E_rotation_angle = 0
+        self.overlay_reg_elastic_rotation_angle = 0
+        self.moving_coords_rotation_angle = 0
+        # image view variables - brightness (not editable for overlay images)
+        self.brightness = 0
         self.fixed_brightness = 0
         self.moving_brightness = 0
+        self.moving_coords_brightness = 0
+        # image view variables - contrast (not editable for overlay images)
+        self.contrast = 1
         self.fixed_contrast = 1
         self.moving_contrast = 1
-        self.rad_tabF = self.rad  # default size of fiducial points
-        self.ptsColor_tabF = self.ptsColor  # default color of fiducial points
+        self.moving_coords_contrast = 1
+        # image view variables - zoom scale to fit the whole image in the image frame
+        self.zoom_default = 1
         self.fixed_zoom_default = 1
         self.moving_zoom_default = 1
-        self.fixed_zoom_scale = self.fixed_zoom_default  # Initialize zoom scale
-        self.moving_zoom_scale = self.moving_zoom_default  # Initialize zoom scale
-        self.fixed_pan_offset_x = 0
-        self.fixed_pan_offset_y = 0
-        self.moving_pan_offset_x = 0
-        self.moving_pan_offset_y = 0
-        self.ptsFixed = np.array([[0, 0]], dtype=np.float64)
-        self.ptsMoving = np.array([[0, 0]], dtype=np.float64)
-        self.add_fiducial_active = False  # Flag to track fiducial selection mode
-        self.delete_mode_active = False
-        self.potential_deletion = -5
-        self.minFidPts = 6
-        # registration overlay tab
-        self.imOverlay0 = []
-        self.imOverlay = []
-        self.rad_tabO = self.rad_tabF  # default size of fiducial points
-        self.rad_tabOb = int(np.ceil(self.rad_tabF * 0.75))  # default size of fiducial points
-        self.ptsColor_tabO = self.ptsColor_tabF  # default color of fiducial points
-        self.ptsColor_tabOb = self.ptsColor_tabF  # default complement color of fiducial points
-        self.unregistered_flip_state = False
-        self.unregistered_rotation_angle = 0
-        self.registered_flip_state = False
-        self.registered_rotation_angle = 0
-        self.unregistered_zoom_default = 1
-        self.registered_zoom_default = 1
-        self.unregistered_zoom_scale = self.unregistered_zoom_default  # Initialize zoom scale
-        self.registered_zoom_scale = self.registered_zoom_default  # Initialize zoom scale
-        self.unregistered_pan_offset_x = 0
-        self.unregistered_pan_offset_y = 0
-        self.registered_pan_offset_x = 0
-        self.registered_pan_offset_y = 0
-        self.whichColor = 0
-        self.RMSE0 = 0
-        self.RMSE = 0
-        self.tform = 0
-        self.flip_im = 0
-        self.ptsMovingReg = np.array([[0, 0]], dtype=np.float64)
-        self.imMovingReg = []
-        # elastic registration tab
-        self.unregistered_E_flip_state = False
-        self.unregistered_E_rotation_angle = 0
-        self.registered_E_flip_state = False
-        self.registered_E_rotation_angle = 0
+        self.overlay_zoom_default = 1
+        self.overlay_reg_zoom_default = 1
         self.unregistered_E_zoom_default = 1
-        self.registered_E_zoom_default = 1
-        self.unregistered_E_zoom_scale = self.unregistered_E_zoom_default  # Initialize zoom scale
-        self.registered_E_zoom_scale = self.registered_E_zoom_default  # Initialize zoom scale
+        self.overlay_reg_elastic_zoom_default = 1
+        self.moving_coords_zoom_default = 1
+        # image view variables - user's current zoom level
+        self.zoom_scale = self.zoom_default
+        self.fixed_zoom_scale = self.fixed_zoom_default
+        self.moving_zoom_scale = self.moving_zoom_default
+        self.overlay_zoom_scale = self.overlay_zoom_default
+        self.overlay_reg_zoom_scale = self.overlay_reg_zoom_default
+        self.unregistered_E_zoom_scale = self.unregistered_E_zoom_default
+        self.overlay_reg_elastic_zoom_scale = self.overlay_reg_elastic_zoom_default
+        self.moving_coords_zoom_scale = self.moving_coords_zoom_default
+        # image view variables - user's current horizontal pan offset from center
+        self.pan_offset_x = 0
+        self.fixed_pan_offset_x = 0
+        self.moving_pan_offset_x = 0
+        self.overlay_pan_offset_x = 0
+        self.registered_pan_offset_x = 0
         self.unregistered_E_pan_offset_x = 0
+        self.overlay_reg_elastic_pan_offset_x = 0
+        self.moving_coords_pan_offset_x = 0
+        # image view variables - user's current vertical pan offset from center
+        self.pan_offset_y = 0
+        self.moving_pan_offset_y = 0
+        self.fixed_pan_offset_y = 0
+        self.overlay_pan_offset_y = 0
+        self.overlay_reg_pan_offset_y = 0
         self.unregistered_E_pan_offset_y = 0
-        self.registered_E_pan_offset_x = 0
-        self.registered_E_pan_offset_y = 0
-        self.RMSE_Elastic = 0
-        self.imMovingRegElastic = []
-        self.imOverlayE = []
+        self.overlay_reg_elastic_pan_offset_y = 0
+        self.moving_coords_pan_offset_y = 0
+        # fiducial point variables and settings
+        self.MIN_NUM_FIDUCIAL_PTS = 6
+        self.pts_size = 10
+        self.pts_size_fiducial_tab = self.pts_size  # default size of fiducial points
+        self.pts_size_overlay_tab_fixed = self.pts_size_fiducial_tab  # default size of fiducial points
+        self.pts_size_overlay_tab_moving = int(np.ceil(self.pts_size_fiducial_tab * 0.75))  # default size of fiducial points
+        self.pts_size_coordinates_tab = self.pts_size_fiducial_tab  # default size of fiducial points
+        self.color_button = [] # name of the current color button in case we need to update it
+        self.pts_color = QColor(30, 255, 150)  # default color of fiducial points
+        self.pts_color_fiducial_tab = self.pts_color  # default color of fiducial points
+        self.pts_color_overlay_tab_fixed = self.pts_color_fiducial_tab  # default color of fiducial points
+        self.pts_color_overlay_tab_moving = self.pts_color_fiducial_tab  # default complement color of fiducial points
+        self.pts_color_coordinates_tab = self.pts_color_fiducial_tab  # default color of fiducial points
+        # coordinate variables
+        self.pts_fixed = np.array([[0, 0]], dtype=np.float64)
+        self.pts_moving = np.array([[0, 0]], dtype=np.float64)
+        self.pts_moving_reg = np.array([[0, 0]], dtype=np.float64)
+        self.pts_moving_reg_elastic = np.array([[0, 0]], dtype=np.float64)
+        self.pts_coords = []
+        self.pts_coords_reg = []
+        self.pts_coords_reg_elastic = []
+        # registration variables - root mean squared error
+        self.rmse_unregistered = 0 # root mean squared error between unregistered images
+        self.rmse_reg = 0 # root mean squared error between affine registered images
+        self.rmse_reg_elastic = 0 # root mean squared error between elastically registered images
+        # registration transforms
+        self.flip_im = 0
+        self.flip_im_coords = 0
+        self.tform = []
+        self.tformCoords = []
         self.D = []
         self.Dinv = []
-        self.ptsMovingRegE = np.array([[0, 0]], dtype=np.float64)
+        self.DinvCoords = []
+        self.coord_registration_type = []
+        # elastic registration info
         self.elastic_tilesize = 250
         self.elastic_tilespacing = 100
         self.view_squares = 1
-        self.squaresColor = self.ptsColor_tabO
+        self.squaresColor = self.pts_color_overlay_tab_fixed
         self.squaresThickness = 30
         self.xySquare = (1, 1)
-        # apply to coordinates tab
-        self.all_images_checked = 0
-        self.max_points = "5000"
-        self.xColumn = 1
-        self.yColumn = 1
-        self.first_row = 0
-        self.pthCoords = ""
-        self.nmCoords = ""
-        self.pthMovingCoords = ""
-        self.nmMovingCoords = ""
-        self.nmLoadedMoving = ""
-        self.nmCoordsLoaded = ""
-        self.Coords = ""
-        self.imMovingCoords = []
-        self.imMovingCoordsReg = []
-        self.imMovingCoordsRegElastic = []
-        self.numMovingCoords = [[0], [0]]
-        self.ScaleCoords = ""
-        self.ptsCoords = []
-        self.ptsCoordsReg = []
-        self.ptsCoordsRegE = []
-        self.rad_tabC = self.rad_tabF  # default size of fiducial points
-        self.ptsColor_tabC = self.ptsColor_tabF  # default color of fiducial points
-        self.coords_flip_state = False
-        self.coords_rotation_angle = 0
-        self.coords_brightness = 0
-        self.coords_contrast = 1
-        self.coords_zoom_default = 1
-        self.coords_zoom_scale = self.coords_zoom_default  # Initialize zoom scale
-        self.coords_pan_offset_x = 0
-        self.coords_pan_offset_y = 0
-        self.tformCoords = []
-        self.DinvCoords = []
-        self.sampled_indices = []
-        self.coord_registration_type = []
-
-        # define some button styles
-        self.define_some_stylesheets()
-
-        # make some tab headers invisible
-        self.ui.tabWidget.setTabVisible(self.keyboard_tab, False)
-        self.ui.tabWidget.setTabVisible(self.elastic_reg_tab, False)
-        self.ui.tabWidget.setTabVisible(self.overlay_tab, False)
-
+        # table inputs for apply to coordinates tab
+        self.all_images_checked = 0 # keep track of states the user has checked the points in (unregistered, registered, etc)
+        self.max_points = "10000" # default maximum number of points to plot when validating coordinate registration
+        self.column_in_coords_file_containing_x_values = 1 # column in the coordinate file containing x values
+        self.column_in_coords_file_containing_y_values = 1 # column in the coordinate file containing y values
+        self.number_of_first_row_in_coords_file = 0 # allows skipping the first row in the file if it contains titles
+        self.coordinate_data = "" # table of all coordinate data read from the coordinate file
+        self.which_moving_images_are_registered = [[0], [0]] # keep track of which images have registration data saved
+        self.sampled_indices = [] # keep track of which rows of the coordinate file are selected to plot
         # populate the keyboard shortcuts table
         self.ui.keyboardShortCutsTableWidget.setHorizontalHeaderLabels(["R", "F", "D"])
         self.ui.keyboardShortCutsTableWidget_2.setHorizontalHeaderLabels(["B", "C", "A"])
@@ -297,6 +300,7 @@ class MainWindow(QMainWindow):
         self.delegate = CustomDelegateTable(self.ui.setJobTableWidget)
         self.ui.setJobTableWidget.setItemDelegate(self.delegate)
         self.delegate.valueUpdatedTable.connect(self.handle_value_update_job)
+        # apply to coordinates tab
         self.delegate = CustomDelegateTable(self.ui.RegisterCoordinatesTableWidget)
         self.ui.RegisterCoordinatesTableWidget.setItemDelegate(self.delegate)
         self.delegate.valueUpdatedTable.connect(self.handle_value_update_coordinates)
@@ -418,6 +422,14 @@ class MainWindow(QMainWindow):
         self.ui.ColorFiducialButton_C.clicked.connect(self.change_fiducial_color)
         self.ui.ShrinkFiducialButton_C.clicked.connect(self.decrease_fiducial_size)
         self.ui.GrowFiducialButton_C.clicked.connect(self.increase_fiducial_size)
+
+        # define some style sheets that we will use later
+        self.define_some_stylesheets()
+
+        # make some tab headers invisible
+        self.ui.tabWidget.setTabVisible(self.keyboard_tab, False)
+        self.ui.tabWidget.setTabVisible(self.elastic_reg_tab, False)
+        self.ui.tabWidget.setTabVisible(self.overlay_tab, False)
 
         # initiate tab 1 inside the app
         self.default_model_name()
@@ -598,9 +610,9 @@ class MainWindow(QMainWindow):
 
         if self.current_index == self.fiducials_tab:
             # point view variables
-            self.rad = self.rad_tabF
-            self.ptsColor = self.ptsColor_tabF
-            self.ColorButton = self.ui.ColorFiducialButton
+            self.pts_size = self.pts_size_fiducial_tab
+            self.pts_color = self.pts_color_fiducial_tab
+            self.color_button = self.ui.ColorFiducialButton
             # frame variables
             self.border_left = self.ui.FixedImageBorder
             self.border_right = self.ui.MovingImageBorder
@@ -608,7 +620,7 @@ class MainWindow(QMainWindow):
             self.text_right = self.ui.MovingImageFrameHeaderText
             self.frame_left = self.ui.FixedImageDisplayFrame
             self.frame_right = self.ui.MovingImageDisplayFrame
-            if self.editWhichImage == 0:  # fixed image
+            if self.edit_which_image == 0:  # fixed image
                 # image view variables
                 self.flip_state = self.fixed_flip_state
                 self.rotation_angle = self.fixed_rotation_angle
@@ -619,15 +631,15 @@ class MainWindow(QMainWindow):
                 self.pan_offset_x = self.fixed_pan_offset_x
                 self.pan_offset_y = self.fixed_pan_offset_y
                 self.label = self.fixed_image_label
-                self.fiducial_pts = self.ptsFixed
-                self.fiducial_pts2 = []
-                self.MI = self.MI_Fixed
+                self.fiducial_pts_to_plot = self.pts_fixed
+                self.more_fiducial_pts_to_plot = []
+                self.max_intensity = self.max_intensity_fixed
                 try:
-                    self.ImageHeight = self.imFixed0.height()
-                    self.ImageWidth = self.imFixed0.width()
+                    self.image_height = self.im_fixed.height()
+                    self.image_width = self.im_fixed.width()
                 except:
-                    self.ImageHeight = 0
-                    self.ImageWidth = 0
+                    self.image_height = 0
+                    self.image_width = 0
             else:  # moving image
                 # image view variables
                 self.flip_state = self.moving_flip_state
@@ -639,25 +651,25 @@ class MainWindow(QMainWindow):
                 self.pan_offset_x = self.moving_pan_offset_x
                 self.pan_offset_y = self.moving_pan_offset_y
                 self.label = self.moving_image_label
-                self.fiducial_pts = self.ptsMoving
-                self.fiducial_pts2 = []
-                self.MI = self.MI_Moving
+                self.fiducial_pts_to_plot = self.pts_moving
+                self.more_fiducial_pts_to_plot = []
+                self.max_intensity = self.max_intensity_moving
                 try:
-                    self.ImageHeight = self.imMoving0.height()
-                    self.ImageWidth = self.imMoving0.width()
+                    self.image_height = self.im_moving.height()
+                    self.image_width = self.im_moving.width()
                 except:
-                    self.ImageHeight = 0
-                    self.ImageWidth = 0
+                    self.image_height = 0
+                    self.image_width = 0
         elif self.current_index == self.overlay_tab:
             # point view variables
-            if self.whichColor == 0:
-                self.ColorButton = self.ui.ColorFiducialButton_O
-                self.ptsColor = self.ptsColor_tabO
-                self.rad = self.rad_tabO
+            if self.edit_which_pt_color == 0:
+                self.color_button = self.ui.ColorFiducialButton_O
+                self.pts_color = self.pts_color_overlay_tab_fixed
+                self.pts_size = self.pts_size_overlay_tab_fixed
             else:
-                self.ColorButton = self.ui.ColorFiducialButton2_O
-                self.ptsColor = self.ptsColor_tabOb
-                self.rad = self.rad_tabOb
+                self.color_button = self.ui.ColorFiducialButton2_O
+                self.pts_color = self.pts_color_overlay_tab_moving
+                self.pts_size = self.pts_size_overlay_tab_moving
             # frame variables
             self.border_left = self.ui.UnregisteredImageBorder
             self.border_right = self.ui.RegisteredImageBorder
@@ -665,59 +677,59 @@ class MainWindow(QMainWindow):
             self.text_right = self.ui.RegisteredImageFrameHeaderText
             self.frame_left = self.ui.UnregisteredImageDisplayFrame
             self.frame_right = self.ui.RegisteredImageDisplayFrame
-            self.MI = 255
-            if self.editWhichImage == 0:  # unregistered image
+            self.max_intensity = 255
+            if self.edit_which_image == 0:  # unregistered image
                 # image view variables
-                self.flip_state = self.unregistered_flip_state
-                self.rotation_angle = self.unregistered_rotation_angle
+                self.flip_state = self.overlay_flip_state
+                self.rotation_angle = self.overlay_rotation_angle
                 self.brightness = 0
                 self.contrast = 1
-                self.zoom_default = self.unregistered_zoom_default
-                self.zoom_scale = self.unregistered_zoom_scale
-                self.pan_offset_x = self.unregistered_pan_offset_x
-                self.pan_offset_y = self.unregistered_pan_offset_y
+                self.zoom_default = self.overlay_zoom_default
+                self.zoom_scale = self.overlay_zoom_scale
+                self.pan_offset_x = self.overlay_pan_offset_x
+                self.pan_offset_y = self.overlay_pan_offset_y
                 self.label = self.overlay0_label
-                self.fiducial_pts = self.ptsFixed
-                self.fiducial_pts2 = self.ptsMoving
+                self.fiducial_pts_to_plot = self.pts_fixed
+                self.more_fiducial_pts_to_plot = self.pts_moving
                 try:
-                    self.ImageHeight = self.imOverlay0.height()
-                    self.ImageWidth = self.imOverlay0.width()
+                    self.image_height = self.im_overlay.height()
+                    self.image_width = self.im_overlay.width()
                 except:
-                    self.ImageHeight = 0
-                    self.ImageWidth = 0
+                    self.image_height = 0
+                    self.image_width = 0
             else:  # registered image
                 # image view variables
-                self.flip_state = self.registered_flip_state
-                self.rotation_angle = self.registered_rotation_angle
+                self.flip_state = self.overlay_reg_flip_state
+                self.rotation_angle = self.overlay_reg_rotation_angle
                 self.brightness = 0
                 self.contrast = 1
-                self.zoom_default = self.registered_zoom_default
-                self.zoom_scale = self.registered_zoom_scale
+                self.zoom_default = self.overlay_reg_zoom_default
+                self.zoom_scale = self.overlay_reg_zoom_scale
                 self.pan_offset_x = self.registered_pan_offset_x
-                self.pan_offset_y = self.registered_pan_offset_y
+                self.pan_offset_y = self.overlay_reg_pan_offset_y
                 self.label = self.overlay_label
-                self.fiducial_pts = self.ptsFixed
-                self.fiducial_pts2 = self.ptsMovingReg
+                self.fiducial_pts_to_plot = self.pts_fixed
+                self.more_fiducial_pts_to_plot = self.pts_moving_reg
                 try:
-                    self.ImageHeight = self.imOverlay.height()
-                    self.ImageWidth = self.imOverlay.width()
+                    self.image_height = self.im_overlay_reg.height()
+                    self.image_width = self.im_overlay_reg.width()
                 except:
-                    self.ImageHeight = 0
-                    self.ImageWidth = 0
+                    self.image_height = 0
+                    self.image_width = 0
         elif self.current_index == self.elastic_reg_tab:
             # point view variables
             if self.view_squares > 0:
-                self.ColorButton = self.ui.ColorSquaresButton
-                self.ptsColor = self.squaresColor
+                self.color_button = self.ui.ColorSquaresButton
+                self.pts_color = self.squaresColor
             else:
-                if self.whichColor == 0:
-                    self.ColorButton = self.ui.ColorFiducialButton_E
-                    self.ptsColor = self.ptsColor_tabO
-                    self.rad = self.rad_tabO
+                if self.edit_which_pt_color == 0:
+                    self.color_button = self.ui.ColorFiducialButton_E
+                    self.pts_color = self.pts_color_overlay_tab_fixed
+                    self.pts_size = self.pts_size_overlay_tab_fixed
                 else:
-                    self.ColorButton = self.ui.ColorFiducialButton2_E
-                    self.ptsColor = self.ptsColor_tabOb
-                    self.rad = self.rad_tabOb
+                    self.color_button = self.ui.ColorFiducialButton2_E
+                    self.pts_color = self.pts_color_overlay_tab_moving
+                    self.pts_size = self.pts_size_overlay_tab_moving
             # frame variables
             self.border_left = self.ui.FiducialRegisteredImageBorder
             self.border_right = self.ui.ElasticRegisteredImageBorder
@@ -725,8 +737,8 @@ class MainWindow(QMainWindow):
             self.text_right = self.ui.ElasticRegisteredImageFrameHeaderText
             self.frame_left = self.ui.FiducialRegisteredImageDisplayFrame
             self.frame_right = self.ui.ElasticRegisteredImageDisplayFrame
-            self.MI = 255
-            if self.editWhichImage == 0:  # fiducials registered image
+            self.max_intensity = 255
+            if self.edit_which_image == 0:  # fiducials registered image
                 # image view variables
                 self.flip_state = self.unregistered_E_flip_state
                 self.rotation_angle = self.unregistered_E_rotation_angle
@@ -737,39 +749,39 @@ class MainWindow(QMainWindow):
                 self.pan_offset_x = self.unregistered_E_pan_offset_x
                 self.pan_offset_y = self.unregistered_E_pan_offset_y
                 self.label = self.overlay0_E_label
-                self.fiducial_pts = self.ptsFixed
-                self.fiducial_pts2 = self.ptsMovingReg
+                self.fiducial_pts_to_plot = self.pts_fixed
+                self.more_fiducial_pts_to_plot = self.pts_moving_reg
                 try:
-                    self.ImageHeight = self.imOverlay.height()
-                    self.ImageWidth = self.imOverlay.width()
+                    self.image_height = self.im_overlay_reg.height()
+                    self.image_width = self.im_overlay_reg.width()
                 except:
-                    self.ImageHeight = 0
-                    self.ImageWidth = 0
+                    self.image_height = 0
+                    self.image_width = 0
             else:  # registered image
                 # image view variables
-                self.flip_state = self.registered_E_flip_state
-                self.rotation_angle = self.registered_E_rotation_angle
+                self.flip_state = self.overlay_reg_elastic_flip_state
+                self.rotation_angle = self.overlay_reg_elastic_rotation_angle
                 self.brightness = 0
                 self.contrast = 1
-                self.zoom_default = self.registered_E_zoom_default
-                self.zoom_scale = self.registered_E_zoom_scale
-                self.pan_offset_x = self.registered_E_pan_offset_x
-                self.pan_offset_y = self.registered_E_pan_offset_y
+                self.zoom_default = self.overlay_reg_elastic_zoom_default
+                self.zoom_scale = self.overlay_reg_elastic_zoom_scale
+                self.pan_offset_x = self.overlay_reg_elastic_pan_offset_x
+                self.pan_offset_y = self.overlay_reg_elastic_pan_offset_y
                 self.label = self.overlay_E_label
-                self.fiducial_pts = self.ptsFixed
-                self.fiducial_pts2 = self.ptsMovingRegE
+                self.fiducial_pts_to_plot = self.pts_fixed
+                self.more_fiducial_pts_to_plot = self.pts_moving_reg_elastic
                 try:
-                    self.ImageHeight = self.imOverlayE.height()
-                    self.ImageWidth = self.imOverlayE.width()
+                    self.image_height = self.im_overlay_reg_elastic.height()
+                    self.image_width = self.im_overlay_reg_elastic.width()
                 except:
-                    self.ImageHeight = 0
-                    self.ImageWidth = 0
+                    self.image_height = 0
+                    self.image_width = 0
 
         elif self.current_index == self.apply_to_data_tab:  # apply to coordinates tab
             # point view variables
-            self.rad = self.rad_tabC
-            self.ptsColor = self.ptsColor_tabC
-            self.ColorButton = self.ui.ColorFiducialButton_C
+            self.pts_size = self.pts_size_coordinates_tab
+            self.pts_color = self.pts_color_coordinates_tab
+            self.color_button = self.ui.ColorFiducialButton_C
             # frame variables
             self.border_left = self.ui.RegisterCoordsImageBorder
             self.border_right = self.ui.RegisterCoordsImageBorder
@@ -779,88 +791,88 @@ class MainWindow(QMainWindow):
             self.frame_right = self.ui.RegisterCoordsDisplayFrame
 
             # image view variables
-            self.flip_state = self.coords_flip_state
-            self.rotation_angle = self.coords_rotation_angle
-            self.brightness = self.coords_brightness
-            self.contrast = self.coords_contrast
-            self.zoom_default = self.coords_zoom_default
-            self.zoom_scale = self.coords_zoom_scale
-            self.pan_offset_x = self.coords_pan_offset_x
-            self.pan_offset_y = self.coords_pan_offset_y
+            self.flip_state = self.moving_coords_flip_state
+            self.rotation_angle = self.moving_coords_rotation_angle
+            self.brightness = self.moving_coords_brightness
+            self.contrast = self.moving_coords_contrast
+            self.zoom_default = self.moving_coords_zoom_default
+            self.zoom_scale = self.moving_coords_zoom_scale
+            self.pan_offset_x = self.moving_coords_pan_offset_x
+            self.pan_offset_y = self.moving_coords_pan_offset_y
             self.label = self.coordinates_label
-            if self.editWhichImage == 0:
-                self.fiducial_pts = self.ptsCoords
-                self.MI = self.MI_MovingCoords
+            if self.edit_which_image == 0:
+                self.fiducial_pts_to_plot = self.pts_coords
+                self.max_intensity = self.max_intensity_moving_coords
                 try:
-                    self.ImageHeight = self.imMovingCoords.height()
-                    self.ImageWidth = self.imMovingCoords.width()
+                    self.image_height = self.im_moving_coords.height()
+                    self.image_width = self.im_moving_coords.width()
                 except:
-                    self.ImageHeight = 0
-                    self.ImageWidth = 0
-            elif self.editWhichImage == 1:
-                self.fiducial_pts = self.ptsCoordsReg
-                self.MI = self.MI_MovingCoordsReg
+                    self.image_height = 0
+                    self.image_width = 0
+            elif self.edit_which_image == 1:
+                self.fiducial_pts_to_plot = self.pts_coords_reg
+                self.max_intensity = self.max_intensity_moving_coords_reg
                 try:
-                    self.ImageHeight = self.imMovingCoordsReg.height()
-                    self.ImageWidth = self.imMovingCoordsReg.width()
+                    self.image_height = self.im_moving_coords_reg.height()
+                    self.image_width = self.im_moving_coords_reg.width()
                 except:
-                    self.ImageHeight = 0
-                    self.ImageWidth = 0
-            elif self.editWhichImage == 2:
-                self.fiducial_pts = self.ptsCoordsReg
-                self.MI = self.MI_Fixed
+                    self.image_height = 0
+                    self.image_width = 0
+            elif self.edit_which_image == 2:
+                self.fiducial_pts_to_plot = self.pts_coords_reg
+                self.max_intensity = self.max_intensity_fixed
                 try:
-                    self.ImageHeight = self.imFixed0.height()
-                    self.ImageWidth = self.imFixed0.width()
+                    self.image_height = self.im_fixed.height()
+                    self.image_width = self.im_fixed.width()
                 except:
-                    self.ImageHeight = 0
-                    self.ImageWidth = 0
+                    self.image_height = 0
+                    self.image_width = 0
             else:
-                self.fiducial_pts = self.ptsCoordsRegE
-                self.MI = self.MI_MovingCoordsReg
+                self.fiducial_pts_to_plot = self.pts_coords_reg_elastic
+                self.max_intensity = self.max_intensity_moving_coords_reg
                 try:
-                    self.ImageHeight = self.imMovingCoordsRegElastic.height()
-                    self.ImageWidth = self.imMovingCoordsRegElastic.width()
+                    self.image_height = self.im_moving_coords_reg_elastic.height()
+                    self.image_width = self.im_moving_coords_reg_elastic.width()
                 except:
-                    self.ImageHeight = 0
-                    self.ImageWidth = 0
-            self.fiducial_pts2 = []
+                    self.image_height = 0
+                    self.image_width = 0
+            self.more_fiducial_pts_to_plot = []
         else:
             return
 
-        if self.editWhichImage == 0:
+        if self.edit_which_image == 0:
             self.frame = self.frame_left
         else:
             self.frame = self.frame_right
 
         if make_pixmap == 1:
             if self.current_index == self.fiducials_tab:
-                if self.editWhichImage == 0:  # fiducials tab fixed image
-                    self.pixmap = self.imFixed0
+                if self.edit_which_image == 0:  # fiducials tab fixed image
+                    self.pixmap = self.im_fixed
                 else:  # fiducials tab moving image
-                    self.pixmap = self.imMoving0
+                    self.pixmap = self.im_moving
 
             elif self.current_index == self.overlay_tab:
-                if self.editWhichImage == 0:  # overlay tab unregistered images
-                    self.pixmap = self.imOverlay0
+                if self.edit_which_image == 0:  # overlay tab unregistered images
+                    self.pixmap = self.im_overlay
                 else:  # overlay tab registered images
-                    self.pixmap = self.imOverlay  # self.imMovingReg
+                    self.pixmap = self.im_overlay_reg  # self.imMovingReg
 
             elif self.current_index == self.apply_to_data_tab:
-                if self.editWhichImage == 0:  # register coordinates tab unregistered moving image
-                    self.pixmap = self.imMovingCoords
-                elif self.editWhichImage == 1:  # register coordinates tab registered moving image
-                    self.pixmap = self.imMovingCoordsReg
-                elif self.editWhichImage == 2:  # Apply to coordinates tab fixed image
-                    self.pixmap = self.imFixed0
+                if self.edit_which_image == 0:  # register coordinates tab unregistered moving image
+                    self.pixmap = self.im_moving_coords
+                elif self.edit_which_image == 1:  # register coordinates tab registered moving image
+                    self.pixmap = self.im_moving_coords_reg
+                elif self.edit_which_image == 2:  # Apply to coordinates tab fixed image
+                    self.pixmap = self.im_fixed
                 else:
-                    self.pixmap = self.imMovingCoordsRegElastic
+                    self.pixmap = self.im_moving_coords_reg_elastic
 
             elif self.current_index == self.elastic_reg_tab:
-                if self.editWhichImage == 0:  # overlay tab unregistered images
-                    self.pixmap = self.imOverlay
+                if self.edit_which_image == 0:  # overlay tab unregistered images
+                    self.pixmap = self.im_overlay_reg
                 else:  # overlay tab registered images
-                    self.pixmap = self.imOverlayE
+                    self.pixmap = self.im_overlay_reg_elastic
 
     def return_edit_frame(self):
         """Return the current image and image view variables depending on which tab is open
@@ -875,9 +887,9 @@ class MainWindow(QMainWindow):
 
         if self.current_index == self.fiducials_tab:
             # point view variables
-            self.rad_tabF = self.rad
-            self.ptsColor_tabF = self.ptsColor
-            self.ui.ColorFiducialButton = self.ColorButton
+            self.pts_size_fiducial_tab = self.pts_size
+            self.pts_color_fiducial_tab = self.pts_color
+            self.ui.ColorFiducialButton = self.color_button
             # frame variables
             self.ui.FixedImageBorder = self.border_left
             self.ui.MovingImageBorder = self.border_right
@@ -886,7 +898,7 @@ class MainWindow(QMainWindow):
             self.ui.FixedImageDisplayFrame = self.frame_left
             self.ui.MovingImageDisplayFrame = self.frame_right
 
-            if self.editWhichImage == 0:  # fixed image
+            if self.edit_which_image == 0:  # fixed image
                 # image view variables
                 self.fixed_flip_state = self.flip_state
                 self.fixed_rotation_angle = self.rotation_angle
@@ -909,14 +921,14 @@ class MainWindow(QMainWindow):
 
         elif self.current_index == self.overlay_tab:
             # point view variables
-            if self.whichColor == 0:
-                self.ptsColor_tabO = self.ptsColor
-                self.ui.ColorFiducialButton_O = self.ColorButton
-                self.rad_tabO = self.rad
+            if self.edit_which_pt_color == 0:
+                self.pts_color_overlay_tab_fixed = self.pts_color
+                self.ui.ColorFiducialButton_O = self.color_button
+                self.pts_size_overlay_tab_fixed = self.pts_size
             else:
-                self.ptsColor_tabOb = self.ptsColor
-                self.ui.ColorFiducialButton2_O = self.ColorButton
-                self.rad_tabOb = self.rad
+                self.pts_color_overlay_tab_moving = self.pts_color
+                self.ui.ColorFiducialButton2_O = self.color_button
+                self.pts_size_overlay_tab_moving = self.pts_size
             # frame variables
             self.ui.UnregisteredImageBorder = self.border_left
             self.ui.RegisteredImageBorder = self.border_right
@@ -925,37 +937,37 @@ class MainWindow(QMainWindow):
             self.ui.UnregisteredImageDisplayFrame = self.frame_left
             self.ui.RegisteredImageDisplayFrame = self.frame_right
 
-            if self.editWhichImage == 0:  # unregistered image
+            if self.edit_which_image == 0:  # unregistered image
                 # image view variables
-                self.unregistered_flip_state = self.flip_state
-                self.unregistered_rotation_angle = self.rotation_angle
-                self.unregistered_zoom_default = self.zoom_default
-                self.unregistered_zoom_scale = self.zoom_scale
-                self.unregistered_pan_offset_x = self.pan_offset_x
-                self.unregistered_pan_offset_y = self.pan_offset_y
+                self.overlay_flip_state = self.flip_state
+                self.overlay_rotation_angle = self.rotation_angle
+                self.overlay_zoom_default = self.zoom_default
+                self.overlay_zoom_scale = self.zoom_scale
+                self.overlay_pan_offset_x = self.pan_offset_x
+                self.overlay_pan_offset_y = self.pan_offset_y
             else:  # registered image
                 # image view variables
-                self.registered_flip_state = self.flip_state
-                self.registered_rotation_angle = self.rotation_angle
-                self.registered_zoom_default = self.zoom_default
-                self.registered_zoom_scale = self.zoom_scale
+                self.overlay_reg_flip_state = self.flip_state
+                self.overlay_reg_rotation_angle = self.rotation_angle
+                self.overlay_reg_zoom_default = self.zoom_default
+                self.overlay_reg_zoom_scale = self.zoom_scale
                 self.registered_pan_offset_x = self.pan_offset_x
-                self.registered_pan_offset_y = self.pan_offset_y
+                self.overlay_reg_pan_offset_y = self.pan_offset_y
 
         elif self.current_index == self.elastic_reg_tab:
             # point view variables
             if self.view_squares > 0:
-                self.ui.ColorSquaresButton = self.ColorButton
-                self.squaresColor = self.ptsColor
+                self.ui.ColorSquaresButton = self.color_button
+                self.squaresColor = self.pts_color
             else:
-                if self.whichColor == 0:
-                    self.ui.ColorFiducialButton_O = self.ColorButton
-                    self.ptsColor_tabO = self.ptsColor
-                    self.rad_tabO = self.rad
+                if self.edit_which_pt_color == 0:
+                    self.ui.ColorFiducialButton_O = self.color_button
+                    self.pts_color_overlay_tab_fixed = self.pts_color
+                    self.pts_size_overlay_tab_fixed = self.pts_size
                 else:
-                    self.ui.ColorFiducialButton2_O = self.ColorButton
-                    self.ptsColor_tabOb = self.ptsColor
-                    self.rad_tabOb = self.rad
+                    self.ui.ColorFiducialButton2_O = self.color_button
+                    self.pts_color_overlay_tab_moving = self.pts_color
+                    self.pts_size_overlay_tab_moving = self.pts_size
 
             # frame variables
             self.ui.FiducialRegisteredImageBorder = self.border_left
@@ -965,7 +977,7 @@ class MainWindow(QMainWindow):
             self.ui.FiducialRegisteredImageDisplayFrame = self.frame_left
             self.ui.ElasticRegisteredImageDisplayFrame = self.frame_right
 
-            if self.editWhichImage == 0:  # unregistered image
+            if self.edit_which_image == 0:  # unregistered image
                 # image view variables
                 self.unregistered_E_flip_state = self.flip_state
                 self.unregistered_E_rotation_angle = self.rotation_angle
@@ -975,32 +987,32 @@ class MainWindow(QMainWindow):
                 self.unregistered_E_pan_offset_y = self.pan_offset_y
             else:  # registered image
                 # image view variables
-                self.registered_E_flip_state = self.flip_state
-                self.registered_E_rotation_angle = self.rotation_angle
-                self.registered_E_zoom_default = self.zoom_default
-                self.registered_E_zoom_scale = self.zoom_scale
-                self.registered_E_pan_offset_x = self.pan_offset_x
-                self.registered_E_pan_offset_y = self.pan_offset_y
+                self.overlay_reg_elastic_flip_state = self.flip_state
+                self.overlay_reg_elastic_rotation_angle = self.rotation_angle
+                self.overlay_reg_elastic_zoom_default = self.zoom_default
+                self.overlay_reg_elastic_zoom_scale = self.zoom_scale
+                self.overlay_reg_elastic_pan_offset_x = self.pan_offset_x
+                self.overlay_reg_elastic_pan_offset_y = self.pan_offset_y
 
         elif self.current_index == self.apply_to_data_tab:
             # point view variables
-            self.rad_tabC = self.rad
-            self.ptsColor_tabC = self.ptsColor
-            self.ui.ColorFiducialButton_C = self.ColorButton
+            self.pts_size_coordinates_tab = self.pts_size
+            self.pts_color_coordinates_tab = self.pts_color
+            self.ui.ColorFiducialButton_C = self.color_button
             # frame variables
             self.ui.RegisterCoordsImageBorder = self.border_left
             self.ui.RegisterCoordsFrameHeaderText = self.text_left
             self.ui.RegisterCoordsDisplayFrame = self.frame_left
 
             # image view variables
-            self.coords_flip_state = self.flip_state
-            self.coords_rotation_angle = self.rotation_angle
-            self.coords_brightness = self.brightness
-            self.coords_contrast = self.contrast
-            self.coords_zoom_default = self.zoom_default
-            self.coords_zoom_scale = self.zoom_scale
-            self.coords_pan_offset_x = self.pan_offset_x
-            self.coords_pan_offset_y = self.pan_offset_y
+            self.moving_coords_flip_state = self.flip_state
+            self.moving_coords_rotation_angle = self.rotation_angle
+            self.moving_coords_brightness = self.brightness
+            self.moving_coords_contrast = self.contrast
+            self.moving_coords_zoom_default = self.zoom_default
+            self.moving_coords_zoom_scale = self.zoom_scale
+            self.moving_coords_pan_offset_x = self.pan_offset_x
+            self.moving_coords_pan_offset_y = self.pan_offset_y
         else:
             return
 
@@ -1053,7 +1065,7 @@ class MainWindow(QMainWindow):
         self.define_edit_frame()
 
         # Open the color dialog
-        color_dialog = QColorDialog(self.ptsColor, self)
+        color_dialog = QColorDialog(self.pts_color, self)
 
         # Set a stylesheet to change the font color to white
         color_dialog.setStyleSheet(self.dialog_style)
@@ -1064,22 +1076,22 @@ class MainWindow(QMainWindow):
 
             if color.isValid():
                 if self.current_index == self.fiducials_tab:  # fiducials tab
-                    self.ptsColor_tabF = color
+                    self.pts_color_fiducial_tab = color
                 elif self.current_index == self.overlay_tab:  # image overlay tab
-                    if self.whichColor == 0:
-                        self.ptsColor_tabO = color
+                    if self.edit_which_pt_color == 0:
+                        self.pts_color_overlay_tab_fixed = color
                     else:
-                        self.ptsColor_tabOb = color
+                        self.pts_color_overlay_tab_moving = color
                 elif self.current_index == self.apply_to_data_tab:  # apply to coordinates tab
-                    self.ptsColor_tabC = color
+                    self.pts_color_coordinates_tab = color
                 elif self.current_index == self.elastic_reg_tab:  # elastic registration tab
                     if self.view_squares == 1:
                         self.squaresColor = color
                     else:
-                        if self.whichColor == 0:
-                            self.ptsColor_tabO = color
+                        if self.edit_which_pt_color == 0:
+                            self.pts_color_overlay_tab_fixed = color
                         else:
-                            self.ptsColor_tabOb = color
+                            self.pts_color_overlay_tab_moving = color
 
                 self.update_button_color()
 
@@ -1103,14 +1115,14 @@ class MainWindow(QMainWindow):
         self.define_edit_frame()
 
         # Calculate the average of the RGB values
-        avg_rgb = (self.ptsColor.red() + self.ptsColor.green() + self.ptsColor.blue()) / 3
+        avg_rgb = (self.pts_color.red() + self.pts_color.green() + self.pts_color.blue()) / 3
 
         # Determine font color based on the average RGB value
         font_color = "white" if avg_rgb < 125 else "black"
-        color_rgb = f"rgb({self.ptsColor.red()}, {self.ptsColor.green()}, {self.ptsColor.blue()})"
+        color_rgb = f"rgb({self.pts_color.red()}, {self.pts_color.green()}, {self.pts_color.blue()})"
         tmp = f"background-color: {color_rgb}; color: {font_color};border: 1px solid  #e6e6e6;border-radius: 5px;padding: 5px;"
-        self.ColorButton.setStyleSheet(tmp)
-        self.whichColor = 0
+        self.color_button.setStyleSheet(tmp)
+        self.edit_which_pt_color = 0
 
     def update_zoom_default(self):
         """Determines the initial zoom settings to fit the image entirely within the image frame.
@@ -1121,11 +1133,11 @@ class MainWindow(QMainWindow):
             no variables output, but app view changes
         """
         self.define_edit_frame()
-        if self.ImageWidth == 0 or self.ImageHeight == 0:
+        if self.image_width == 0 or self.image_height == 0:
             return
 
-        width_scale = self.frame.width() / self.ImageWidth
-        height_scale = self.frame.height() / self.ImageHeight
+        width_scale = self.frame.width() / self.image_width
+        height_scale = self.frame.height() / self.image_height
 
         zoom_default0 = self.zoom_default
         zoom_scale0 = self.zoom_scale
@@ -1158,7 +1170,7 @@ class MainWindow(QMainWindow):
         self.ui.fixedImageTableWidget.setVerticalHeaderLabels([""])
         self.ui.movingImageTableWidget.setVerticalHeaderLabels(["1"])
         self.ui.setJobTableWidget.setVerticalHeaderLabels([""])
-        self.ui.setJobTableWidget.setItem(0, 0, QtWidgets.QTableWidgetItem(self.ResultsName))
+        self.ui.setJobTableWidget.setItem(0, 0, QtWidgets.QTableWidgetItem(self.results_name))
         self.populate_fixed_table()
         self.populate_moving_table()
         self.populate_project_table()
@@ -1216,14 +1228,14 @@ class MainWindow(QMainWindow):
         self.ui.LoadOldMovingImageButton.setStyleSheet(self.inactive_button_style)
 
         # load and display fixed image
-        image_path = os.path.join(self.pthFixed, self.nmFixed)
-        if self.nmFixed != self.nmLoadedFixed:
-            self.imFixed0, self.MI_Fixed, self.mode_Fixed = self.load_image(image_path)  # store the original pixmap
-            self.nmLoadedFixed = self.nmFixed
+        image_path = os.path.join(self.fixed_image_folder, self.fixed_image_filename)
+        if self.fixed_image_filename != self.fixed_image_filename_for_coordinates_tab:
+            self.im_fixed, self.max_intensity_fixed, self.mode_intensity_fixed = self.load_image(image_path)  # store the original pixmap
+            self.fixed_image_filename_for_coordinates_tab = self.fixed_image_filename
 
         # Calculate zoom_default
-        width_scale = self.ui.FixedImageDisplayFrame.width() / self.imFixed0.width()
-        height_scale = self.ui.FixedImageDisplayFrame.height() / self.imFixed0.height()
+        width_scale = self.ui.FixedImageDisplayFrame.width() / self.im_fixed.width()
+        height_scale = self.ui.FixedImageDisplayFrame.height() / self.im_fixed.height()
         self.fixed_zoom_default = min(width_scale, height_scale)
 
         # go to fiducials tab
@@ -1231,18 +1243,18 @@ class MainWindow(QMainWindow):
         self.update_button_color()
 
         # set fiducial point count
-        self.ptsFixed = np.array([[0, 0]], dtype=np.float64)
-        self.ptsMoving = np.array([[0, 0]], dtype=np.float64)
-        self.editWhichImage = 0
+        self.pts_fixed = np.array([[0, 0]], dtype=np.float64)
+        self.pts_moving = np.array([[0, 0]], dtype=np.float64)
+        self.edit_which_image = 0
         self.add_fiducial_active = 0
         self.highlight_current_frame()
 
         # display image
-        self.imMoving0 = []
+        self.im_moving = []
         self.moving_zoom_default = 1
-        self.editWhichImage = 1
+        self.edit_which_image = 1
         self.reset_transformations()
-        self.editWhichImage = 0
+        self.edit_which_image = 0
         self.reset_transformations()
 
     def initiate_overlay_tab(self):
@@ -1276,41 +1288,42 @@ class MainWindow(QMainWindow):
         self.ui.NavigationButton.setStyleSheet(self.active_button_style)
         self.ui.KeyboardShortcutsButton.setEnabled(True)
         self.ui.KeyboardShortcutsButton.setStyleSheet(self.active_button_style)
-        self.squaresColor = self.ptsColor_tabO
+        self.squaresColor = self.pts_color_overlay_tab_fixed
         self.add_fiducial_active = False
         self.delete_mode_active = False
 
         # fill in text
         self.ui.UnregisteredImageFrameHeaderText.setText(
-            f"Pre-Registration Overlay (RMSE: {round(self.RMSE0)} pixels).")
+            f"Pre-Registration Overlay (RMSE: {round(self.rmse_unregistered)} pixels).")
         self.ui.RegisteredImageFrameHeaderText.setText(
-            f"Fiducial Registration Overlay (RMSE: {round(self.RMSE)} pixels).")
+            f"Fiducial Registration Overlay (RMSE: {round(self.rmse_reg)} pixels).")
         # go to overlay tab
         self.ui.tabWidget.setCurrentIndex(self.overlay_tab)
 
         # create and display the overlay image
-        self.ptsColor_tabO = self.ptsColor_tabF
-        self.ptsColor_tabOb = QColor(255 - self.ptsColor_tabO.red(), 255 - self.ptsColor_tabO.green(),
-                                     255 - self.ptsColor_tabO.blue())
+        self.pts_color_overlay_tab_fixed = self.pts_color_fiducial_tab
+        self.pts_color_overlay_tab_moving = QColor(255 - self.pts_color_overlay_tab_fixed.red(),
+                                                   255 - self.pts_color_overlay_tab_fixed.green(),
+                                                   255 - self.pts_color_overlay_tab_fixed.blue())
         self.update_button_color()
-        self.whichColor = 1
+        self.edit_which_pt_color = 1
         self.update_button_color()
-        pixmap_fixed = self.adjust_brightness_contrast(self.imFixed0, self.fixed_contrast, self.fixed_brightness)
-        pixmap_moving = self.adjust_brightness_contrast(self.imMoving0, self.moving_contrast, self.moving_brightness)
-        self.imOverlay0 = self.make_overlay_image(pixmap_fixed, pixmap_moving)
-        self.editWhichImage = 0
+        pixmap_fixed = self.adjust_brightness_contrast(self.im_fixed, self.fixed_contrast, self.fixed_brightness)
+        pixmap_moving = self.adjust_brightness_contrast(self.im_moving, self.moving_contrast, self.moving_brightness)
+        self.im_overlay = self.make_overlay_image(pixmap_fixed, pixmap_moving)
+        self.edit_which_image = 0
         self.reset_transformations()
 
         # register the moving image
-        self.imMovingReg = self.transform_image(self.imMoving0, self.mode_Moving)
-        pixmap_moving_reg = self.adjust_brightness_contrast(self.imMovingReg, self.moving_contrast,
-                                                            self.moving_brightness)
+        self.im_moving_reg = self.transform_image(self.im_moving, self.mode_intensity_moving)
+        pixmap_moving_reg = self.adjust_brightness_contrast(self.im_moving_reg, self.moving_contrast, self.moving_brightness)
+
         # make the desired overlay image
         # self.imOverlay = self.make_greyscale_overlay(pixmap_fixed, pixmap_moving, pixmap_moving_reg)
         # plot registered overlay
-        self.imOverlay = self.make_overlay_image(pixmap_fixed, pixmap_moving_reg)
+        self.im_overlay_reg = self.make_overlay_image(pixmap_fixed, pixmap_moving_reg)
 
-        self.editWhichImage = 1
+        self.edit_which_image = 1
         self.reset_transformations()
 
     def initiate_elastic_registration_tab(self):
@@ -1366,7 +1379,7 @@ class MainWindow(QMainWindow):
 
         # show the global registration image with boxes overlaid for tilesize and spacing
         # self.imOverlay0 = self.make_overlay_image(pixmap_fixed, pixmap_moving)
-        self.editWhichImage = 0
+        self.edit_which_image = 0
         self.reset_transformations()
         self.update_both_images()
 
@@ -1397,6 +1410,8 @@ class MainWindow(QMainWindow):
         self.ui.RegisterCoordsImageBorder.setVisible(False)
         self.ui.RegisterCoordsFrameHeaderText.setVisible(False)
         self.ui.CoordinatesOverlayControlsFrame.setVisible(False)
+        self.ui.ViewRegisteredEMovingButton.setEnabled(True)
+        self.ui.RegisteredEMovingCheckBox.setEnabled(True)
         self.ui.LoadCoordinatesButton.setVisible(False)
         self.ui.BrowseForCoordinatesFileText.setEnabled(False)
         self.ui.CorrespondingImageText.setEnabled(False)
@@ -1423,33 +1438,33 @@ class MainWindow(QMainWindow):
         self.all_images_checked = 0
 
         # clear large variables to save memory
-        self.imMoving0 = []
-        self.imMovingReg = []
-        self.imMovingRegElastic = []
-        self.nmMoving = []
+        self.im_moving = []
+        self.im_moving_reg = []
+        self.im_moving_reg_elastic = []
+        self.moving_image_filename = []
 
         # initiate coordinates variables
-        self.pthCoords = ""
-        self.nmCoords = ""
-        self.pthMovingCoords = ""
-        self.nmMovingCoords = ""
-        self.nmLoadedMoving = ""
-        self.nmCoordsLoaded = ""
-        self.Coords = ""
-        self.imMovingCoords = []
-        self.imMovingCoordsReg = []
-        self.imMovingCoordsRegElastic = []
-        self.ScaleCoords = ""
-        self.xColumn = ""
-        self.yColumn = ""
-        self.max_points = "5000"
+        self.coordinates_file_folder = ""
+        self.coordinates_filename = ""
+        self.moving_image_folder_corresponding_to_coordinates = ""
+        self.moving_image_filename_corresponding_to_coordinates = ""
+        self.loaded_moving_image_filename = ""
+        self.loaded_coordinates_filename = ""
+        self.coordinate_data = ""
+        self.im_moving_coords = []
+        self.im_moving_coords_reg = []
+        self.im_moving_coords_reg_elastic = []
+        self.scale_coordinates_file = ""
+        self.column_in_coords_file_containing_x_values = ""
+        self.column_in_coords_file_containing_y_values = ""
+        self.max_points = "10000" # default maximum set of coordinates to plot when checking coordinate registration
         self.tformCoords = []
         self.DinvCoords = []
-        self.ptsCoords = []
-        self.ptsCoordsReg = []
-        self.ptsCoordsRegE = []
+        self.pts_coords = []
+        self.pts_coords_reg = []
+        self.pts_coords_reg_elastic = []
         self.sampled_indices = []
-        self.rad_tabC = np.ceil(float(self.rad_tabF) / 2)
+        self.pts_size_coordinates_tab = np.ceil(float(self.pts_size_fiducial_tab) / 2)
 
         # populate dropdown list
         self.populate_coordinates_combo_box()
@@ -1458,7 +1473,7 @@ class MainWindow(QMainWindow):
         # populate the blank table
         self.ui.RegisterCoordinatesTableWidget.setHorizontalHeaderLabels(
             ["Data Filename", "Moving Image Filename", "Scale", "X Column", "Y Column", "# Points to Plot", " "])
-        if self.nmMovingCoords or self.nmCoords:
+        if self.moving_image_filename_corresponding_to_coordinates or self.coordinates_filename:
             self.ui.RegisterCoordinatesTableWidget.setVerticalHeaderLabels([""])
         self.populate_coordinates_table()
 
@@ -1490,7 +1505,7 @@ class MainWindow(QMainWindow):
         # populate the rows of the table with the info in moving_images_list
         self.ui.JobStatusTableWidget.setHorizontalHeaderLabels(
             ["Image Name", "# Fiducials", "ICP Registration", "Elastic Registration", "Coordinates Registered"])
-        self.ui.JobStatusTableWidget.setItem(0, 0, QtWidgets.QTableWidgetItem(f"Fixed image: {self.nmFixed}  "))
+        self.ui.JobStatusTableWidget.setItem(0, 0, QtWidgets.QTableWidgetItem(f"Fixed image: {self.fixed_image_filename}  "))
         self.ui.JobStatusTableWidget.setItem(0, 1, QtWidgets.QTableWidgetItem(" - "))
         self.ui.JobStatusTableWidget.setItem(0, 2, QtWidgets.QTableWidgetItem(" - "))
         self.ui.JobStatusTableWidget.setItem(0, 3, QtWidgets.QTableWidgetItem(" - "))
@@ -1503,10 +1518,10 @@ class MainWindow(QMainWindow):
 
         # check if corresponding files exist
         check_file_status = np.zeros((self.moving_images_list.shape[0], 4), dtype=int)
-        folder_1 = os.path.join(self.jobFolder, self.ResultsName, "Fiducial point selection")
-        folder_2 = os.path.join(self.jobFolder, self.ResultsName, "Registration transforms")
-        folder_3 = os.path.join(self.jobFolder, self.ResultsName, "Registration transforms", "Elastic")
-        folder_4 = os.path.join(self.jobFolder, self.ResultsName, "Registered Coordinate Data", "log")
+        folder_1 = os.path.join(self.job_folder, self.results_name, "Fiducial point selection")
+        folder_2 = os.path.join(self.job_folder, self.results_name, "Registration transforms")
+        folder_3 = os.path.join(self.job_folder, self.results_name, "Registration transforms", "Elastic")
+        folder_4 = os.path.join(self.job_folder, self.results_name, "Registered Coordinate Data", "log")
         for i, row in enumerate(self.moving_images_list):
             image_file = row[0]
             image_name, _ = os.path.splitext(image_file)
@@ -1518,7 +1533,7 @@ class MainWindow(QMainWindow):
                 with open(outfile, 'rb') as file:
                     data = pickle.load(file)
                 pts = data.get('pts_F')
-                if pts.shape[0] >= self.minFidPts:
+                if pts.shape[0] >= self.MIN_NUM_FIDUCIAL_PTS:
                     check_file_status[i, 0] = pts.shape[0]
 
             # check if icp registration transform exists
@@ -1588,8 +1603,7 @@ class MainWindow(QMainWindow):
         """
         # skip if we aren't in an image view tab
         self.define_edit_frame()
-        if self.current_index not in {self.fiducials_tab, self.overlay_tab, self.apply_to_data_tab,
-                                      self.elastic_reg_tab}:
+        if self.current_index not in {self.fiducials_tab, self.overlay_tab, self.apply_to_data_tab, self.elastic_reg_tab}:
             return
 
         self.flip_state = False
@@ -1613,8 +1627,7 @@ class MainWindow(QMainWindow):
         """
         # skip if we aren't in an image view tab
         self.define_edit_frame()
-        if self.current_index not in {self.fiducials_tab, self.overlay_tab, self.apply_to_data_tab,
-                                      self.elastic_reg_tab}:
+        if self.current_index not in {self.fiducials_tab, self.overlay_tab, self.apply_to_data_tab, self.elastic_reg_tab}:
             return
 
         # flip
@@ -1633,8 +1646,7 @@ class MainWindow(QMainWindow):
         """
         # skip if we aren't in an image view tab
         self.define_edit_frame()
-        if self.current_index not in {self.fiducials_tab, self.overlay_tab, self.apply_to_data_tab,
-                                      self.elastic_reg_tab}:
+        if self.current_index not in {self.fiducials_tab, self.overlay_tab, self.apply_to_data_tab, self.elastic_reg_tab}:
             return
 
         # rotate
@@ -1670,8 +1682,7 @@ class MainWindow(QMainWindow):
         """
         # skip if we aren't in an image view tab
         self.define_edit_frame()
-        if self.current_index not in {self.fiducials_tab, self.apply_to_data_tab, self.overlay_tab,
-                                      self.elastic_reg_tab}:
+        if self.current_index not in {self.fiducials_tab, self.apply_to_data_tab, self.overlay_tab, self.elastic_reg_tab}:
             return
 
         self.contrast = self.contrast + delta_val
@@ -1689,16 +1700,15 @@ class MainWindow(QMainWindow):
         """
         # skip if we aren't in an image view tab
         self.define_edit_frame()
-        if self.current_index not in {self.fiducials_tab, self.apply_to_data_tab, self.overlay_tab,
-                                      self.elastic_reg_tab}:
+        if self.current_index not in {self.fiducials_tab, self.apply_to_data_tab, self.overlay_tab, self.elastic_reg_tab}:
             return
 
         # calculate the maximum image intensity
-        max_intensity = self.MI + self.brightness
+        image_max_intensity = self.max_intensity + self.brightness
 
         # determine the contrast to increase the maximum intensity to 255
         contrast_old = self.contrast
-        self.contrast = 255 / min(max_intensity, 255)
+        self.contrast = 255 / min(image_max_intensity, 255)
         print(f"  new auto contrast is {self.contrast}, adjusted from {contrast_old}")
         self.return_edit_frame()
         self.update_image_view()
@@ -1711,7 +1721,7 @@ class MainWindow(QMainWindow):
         Returns:
             no variables output, but app view changes
         """
-        self.whichColor = 0  # color 1
+        self.edit_which_pt_color = 0  # color 1
         self.increase_fiducial_size()
 
     def call_increase_fiducial_size1(self):
@@ -1722,7 +1732,7 @@ class MainWindow(QMainWindow):
         Returns:
             no variables output, but app view changes
         """
-        self.whichColor = 1  # color 1
+        self.edit_which_pt_color = 1  # color 1
         self.increase_fiducial_size()
 
     def call_decrease_fiducial_size0(self):
@@ -1733,7 +1743,7 @@ class MainWindow(QMainWindow):
         Returns:
             no variables output, but app view changes
         """
-        self.whichColor = 0  # color 1
+        self.edit_which_pt_color = 0  # color 1
         self.decrease_fiducial_size()
 
     def call_decrease_fiducial_size1(self):
@@ -1744,7 +1754,7 @@ class MainWindow(QMainWindow):
         Returns:
             no variables output, but app view changes
         """
-        self.whichColor = 1  # color 1
+        self.edit_which_pt_color = 1  # color 1
         self.decrease_fiducial_size()
 
     def increase_fiducial_size(self):
@@ -1756,9 +1766,9 @@ class MainWindow(QMainWindow):
             no variables output, but app view changes
         """
         self.define_edit_frame()
-        self.rad = self.rad + 1
+        self.pts_size = self.pts_size + 1
         self.return_edit_frame()
-        self.whichColor = 0
+        self.edit_which_pt_color = 0
         self.update_both_images()
 
     def decrease_fiducial_size(self):
@@ -1770,74 +1780,74 @@ class MainWindow(QMainWindow):
             no variables output, but app view changes
         """
         self.define_edit_frame()
-        self.rad = max([self.rad - 1, 1])
+        self.pts_size = max([self.pts_size - 1, 1])
         self.return_edit_frame()
-        self.whichColor = 0
+        self.edit_which_pt_color = 0
         self.update_both_images()
 
-    def make_greyscale_overlay(self, imFixed, imMoving, imMovingReg):
+    def make_greyscale_overlay(self, im_fixed, im_moving, im_moving_reg):
         """Make an overlay of two RGB images. Overlay keeps the RGB colors of imFixed, and fully substitutes
         pixels of imFixed where imMovingReg contains tissue.
         Used in multiple tabs
         Args:
-            imFixed: image 1
-            imMoving: image 2
-            imMovingReg: image 3
+            im_fixed: image 1
+            im_moving: image 2
+            im_moving_reg: image 3
         Returns:
-            imOverlay: combined overlay image made from imFixed and imMoving
+            im_overlay: combined overlay image made from imFixed and imMoving
         """
         # register a mask of the moving image
-        array = self.pixmap_to_array(imMoving)
+        array = self.pixmap_to_array(im_moving)
         array_mask = np.ones_like(array, dtype=np.uint8)
         array_mask = self.array_to_pixmap(array_mask)
         registered_mask = self.transform_image(array_mask, [0, 0, 0])
         registered_mask = self.pixmap_to_array(registered_mask)  # [..., :3]
 
         # Convert pixmaps to arrays
-        moving_array = self.pixmap_to_array(imMovingReg)
-        overlay_array = self.pixmap_to_array(imFixed)
+        moving_array = self.pixmap_to_array(im_moving_reg)
+        overlay_array = self.pixmap_to_array(im_fixed)
         gray_values = overlay_array[..., :3].mean(axis=-1).astype(np.uint8)  # Mean of RGB channels
         gray_values = (gray_values / gray_values.max() * 255).astype(np.uint8)  # Normalize brightness to match original
         overlay_array = np.stack([gray_values] * overlay_array.shape[-1], axis=-1)
         overlay_array[registered_mask == 1] = moving_array[registered_mask == 1]
         overlay_array = np.ascontiguousarray(overlay_array[..., :3])  # remove the alpha channel
-        imOverlay = self.array_to_pixmap(overlay_array)
+        im_overlay = self.array_to_pixmap(overlay_array)
 
-        return imOverlay
+        return im_overlay
 
-    def make_overlay_image(self, imFixed, imMoving):
+    def make_overlay_image(self, im_fixed, im_moving):
         """Make an overlay of two RGB images. Overlay is a direct combination of both images
         Used in multiple tabs
         Args:
-            imFixed: image 1
-            imMoving: image 2
+            im_fixed: image 1
+            im_moving: image 2
         Returns:
-            imOverlay: combined overlay image made from imFixed and imMoving
+            im_overlay: combined overlay image made from imFixed and imMoving
         """
         # pad images to be the same size
-        height = max([imFixed.height(), imMoving.height()])
-        width = max([imFixed.width(), imMoving.width()])
+        height = max([im_fixed.height(), im_moving.height()])
+        width = max([im_fixed.width(), im_moving.width()])
 
         # pad the fixed image
-        imFixed_pad, imFixed_pad_G = self.pad_images(imFixed, width, height, self.mode_Fixed)
-        mFixed = sum(self.mode_Fixed) / len(self.mode_Fixed)
+        im_fixed_pad, im_fixed_pad_grey = self.pad_images(im_fixed, width, height, self.mode_intensity_fixed)
+        mode_fixed = sum(self.mode_intensity_fixed) / len(self.mode_intensity_fixed)
 
         # pad the moving image
-        imMoving_pad, imMoving_pad_G = self.pad_images(imMoving, width, height, self.mode_Moving)
-        mMoving = sum(self.mode_Moving) / len(self.mode_Moving)
+        im_moving_pad, im_moving_pad_grey = self.pad_images(im_moving, width, height, self.mode_intensity_moving)
+        mode_moving = sum(self.mode_intensity_moving) / len(self.mode_intensity_moving)
 
-        # complement if necessary
-        if mMoving < 25 and mFixed > 25:  # complement if the image is brightfield
-            imMoving_pad_G = 255 - imMoving_pad_G
-        if mFixed < 25 and mMoving > 25:
-            imFixed_pad_G = 255 - imFixed_pad_G
+        # if one image is brightfield and the other is fluorescent, complement one image so the overlay is clear
+        if mode_moving < 25 < mode_fixed:
+            im_moving_pad_grey = 255 - im_moving_pad_grey
+        if mode_fixed < 25 < mode_moving:
+            im_fixed_pad_grey = 255 - im_fixed_pad_grey
 
         # make the combined overlay image
-        combined_array = np.stack((imMoving_pad_G, imFixed_pad_G, imMoving_pad_G), axis=-1)  # (H, W, 3)
-        imOverlay = QImage(combined_array.data, width, height, 3 * width, QImage.Format_RGB888)
-        imOverlay = QPixmap.fromImage(imOverlay)
+        combined_array = np.stack((im_moving_pad_grey, im_fixed_pad_grey, im_moving_pad_grey), axis=-1)  # (H, W, 3)
+        im_overlay = QImage(combined_array.data, width, height, 3 * width, QImage.Format_RGB888)
+        im_overlay = QPixmap.fromImage(im_overlay)
 
-        return imOverlay
+        return im_overlay
 
     def pixmap_to_array(self, pixmap):
         """Convert a QPixmap to a numpy array.
@@ -1929,23 +1939,23 @@ class MainWindow(QMainWindow):
 
         self.define_edit_frame()
         if self.current_index == self.fiducials_tab or self.current_index == self.overlay_tab:  # fiducials tab
-            self.editWhichImage = not self.editWhichImage
+            self.edit_which_image = not self.edit_which_image
             self.update_image_view()
-            self.editWhichImage = not self.editWhichImage
+            self.edit_which_image = not self.edit_which_image
             self.update_image_view()
         elif self.current_index == self.apply_to_data_tab:  # apply to coordinates tab
             self.update_image_view()
         elif self.current_index == self.elastic_reg_tab:
             if self.view_squares == 1:
-                self.imOverlayE = []
-                self.editWhichImage = 1
+                self.im_overlay_reg_elastic = []
+                self.edit_which_image = 1
                 self.update_image_view()
-                self.editWhichImage = 0
+                self.edit_which_image = 0
                 self.update_image_view()
             else:
-                self.editWhichImage = not self.editWhichImage
+                self.edit_which_image = not self.edit_which_image
                 self.update_image_view()
-                self.editWhichImage = not self.editWhichImage
+                self.edit_which_image = not self.edit_which_image
                 self.update_image_view()
 
     def update_image_view(self):
@@ -1963,10 +1973,10 @@ class MainWindow(QMainWindow):
         define_pixmap = 1
         self.define_edit_frame(define_pixmap)
         if self.current_index in {self.fiducials_tab, self.overlay_tab, self.elastic_reg_tab}:
-            self.fiducial_pts = np.delete(self.fiducial_pts, 0, axis=0)  # remove the first point
+            self.fiducial_pts_to_plot = np.delete(self.fiducial_pts_to_plot, 0, axis=0)  # remove the first point
         elif self.current_index == self.apply_to_data_tab:
             # randomly subsample the coordinate points
-            self.fiducial_pts = self.fiducial_pts[self.sampled_indices]
+            self.fiducial_pts_to_plot = self.fiducial_pts_to_plot[self.sampled_indices]
         else:
             return
 
@@ -1980,20 +1990,20 @@ class MainWindow(QMainWindow):
                 self.pixmap = self.adjust_brightness_contrast(self.pixmap, self.contrast, self.brightness)
 
             size_pt = max(
-                [int(np.ceil(max([self.pixmap.width(), self.pixmap.height()]) / 1000 / zoom_ratio * self.rad)), 1])
+                [int(np.ceil(max([self.pixmap.width(), self.pixmap.height()]) / 1000 / zoom_ratio * self.pts_size)), 1])
             if self.current_index == self.elastic_reg_tab and self.view_squares > 0:
                 if self.view_squares == 1:
                     self.pixmap = self.add_squares_to_image(self.pixmap)
                 elif self.view_squares == 2:
                     self.pixmap = self.add_square_to_image(self.pixmap, self.xySquare)
             else:
-                self.pixmap = self.add_points_to_image(self.pixmap, self.fiducial_pts, size_pt, self.ptsColor)
+                self.pixmap = self.add_points_to_image(self.pixmap, self.fiducial_pts_to_plot, size_pt, self.pts_color)
 
             if self.current_index == self.fiducials_tab:  # if in fiducials tab, overlay the potential deletion point if required
                 # update the fiducial point count
-                count = self.ptsMoving.shape[0] - 1
+                count = self.pts_moving.shape[0] - 1
                 self.ui.FiducialFrameHeaderText.setText(f"Fiducial Point View (# Pairs : {count})")
-                if count >= self.minFidPts:
+                if count >= self.MIN_NUM_FIDUCIAL_PTS:
                     self.ui.AttemptICPRegistrationButton.setVisible(True)
                     self.ui.AttemptICPRegistrationButton.setEnabled(True)
                     self.ui.AttemptICPRegistrationButton.setStyleSheet(self.style_button_green)
@@ -2004,20 +2014,20 @@ class MainWindow(QMainWindow):
                 # highlight the point to be deleted, if applicable
                 if self.delete_mode_active and self.potential_deletion != -5:
                     size_pt = size_pt * 2
-                    color = QColor(round(self.ptsColor.red() * 0.5), round(self.ptsColor.green() * 0.5),
-                                   round(self.ptsColor.blue() * 0.5))
-                    self.pixmap = self.add_points_to_image(self.pixmap, [self.fiducial_pts[self.potential_deletion]],
+                    color = QColor(round(self.pts_color.red() * 0.5), round(self.pts_color.green() * 0.5),
+                                   round(self.pts_color.blue() * 0.5))
+                    self.pixmap = self.add_points_to_image(self.pixmap, [self.fiducial_pts_to_plot[self.potential_deletion]],
                                                            size_pt, color)
             elif self.current_index == self.overlay_tab or (
                     self.current_index == self.elastic_reg_tab and self.view_squares == 0):  # if in overlay tab, also overlay the fiducial points of the moving image
-                self.rad = self.rad_tabOb
+                self.pts_size = self.pts_size_overlay_tab_moving
                 size_pt = max(
-                    [int(np.ceil(max([self.pixmap.width(), self.pixmap.height()]) / 1000 / zoom_ratio * self.rad)), 1])
-                if self.current_index == self.overlay_tab and self.editWhichImage == 0:
-                    self.fiducial_pts2 = np.delete(self.fiducial_pts2, 0, axis=0)
+                    [int(np.ceil(max([self.pixmap.width(), self.pixmap.height()]) / 1000 / zoom_ratio * self.pts_size)), 1])
+                if self.current_index == self.overlay_tab and self.edit_which_image == 0:
+                    self.more_fiducial_pts_to_plot = np.delete(self.more_fiducial_pts_to_plot, 0, axis=0)
 
-                color = self.ptsColor_tabOb
-                self.pixmap = self.add_points_to_image(self.pixmap, self.fiducial_pts2, size_pt, color)
+                color = self.pts_color_overlay_tab_moving
+                self.pixmap = self.add_points_to_image(self.pixmap, self.more_fiducial_pts_to_plot, size_pt, color)
 
             # Create a transformation matrix to apply the view settings flip, rotation, and zoom
             transform = QTransform()
@@ -2039,7 +2049,7 @@ class MainWindow(QMainWindow):
             self.label.move(int(new_x), int(new_y))
 
     def _apply_flip_and_rotation(self):
-        """Updates image flip and rotate variables when the corresponding key is pressed.
+        """Updates image flip and rotate image view variables when the corresponding key is pressed.
         Used in multiple tabs
         Args:
             none, draws from 'self'
@@ -2227,7 +2237,7 @@ class MainWindow(QMainWindow):
             return
 
         if self.add_fiducial_active:
-            self.editWhichImage = self.editWhichFid
+            self.edit_which_image = self.edit_which_fid
         self.define_edit_frame()
 
         # figure out which image to edit
@@ -2245,16 +2255,16 @@ class MainWindow(QMainWindow):
         if event.button() == Qt.LeftButton:
             if in_left_x and in_left_y:
                 if self.current_index != self.apply_to_data_tab:
-                    self.editWhichImage = 0
+                    self.edit_which_image = 0
             elif in_right_x and in_right_y:
                 if self.current_index != self.apply_to_data_tab:
-                    self.editWhichImage = 1
+                    self.edit_which_image = 1
             else:
                 return
 
             # Get the mouse position relative to the target label
             self.define_edit_frame()
-            self.panning = 1
+            self.panning_mode_active = 1
             self.last_mouse_position = event.globalPosition()  # Store the initial mouse position
 
     def mouseMoveEvent(self, event):
@@ -2266,8 +2276,8 @@ class MainWindow(QMainWindow):
             no variables output, but if panning mode is active the image view will change
         """
         # if panning
-        if self.panning != 0:
-            self.panning += self.panning  # the mouse was clicked and now moved
+        if self.panning_mode_active != 0:
+            self.panning_mode_active += self.panning_mode_active  # the mouse was clicked and now moved
             delta = event.globalPosition() - self.last_mouse_position
             self.last_mouse_position = event.globalPosition()
 
@@ -2313,10 +2323,10 @@ class MainWindow(QMainWindow):
         """
 
         if event.button() == Qt.LeftButton:
-            if self.panning < 3 and self.current_index == self.fiducials_tab and (
+            if self.panning_mode_active < 3 and self.current_index == self.fiducials_tab and (
                     self.add_fiducial_active or self.delete_mode_active):
                 if self.add_fiducial_active:
-                    self.editWhichImage = self.editWhichFid
+                    self.edit_which_image = self.edit_which_fid
                 self.define_edit_frame()
 
                 # figure out which image
@@ -2332,16 +2342,16 @@ class MainWindow(QMainWindow):
                 # right-click to add or delete fiducials
                 local_pos = self.label.mapFromGlobal(event.globalPosition().toPoint())
                 if self.add_fiducial_active:  # add a fiducial
-                    if in_left_x and in_left_y and self.editWhichFid == 0:
+                    if in_left_x and in_left_y and self.edit_which_fid == 0:
                         self.handle_fiducial_click(local_pos.x(), local_pos.y(), event)
-                    elif in_right_x and in_right_y and self.editWhichFid == 1:
+                    elif in_right_x and in_right_y and self.edit_which_fid == 1:
                         self.handle_fiducial_click(local_pos.x(), local_pos.y(), event)
                 elif self.delete_mode_active and self.current_index == self.fiducials_tab:
                     cursor_pos = self.mapFromGlobal(event.globalPosition().toPoint())
                     self.handle_fiducial_click(cursor_pos.x(), cursor_pos.y(), event)
                 else:
                     return
-        self.panning = 0
+        self.panning_mode_active = 0
 
     def wheelEvent(self, event):
         """Handle mouse wheel events for zooming.
@@ -2372,11 +2382,11 @@ class MainWindow(QMainWindow):
         # apply the zoom to the left image frame
         if in_left_x and in_left_y:
             if self.current_index != self.apply_to_data_tab:
-                self.editWhichImage = 0
+                self.edit_which_image = 0
         # apply the zoom to the right image frame
         elif in_right_x and in_right_y:
             if self.current_index != self.apply_to_data_tab:
-                self.editWhichImage = 1
+                self.edit_which_image = 1
         # ignore the wheel event
         else:
             return
@@ -2511,7 +2521,7 @@ class MainWindow(QMainWindow):
         # set the action to apply to the left or right image frame
         if self.current_index != self.apply_to_data_tab:
             ff = [0, 1]
-            self.editWhichImage = ff[self.shift_key_active]
+            self.edit_which_image = ff[self.shift_key_active]
         # call the correct function depending on which key was pressed
         if self.which_key_press == 1:
             self.rotate_label_ui()
@@ -2562,7 +2572,7 @@ class MainWindow(QMainWindow):
             image = (image * 255).astype(np.uint8)
 
         # calculate the maximum intensity of the image
-        max_intensity = np.max(image)
+        image_max_intensity = np.max(image)
 
         # calculate the mode intensity of each channel of the image
         r = mode(image[..., 0].flatten(), axis=None).mode
@@ -2573,7 +2583,7 @@ class MainWindow(QMainWindow):
         # convert the image to a pixmap
         pixmap = self.array_to_pixmap(image)
 
-        return pixmap, max_intensity, mode_intensity_rgb
+        return pixmap, image_max_intensity, mode_intensity_rgb
 
     def save_screenshot(self):
         """Save a screenshot of the app in the pre-defined job folder when the user presses 's'.
@@ -2583,7 +2593,7 @@ class MainWindow(QMainWindow):
         Returns:
             No variables returned, a .png screenshot of the app will be saved in the job folder.
         """
-        if self.jobFolder == "":
+        if self.job_folder == "":
             print("no screenshot for you")
             # return
 
@@ -2764,8 +2774,8 @@ class MainWindow(QMainWindow):
 
         # Pad the image to the size of the fixed image
         border = 0  # add border around fixed image
-        width = max([self.imFixed0.width(), pixmap.width()])
-        height = max([self.imFixed0.height(), pixmap.height()])
+        width = max([self.im_fixed.width(), pixmap.width()])
+        height = max([self.im_fixed.height(), pixmap.height()])
         szz = (width, height)  # (width, height)
         array, array_g = self.pad_images(pixmap, width, height, mode_vals, border)
 
@@ -2773,8 +2783,8 @@ class MainWindow(QMainWindow):
         fv1, fv2, fv3 = int(mode_vals[0]), int(mode_vals[1]), int(mode_vals[2])
         transformed_array = cv2.warpAffine(array, self.tform[:2, :], szz, flags=cv2.INTER_LINEAR,
                                            borderMode=cv2.BORDER_CONSTANT, borderValue=[fv1, fv2, fv3])
-        if transformed_array.shape[1] > self.imFixed0.height() or transformed_array.shape[0] > self.imFixed0.width():
-            transformed_array = transformed_array[:self.imFixed0.height(), :self.imFixed0.width()]
+        if transformed_array.shape[1] > self.im_fixed.height() or transformed_array.shape[0] > self.im_fixed.width():
+            transformed_array = transformed_array[:self.im_fixed.height(), :self.im_fixed.width()]
         transformed_array = np.ascontiguousarray(transformed_array)
 
         # Convert back to pixmap
@@ -2795,7 +2805,7 @@ class MainWindow(QMainWindow):
             no variables output, but will update the first table of tab 1.
         """
         # if the fixed image is already defined, confirm that the user wants to replace it
-        if self.nmFixed:
+        if self.fixed_image_filename:
             msg_box = QtWidgets.QMessageBox()  # Create a message box
             msg_box.setWindowTitle("Fixed Image Already Defined")  # Set the window title
             msg_box.setText("Would you like to Replace the Current Fixed Image?")  # Set the message text
@@ -2814,7 +2824,7 @@ class MainWindow(QMainWindow):
         # extract the filename selected by the user and update table 1 in the app
         file_path, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Select Fixed Image File", "")
         if file_path:  # if a file is selected
-            self.pthFixed, self.nmFixed = os.path.split(file_path)
+            self.fixed_image_folder, self.fixed_image_filename = os.path.split(file_path)
             # file_path = os.path.join(self.pthFixed, self.nmFixed)
             if self.is_file_an_image(file_path):
                 self.populate_fixed_table()
@@ -2830,16 +2840,16 @@ class MainWindow(QMainWindow):
         # extract the filename selected by the user and update table 2 in the app
         file_path, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Select Moving Image File", "")
         if file_path:  # If a file is selected
-            # self.pthMoving, self.nmMoving = os.path.split(filename)
-            self.scaleMoving = ""
+            self.moving_image_folder, self.moving_image_filename = os.path.split(file_path)
+            self.scale_moving_image = ""
             # file_path = os.path.join(self.pthMoving, self.nmMoving)
             if self.is_file_an_image(file_path):
 
                 if len(self.moving_images_list) == 0:
-                    self.moving_images_list = np.array([[self.nmMoving, self.scaleMoving, self.pthMoving]],
+                    self.moving_images_list = np.array([[self.moving_image_filename, self.scale_moving_image, self.moving_image_folder]],
                                                        dtype=object)
                 else:
-                    add_to_list = np.array([self.nmMoving, self.scaleMoving, self.pthMoving])
+                    add_to_list = np.array([self.moving_image_filename, self.scale_moving_image, self.moving_image_folder])
                     self.moving_images_list = np.vstack([self.moving_images_list, add_to_list])
                 self.populate_moving_table()
 
@@ -2851,9 +2861,8 @@ class MainWindow(QMainWindow):
         Returns:
             no variables output, but will update the third table of tab 1.
         """
-
         # if the project folder is already defined, confirm that the user wants to replace it
-        if self.jobFolder:
+        if self.job_folder:
             msg_box = QtWidgets.QMessageBox()  # Create a message box
             msg_box.setWindowTitle("Job Folder Already Defined")  # Set the window title
             msg_box.setText("Would you like to Replace the Current Job Folder?")  # Set the message text
@@ -2872,7 +2881,7 @@ class MainWindow(QMainWindow):
         # extract the folder selected by the user and update table 3 in the app
         folder = QFileDialog.getExistingDirectory(self, "Select Job Folder", "")
         if folder:  # If a file is selected
-            self.jobFolder = folder
+            self.job_folder = folder
             self.populate_project_table()
 
     def populate_fixed_table(self):
@@ -2885,20 +2894,20 @@ class MainWindow(QMainWindow):
             no variables output, but will update the first table of tab 1.
         """
         # Populate the first row with the variables' values
-        self.ui.fixedImageTableWidget.setItem(0, 0, QtWidgets.QTableWidgetItem(f"{self.nmFixed}  "))
+        self.ui.fixedImageTableWidget.setItem(0, 0, QtWidgets.QTableWidgetItem(f"{self.fixed_image_filename}  "))
         self.ui.fixedImageTableWidget.setItem(0, 1, QtWidgets.QTableWidgetItem(
-            f"{self.ScaleFixed}  "))  # Convert scale to string if necessary
-        self.ui.fixedImageTableWidget.setItem(0, 2, QtWidgets.QTableWidgetItem(f"{self.pthFixed}  "))
+            f"{self.scale_fixed_image}  "))  # Convert scale to string if necessary
+        self.ui.fixedImageTableWidget.setItem(0, 2, QtWidgets.QTableWidgetItem(f"{self.fixed_image_folder}  "))
 
         # allow the user to set the job folder to the fixed image folder if the fixed image folder is defined
-        if len(self.pthFixed) > 0:
+        if len(self.fixed_image_folder) > 0:
             self.ui.JobFolderCheckBox.setVisible(True)
         else:
             self.ui.JobFolderCheckBox.setVisible(False)
 
         # turn the frame green if all fixed image inputs are defined correctly
         self.check_if_tables_are_complete_import_project_tab()
-        if self.nmFixed:
+        if self.fixed_image_filename:
             self.ui.fixedImageTableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 
     def populate_moving_table(self):
@@ -2940,12 +2949,12 @@ class MainWindow(QMainWindow):
         """
         # update the results name and job folder in the table
         self.ui.setJobTableWidget.setRowCount(1)
-        self.ui.setJobTableWidget.setItem(0, 0, QtWidgets.QTableWidgetItem(f"{self.ResultsName}  "))
-        self.ui.setJobTableWidget.setItem(0, 1, QtWidgets.QTableWidgetItem(f"{self.jobFolder}  "))
+        self.ui.setJobTableWidget.setItem(0, 0, QtWidgets.QTableWidgetItem(f"{self.results_name}  "))
+        self.ui.setJobTableWidget.setItem(0, 1, QtWidgets.QTableWidgetItem(f"{self.job_folder}  "))
 
         # turn the frame green if all inputs are defined correctly
         self.check_if_tables_are_complete_import_project_tab()
-        if self.ResultsName:
+        if self.results_name:
             self.ui.setJobTableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 
     def check_if_tables_are_complete_import_project_tab(self):
@@ -2960,9 +2969,9 @@ class MainWindow(QMainWindow):
             enabled, allowing the user to advance through the app.
         """
         # is the fixed image table complete
-        fixed_frame_done = int(len(self.nmFixed) > 0) + int(len(self.ScaleFixed) > 0) + int(len(self.pthFixed) > 0)
+        fixed_frame_done = int(len(self.fixed_image_filename) > 0) + int(len(self.scale_fixed_image) > 0) + int(len(self.fixed_image_folder) > 0)
         # is the job folder table complete
-        job_frame_done = int(len(self.jobFolder) > 0) + int(len(self.ResultsName) > 0)
+        job_frame_done = int(len(self.job_folder) > 0) + int(len(self.results_name) > 0)
         # is the moving image table complete
         moving_frame_done = 1  # complete
         if len(self.moving_images_list) == 0:
@@ -3034,9 +3043,9 @@ class MainWindow(QMainWindow):
         # define the first 6 lines of the csv file
         line1 = ['', 'filename', 'scale factor', 'path']
         line2 = ['Fixed image', '', '', '']
-        line3 = ['', self.nmFixed, self.ScaleFixed, self.pthFixed]
+        line3 = ['', self.fixed_image_filename, self.scale_fixed_image, self.fixed_image_folder]
         line4 = ['Output folder', '', '', '']
-        line5 = ['', self.ResultsName, '', self.jobFolder]
+        line5 = ['', self.results_name, '', self.job_folder]
         line6 = ['Moving images', '', '', '']
         all_lines_concat = np.row_stack([line1, line2, line3, line4, line5, line6])
 
@@ -3047,7 +3056,7 @@ class MainWindow(QMainWindow):
             all_lines_concat = np.row_stack([all_lines_concat, tmp])
 
         # make sure the output folder exists
-        output_folder = os.path.join(self.jobFolder, self.ResultsName)
+        output_folder = os.path.join(self.job_folder, self.results_name)
         if not os.path.exists(output_folder):
             os.makedirs(output_folder)
 
@@ -3067,15 +3076,15 @@ class MainWindow(QMainWindow):
         X = pd.read_csv(file_path, header=None).values
 
         # Get location and name of fixed image
-        self.nmFixed = X[2, 1]
-        self.ScaleFixed = X[2, 2]
-        self.pthFixed = X[2, 3]
+        self.fixed_image_filename = X[2, 1]
+        self.scale_fixed_image = X[2, 2]
+        self.fixed_image_folder = X[2, 3]
 
         # Get location of output folder
-        self.ResultsName = X[4, 1]
-        self.jobFolder = X[4, 3]
-        if not os.path.isdir(self.jobFolder):
-            os.makedirs(self.jobFolder)
+        self.results_name = X[4, 1]
+        self.job_folder = X[4, 3]
+        if not os.path.isdir(self.job_folder):
+            os.makedirs(self.job_folder)
 
         # Get a list of all moving images
         mvims = np.array([["", "", ""]], dtype=object)
@@ -3098,7 +3107,7 @@ class MainWindow(QMainWindow):
             no variables output, but updates the App view
         """
         today = datetime.now()
-        self.ResultsName = "Registration_results_" + today.strftime("%m_%d_%Y")
+        self.results_name = "Registration_results_" + today.strftime("%m_%d_%Y")
 
     def doubleclick_fixed_table(self, row, column):
         """Enable editing of the fixed image variables in table 1
@@ -3111,7 +3120,7 @@ class MainWindow(QMainWindow):
         """
 
         # if the table is populated and table edit mode is not already active
-        if len(self.nmFixed) > 0 and self.editTableActive == 0:
+        if len(self.fixed_image_filename) > 0 and self.edit_table_active == 0:
 
             # if editing the scale
             if column == 1:
@@ -3122,7 +3131,7 @@ class MainWindow(QMainWindow):
                     self.ui.fixedImageTableWidget.editItem(item)  # Put the cell into edit mode
             elif column == 0 or column == 2:
                 # turn on edit table mode
-                self.editTableActive = 1  # fixed image
+                self.edit_table_active = 1  # fixed image
                 self.enter_edit_table()
 
                 # make delete visible
@@ -3140,7 +3149,7 @@ class MainWindow(QMainWindow):
         """
 
         # if the table is populated and table edit mode is not already active
-        if len(self.moving_images_list) > 0 and self.editTableActive == 0:
+        if len(self.moving_images_list) > 0 and self.edit_table_active == 0:
 
             # if editing the scale
             if column == 1:
@@ -3151,7 +3160,7 @@ class MainWindow(QMainWindow):
                     self.ui.movingImageTableWidget.editItem(item)  # Put the cell into edit mode
             elif column == 0 or column == 2:
                 # turn on edit table mode
-                self.editTableActive = 2  # moving image
+                self.edit_table_active = 2  # moving image
                 self.enter_edit_table()
                 self.num_moving_delete = row
 
@@ -3170,7 +3179,7 @@ class MainWindow(QMainWindow):
         """
 
         # if table edit mode is not already active
-        if self.editTableActive == 0:
+        if self.edit_table_active == 0:
 
             # if editing the job name
             if column == 0:
@@ -3195,7 +3204,7 @@ class MainWindow(QMainWindow):
             # Check if the string is a number
             try:
                 float(new_value)
-                self.ScaleFixed = new_value
+                self.scale_fixed_image = new_value
             except:
                 text = "The entered value is not a number. Please enter a number"
                 self.show_error_message(text)
@@ -3254,7 +3263,7 @@ class MainWindow(QMainWindow):
             text = f"The entered value {new_value} is not a valid folder name. Please try again."
             self.show_error_message(text)
         else:
-            self.ResultsName = new_value.strip()
+            self.results_name = new_value.strip()
         self.populate_project_table()
 
     def enter_edit_table(self):
@@ -3276,9 +3285,9 @@ class MainWindow(QMainWindow):
         self.ui.NavigationButton.setStyleSheet(self.inactive_button_style)
         self.ui.KeyboardShortcutsButton.setEnabled(False)
         self.ui.KeyboardShortcutsButton.setStyleSheet(self.inactive_button_style)
-        if self.editTableActive == 1:
+        if self.edit_table_active == 1:
             self.ui.DefineMovingImageFrame.setEnabled(False)
-        elif self.editTableActive == 2:
+        elif self.edit_table_active == 2:
             self.ui.DefineFixedImageFrame.setEnabled(False)
 
     def exit_edit_table(self):
@@ -3291,7 +3300,7 @@ class MainWindow(QMainWindow):
         """
 
         # turn off edit table active
-        self.editTableActive = 0
+        self.edit_table_active = 0
 
         # make disabled buttons enabled again
         self.ui.DefineFixedImageFrame.setEnabled(True)
@@ -3333,14 +3342,14 @@ class MainWindow(QMainWindow):
         """
 
         # delete the body of the table
-        self.nmFixed = ""
-        self.pthFixed = ""
-        self.ScaleFixed = ""
+        self.fixed_image_filename = ""
+        self.fixed_image_folder = ""
+        self.scale_fixed_image = ""
         # update the table view and remove the job folder if it was set to the fixed image folder
         self.populate_fixed_table()
         if self.ui.JobFolderCheckBox.isChecked():
             self.ui.JobFolderCheckBox.setChecked(False)
-            self.jobFolder = ""
+            self.job_folder = ""
             self.populate_project_table()
         self.exit_edit_table()
 
@@ -3383,10 +3392,10 @@ class MainWindow(QMainWindow):
         """
         # set the job folder to the fixed image folder
         if state > 0:
-            self.jobFolder = self.pthFixed
+            self.job_folder = self.fixed_image_folder
         # wipe the current job folder so the user can choose a new folder
         else:
-            self.jobFolder = ""
+            self.job_folder = ""
         self.populate_project_table()
 
     def find_closest_row(self, pts, clicked_x, clicked_y):
@@ -3420,9 +3429,9 @@ class MainWindow(QMainWindow):
         """
         # highlight the frame to add a fiducial point to
         if self.add_fiducial_active:
-            self.editWhichImage = self.editWhichFid
+            self.edit_which_image = self.edit_which_fid
             self.define_edit_frame()
-            if self.editWhichImage == 0:  # left image
+            if self.edit_which_image == 0:  # left image
                 self.border_left.setStyleSheet(self.active_label_style)
                 tmp = self.frame_left.geometry()
                 self.border_left.setGeometry(tmp.x() - 5, tmp.y() - 5, tmp.width() + 10, tmp.height() + 10)
@@ -3479,8 +3488,8 @@ class MainWindow(QMainWindow):
             self.ui.AddFiducialButton.setText("Quit")
 
             # start by selecting a point on the fixed image
-            self.editWhichImage = 0
-            self.editWhichFid = 0
+            self.edit_which_image = 0
+            self.edit_which_fid = 0
             self.highlight_current_frame()
             crosshair_cursor = self.create_large_crosshair_cursor()
             self.setCursor(crosshair_cursor)
@@ -3490,9 +3499,9 @@ class MainWindow(QMainWindow):
             self.setCursor(Qt.ArrowCursor)
 
             # remove point from fixed image list if necessary
-            if self.editWhichFid == 1:  # moving image
-                self.ptsFixed = np.delete(self.ptsFixed, -1, axis=0)
-                self.editWhichImage = 0
+            if self.edit_which_fid == 1:  # moving image
+                self.pts_fixed = np.delete(self.pts_fixed, -1, axis=0)
+                self.edit_which_image = 0
                 self.highlight_current_frame()
                 self.update_image_view()
 
@@ -3522,7 +3531,7 @@ class MainWindow(QMainWindow):
         pixmap.fill(Qt.transparent)  # Transparent background
 
         # Extract RGB values from self.ptColor
-        r, g, b = self.ptsColor_tabF.red(), self.ptsColor_tabF.green(), self.ptsColor_tabF.blue()
+        r, g, b = self.pts_color_fiducial_tab.red(), self.pts_color_fiducial_tab.green(), self.pts_color_fiducial_tab.blue()
         ff = 0.6
         crosshair_color = QColor(int(r * ff), int(g * ff), int(b * ff))
 
@@ -3618,8 +3627,8 @@ class MainWindow(QMainWindow):
         if response == QtWidgets.QMessageBox.Cancel:
             return
         else:
-            self.ptsFixed = np.array([[0, 0]], dtype=np.float64)
-            self.ptsMoving = np.array([[0, 0]], dtype=np.float64)
+            self.pts_fixed = np.array([[0, 0]], dtype=np.float64)
+            self.pts_moving = np.array([[0, 0]], dtype=np.float64)
             self.update_both_images()
 
     def call_change_fiducial_color0(self):
@@ -3630,7 +3639,7 @@ class MainWindow(QMainWindow):
         Returns:
             no variables output, but app view changes
         """
-        self.whichColor = 0  # color 1
+        self.edit_which_pt_color = 0  # color 1
         self.change_fiducial_color()
 
     def call_change_fiducial_color1(self):
@@ -3641,7 +3650,7 @@ class MainWindow(QMainWindow):
         Returns:
             no variables output, but app view changes
         """
-        self.whichColor = 1  # color 2
+        self.edit_which_pt_color = 1  # color 2
         self.change_fiducial_color()
 
     def handle_fiducial_click(self, x, y, event):
@@ -3655,19 +3664,19 @@ class MainWindow(QMainWindow):
             no variables output, but app view changes
         """
         if self.add_fiducial_active:
-            self.editWhichImage = self.editWhichFid
-            if self.editWhichImage == 0:  # Fixed image
+            self.edit_which_image = self.edit_which_fid
+            if self.edit_which_image == 0:  # Fixed image
                 zz = self.fixed_zoom_scale / self.fixed_zoom_default
-                image_W = self.imFixed0.width()  # width of image in pixels
-                image_H = self.imFixed0.height()  # height of image in pixels
+                image_W = self.im_fixed.width()  # width of image in pixels
+                image_H = self.im_fixed.height()  # height of image in pixels
                 frame_size_W = self.ui.FixedImageDisplayFrame.width()  # round(image_W / scale)
                 frame_size_H = self.ui.FixedImageDisplayFrame.height()  # round(image_H / scale)
                 flip = self.fixed_flip_state
                 ang = self.fixed_rotation_angle
             else:  # Moving image
                 zz = self.moving_zoom_scale / self.moving_zoom_default
-                image_W = self.imMoving0.width()  # width of image in pixels
-                image_H = self.imMoving0.height()  # height of image in pixels
+                image_W = self.im_moving.width()  # width of image in pixels
+                image_H = self.im_moving.height()  # height of image in pixels
                 frame_size_W = self.ui.MovingImageDisplayFrame.width()  # round(image_W / scale)
                 frame_size_H = self.ui.MovingImageDisplayFrame.height()  # round(image_H / scale)
                 flip = self.moving_flip_state
@@ -3699,16 +3708,16 @@ class MainWindow(QMainWindow):
 
             # Add coordinates to the appropriate list
             add_to_list = np.array([image_x, image_y])
-            if self.editWhichImage == 0:  # Fixed image
-                self.ptsFixed = np.vstack([self.ptsFixed, add_to_list])
+            if self.edit_which_image == 0:  # Fixed image
+                self.pts_fixed = np.vstack([self.pts_fixed, add_to_list])
             else:  # Moving image
-                self.ptsMoving = np.vstack([self.ptsMoving, add_to_list])
+                self.pts_moving = np.vstack([self.pts_moving, add_to_list])
 
             # plot
             self.update_image_view()
 
             # take the next step
-            self.editWhichFid = not self.editWhichFid
+            self.edit_which_fid = not self.edit_which_fid
             self.highlight_current_frame()
 
         elif self.delete_mode_active:
@@ -3723,18 +3732,18 @@ class MainWindow(QMainWindow):
 
             if in_left_x and in_left_y:
                 if self.current_index != self.apply_to_data_tab:
-                    self.editWhichImage = 0
+                    self.edit_which_image = 0
             elif in_right_x and in_right_y:
                 if self.current_index != self.apply_to_data_tab:
-                    self.editWhichImage = 1
+                    self.edit_which_image = 1
             else:
                 return
 
             if in_left_x and in_left_y:
                 image_type = 0  # fixed image
                 zz = self.fixed_zoom_scale / self.fixed_zoom_default
-                image_W = self.imFixed0.width()  # width of image in pixels
-                image_H = self.imFixed0.height()  # height of image in pixels
+                image_W = self.im_fixed.width()  # width of image in pixels
+                image_H = self.im_fixed.height()  # height of image in pixels
                 frame_size_W = self.ui.FixedImageDisplayFrame.width()  # round(image_W / scale)
                 frame_size_H = self.ui.FixedImageDisplayFrame.height()  # round(image_H / scale)
                 flip = self.fixed_flip_state
@@ -3742,12 +3751,12 @@ class MainWindow(QMainWindow):
                 local_pos = self.fixed_image_label.mapFromGlobal(event.globalPosition().toPoint())
                 x = local_pos.x()
                 y = local_pos.y()
-                pts = self.ptsFixed
+                pts = self.pts_fixed
             elif in_right_x and in_right_y:
                 image_type = 1  # moving image
                 zz = self.moving_zoom_scale / self.moving_zoom_default
-                image_W = self.imMoving0.width()  # width of image in pixels
-                image_H = self.imMoving0.height()  # height of image in pixels
+                image_W = self.im_moving.width()  # width of image in pixels
+                image_H = self.im_moving.height()  # height of image in pixels
                 frame_size_W = self.ui.MovingImageDisplayFrame.width()  # round(image_W / scale)
                 frame_size_H = self.ui.MovingImageDisplayFrame.height()  # round(image_H / scale)
                 flip = self.moving_flip_state
@@ -3755,7 +3764,7 @@ class MainWindow(QMainWindow):
                 local_pos = self.moving_image_label.mapFromGlobal(event.globalPosition().toPoint())
                 x = local_pos.x()
                 y = local_pos.y()
-                pts = self.ptsMoving
+                pts = self.pts_moving
             else:
                 print("not inside a frame")
                 return
@@ -3812,8 +3821,8 @@ class MainWindow(QMainWindow):
             response = msg_box.exec()
             if response == QtWidgets.QMessageBox.Yes:
                 # remove the selected fiducial then return to normal mode
-                self.ptsFixed = np.delete(self.ptsFixed, self.potential_deletion + 1, axis=0)
-                self.ptsMoving = np.delete(self.ptsMoving, self.potential_deletion + 1, axis=0)
+                self.pts_fixed = np.delete(self.pts_fixed, self.potential_deletion + 1, axis=0)
+                self.pts_moving = np.delete(self.pts_moving, self.potential_deletion + 1, axis=0)
 
             # delete the point or keep it, then replot the images
             self.potential_deletion = -5
@@ -3839,14 +3848,12 @@ class MainWindow(QMainWindow):
         self.ui.OldMovingImagesComboBox.addItem("Select")
         self.num_moving_delete = [[], []]
 
-        # add items from column 1 of self.movingIMS
+        # add items from column 1 of self.moving_images_list
         for index, row in enumerate(self.moving_images_list):
             if len(row) > 1:  # Ensure the row has at least two columns
                 filename = row[0]  # Get the filename from column 1
-                filename_out = filename[:filename.rfind(
-                    '.')] + ".pkl"  # dot_index = filename.find(".") filename_out = "moving_image_" + filename[:dot_index] + ".png"
-                filepath = os.path.join(self.jobFolder, self.ResultsName, "Registration transforms",
-                                        filename_out)  # os.path.join(self.jobFolder, self.ResultsName, "aligned_stack", filename_out)
+                filename_out = filename[:filename.rfind('.')] + ".pkl"
+                filepath = os.path.join(self.job_folder, self.results_name, "Registration transforms", filename_out)
 
                 if os.path.isfile(filepath):  # Check if the file exists
                     self.ui.OldMovingImagesComboBox.addItem(filename)  # Add to OldMovingImagesComboBox
@@ -3910,10 +3917,10 @@ class MainWindow(QMainWindow):
         row = row[current_index_in_table - 1]
 
         # define the moving image parameters
-        self.nmMoving = self.moving_images_list[row][0]
-        self.scaleMoving = self.moving_images_list[row][1]
-        self.pthMoving = self.moving_images_list[row][2]
-        file_path = os.path.join(self.pthMoving, self.nmMoving)
+        self.moving_image_filename = self.moving_images_list[row][0]
+        self.scale_moving_image = self.moving_images_list[row][1]
+        self.moving_image_folder = self.moving_images_list[row][2]
+        file_path = os.path.join(self.moving_image_folder, self.moving_image_filename)
         self.import_moving_image(file_path)
 
     def load_old_moving_image(self):
@@ -3930,10 +3937,10 @@ class MainWindow(QMainWindow):
         row = row[current_index_in_table - 1]
 
         # define the moving image parameters
-        self.nmMoving = self.moving_images_list[row][0]
-        self.scaleMoving = self.moving_images_list[row][1]
-        self.pthMoving = self.moving_images_list[row][2]
-        file_path = os.path.join(self.pthMoving, self.nmMoving)
+        self.moving_image_filename = self.moving_images_list[row][0]
+        self.scale_moving_image = self.moving_images_list[row][1]
+        self.moving_image_folder = self.moving_images_list[row][2]
+        file_path = os.path.join(self.moving_image_folder, self.moving_image_filename)
         self.import_moving_image(file_path)
 
     def import_moving_image(self, file_path):
@@ -3949,24 +3956,24 @@ class MainWindow(QMainWindow):
         if not os.path.exists(file_path):
             print(f"Image file not found: {file_path}")
             return
-        self.imMoving0, self.MI_Moving, self.mode_Moving = self.load_image(file_path)  # store the original pixmap
+        self.im_moving, self.max_intensity_moving, self.mode_intensity_moving = self.load_image(file_path)  # store the original pixmap
 
         # check if saved fiducial points exist
-        data_filename = self.nmMoving[:self.nmMoving.rfind('.')] + ".pkl"
-        output_folder = os.path.join(self.jobFolder, self.ResultsName, "Fiducial point selection")
+        data_filename = self.moving_image_filename[:self.moving_image_filename.rfind('.')] + ".pkl"
+        output_folder = os.path.join(self.job_folder, self.results_name, "Fiducial point selection")
         output_file = os.path.join(output_folder, data_filename)
         if os.path.exists(output_file):
             self.load_previous_settings(output_file)
             self.update_both_images()
         else:
             # Calculate zoom_default
-            width_scale = self.ui.MovingImageDisplayFrame.width() / self.imMoving0.width()
-            height_scale = self.ui.MovingImageDisplayFrame.height() / self.imMoving0.height()
+            width_scale = self.ui.MovingImageDisplayFrame.width() / self.im_moving.width()
+            height_scale = self.ui.MovingImageDisplayFrame.height() / self.im_moving.height()
             self.moving_zoom_default = min(width_scale, height_scale)
 
-            self.editWhichImage = 0
+            self.edit_which_image = 0
             self.reset_transformations(0)
-            self.editWhichImage = 1
+            self.edit_which_image = 1
             self.reset_transformations()
 
         # display image
@@ -3986,10 +3993,10 @@ class MainWindow(QMainWindow):
             no variables output, the moving image view settings will be saved in a .pkl file
         """
         self.define_edit_frame()
-        if self.current_index == self.fiducials_tab and self.ptsFixed.shape[0] > 1:
+        if self.current_index == self.fiducials_tab and self.pts_fixed.shape[0] > 1:
             # save fiducial info
-            tmp = self.nmMoving[:self.nmMoving.rfind('.')] + ".pkl"
-            output_folder = os.path.join(self.jobFolder, self.ResultsName, "Fiducial point selection")
+            tmp = self.moving_image_filename[:self.moving_image_filename.rfind('.')] + ".pkl"
+            output_folder = os.path.join(self.job_folder, self.results_name, "Fiducial point selection")
             output_file = os.path.join(output_folder, tmp)
 
             # check if the folder exists, and create it if it doesn't
@@ -4014,10 +4021,10 @@ class MainWindow(QMainWindow):
                              'zoom0_M': self.moving_zoom_default,
                              'con_M': self.moving_contrast,
                              'bri_M': self.moving_brightness,
-                             'pts_F': self.ptsFixed,
-                             'pts_M': self.ptsMoving,
-                             'pts_size': self.rad_tabF,
-                             'pts_color': self.ptsColor_tabF,
+                             'pts_F': self.pts_fixed,
+                             'pts_M': self.pts_moving,
+                             'pts_size': self.pts_size_fiducial_tab,
+                             'pts_color': self.pts_color_fiducial_tab,
                              }, file)
 
     def load_previous_settings(self, file_path):
@@ -4050,10 +4057,10 @@ class MainWindow(QMainWindow):
         self.moving_contrast = data.get('con_M')
         self.moving_brightness = data.get('bri_M')
 
-        self.ptsFixed = data.get('pts_F')
-        self.ptsMoving = data.get('pts_M')
-        self.rad_tabF = data.get('pts_size')
-        self.ptsColor_tabF = data.get('pts_color')
+        self.pts_fixed = data.get('pts_F')
+        self.pts_moving = data.get('pts_M')
+        self.pts_size_fiducial_tab = data.get('pts_size')
+        self.pts_color_fiducial_tab = data.get('pts_color')
 
     def confirm_load_new_image(self):
         """Create a pop-up window to confirm that the user wishes to  open a new moving image
@@ -4093,19 +4100,19 @@ class MainWindow(QMainWindow):
         Returns:
             no variables output, but App view changes.
         """
-        open_to = os.path.join(self.jobFolder, self.ResultsName)
+        open_to = os.path.join(self.job_folder, self.results_name)
         file_path, _ = QtWidgets.QFileDialog.getOpenFileName(
             self,
             "Select .csv or .xlsx File containing coordinates",
             open_to,  # Specify the initial folder here
             "Data Files (*.csv *.xlsx);;All Files (*)")
         if file_path:
-            self.pthCoords = os.path.dirname(file_path)  # Extract the folder
-            self.nmCoords = os.path.basename(file_path)  # Extract the filename
+            self.coordinates_file_folder = os.path.dirname(file_path)  # Extract the folder
+            self.coordinates_filename = os.path.basename(file_path)  # Extract the filename
 
         # add this information to the table
-        self.xColumn = ""
-        self.yColumn = ""
+        self.column_in_coords_file_containing_x_values = ""
+        self.column_in_coords_file_containing_y_values = ""
         self.populate_coordinates_table()
 
     def unregistered_coords_checkbox_changed(self, state):
@@ -4200,9 +4207,9 @@ class MainWindow(QMainWindow):
 
         # initialize the combo box list
         self.ui.CorrespondingImageComboBox.addItem("Select")
-        self.numMovingCoords = [[], []]
+        self.which_moving_images_are_registered = [[], []]
 
-        # Add items from column 1 of self.movingIMS
+        # Add items from column 1 of self.moving_images_list
         for index, row in enumerate(self.moving_images_list):
             if len(row) > 1:  # Ensure the row has at least two columns
                 filename = row[0]  # Get the filename from column 1
@@ -4210,15 +4217,15 @@ class MainWindow(QMainWindow):
                 filename_out2 = filename[:filename.rfind('.')] + ".jpg"
 
                 # check if fiducial points, a transform, and a registered image exists
-                filepath1 = os.path.join(self.jobFolder, self.ResultsName, "Fiducial point selection", filename_out1) # os.path.join(self.jobFolder, self.ResultsName, "aligned_stack", filename_out)
-                filepath2 = os.path.join(self.jobFolder, self.ResultsName, "Registration transforms", filename_out1)
-                filepath3 = os.path.join(self.jobFolder, self.ResultsName, "Registered images", filename_out2)
+                filepath1 = os.path.join(self.job_folder, self.results_name, "Fiducial point selection", filename_out1) # os.path.join(self.jobFolder, self.ResultsName, "aligned_stack", filename_out)
+                filepath2 = os.path.join(self.job_folder, self.results_name, "Registration transforms", filename_out1)
+                filepath3 = os.path.join(self.job_folder, self.results_name, "Registered images", filename_out2)
 
                 if os.path.isfile(filepath1) and os.path.isfile(filepath2) and os.path.isfile(filepath3):  # Check if the file exists
                     self.ui.CorrespondingImageComboBox.addItem(filename)  # Add to OldMovingImagesComboBox
-                    self.numMovingCoords[0].append(index)
+                    self.which_moving_images_are_registered[0].append(index)
                 else:
-                    self.numMovingCoords[1].append(index)
+                    self.which_moving_images_are_registered[1].append(index)
 
     def doubleclick_coordinates_table(self, row, column):
         """Handle the user double-clicking the coordinates table.
@@ -4230,7 +4237,7 @@ class MainWindow(QMainWindow):
             no variables output, but App view changes.
         """
         # if the table is populated and table edit mode is not already active
-        if len(self.nmCoords) > 0 or len(self.nmMovingCoords) > 0:
+        if len(self.coordinates_filename) > 0 or len(self.moving_image_filename_corresponding_to_coordinates) > 0:
 
             # if editing the scale
             if column in [2, 3, 4, 5]: # editing the scale, x, y, or # points
@@ -4254,20 +4261,20 @@ class MainWindow(QMainWindow):
         if column == 2: # scale
             try:
                 float(new_value)
-                self.ScaleCoords = new_value
+                self.scale_coordinates_file = new_value
             except:
                 if new_value != "":
                     text = "The entered value is not a number. Please enter a number"
                     self.show_error_message(text)
         elif column == 3: # x column
             if self.get_column_number(new_value):
-                self.xColumn = new_value
+                self.column_in_coords_file_containing_x_values = new_value
             else:
                 text = "Enter fully numeric (e.g. '5') or alphabetical (e.g. 'AB') text"
                 self.show_error_message(text)
         elif column == 4: # y column
             if self.get_column_number(new_value):
-                self.yColumn = new_value
+                self.column_in_coords_file_containing_y_values = new_value
             else:
                 text = "Enter fully numeric (e.g. '5') or alphabetical (e.g. 'AB') text"
                 self.show_error_message(text)
@@ -4296,16 +4303,16 @@ class MainWindow(QMainWindow):
         # get the current filename and index from the droplist
         current_index_in_table = self.ui.CorrespondingImageComboBox.currentIndex()
         if current_index_in_table in {-1, 0}:
-            self.nmMovingCoords = ""
-            self.ScaleCoords = ""
-            self.pthMovingCoords = ""
+            self.moving_image_filename_corresponding_to_coordinates = ""
+            self.scale_coordinates_file = ""
+            self.moving_image_folder_corresponding_to_coordinates = ""
         else:
-            row_number = self.numMovingCoords[0]
+            row_number = self.which_moving_images_are_registered[0]
             row_number = row_number[current_index_in_table - 1]
 
-            self.nmMovingCoords = self.moving_images_list[row_number][0]
-            self.ScaleCoords = self.moving_images_list[row_number][1]
-            self.pthMovingCoords = self.moving_images_list[row_number][2]
+            self.moving_image_filename_corresponding_to_coordinates = self.moving_images_list[row_number][0]
+            self.scale_coordinates_file = self.moving_images_list[row_number][1]
+            self.moving_image_folder_corresponding_to_coordinates = self.moving_images_list[row_number][2]
 
         # update the table
         self.populate_coordinates_table()
@@ -4319,11 +4326,11 @@ class MainWindow(QMainWindow):
             no variables output, but App view changes.
         """
         # Populate the first row with the variables' values
-        self.ui.RegisterCoordinatesTableWidget.setItem(0, 0, QtWidgets.QTableWidgetItem(f"{self.nmCoords}  "))
-        self.ui.RegisterCoordinatesTableWidget.setItem(0, 1, QtWidgets.QTableWidgetItem(f"{self.nmMovingCoords}  "))  # Convert scale to string if necessary
-        self.ui.RegisterCoordinatesTableWidget.setItem(0, 2, QtWidgets.QTableWidgetItem(self.ScaleCoords))
-        self.ui.RegisterCoordinatesTableWidget.setItem(0, 3, QtWidgets.QTableWidgetItem(self.xColumn))
-        self.ui.RegisterCoordinatesTableWidget.setItem(0, 4, QtWidgets.QTableWidgetItem(self.yColumn))
+        self.ui.RegisterCoordinatesTableWidget.setItem(0, 0, QtWidgets.QTableWidgetItem(f"{self.coordinates_filename}  "))
+        self.ui.RegisterCoordinatesTableWidget.setItem(0, 1, QtWidgets.QTableWidgetItem(f"{self.moving_image_filename_corresponding_to_coordinates}  "))  # Convert scale to string if necessary
+        self.ui.RegisterCoordinatesTableWidget.setItem(0, 2, QtWidgets.QTableWidgetItem(self.scale_coordinates_file))
+        self.ui.RegisterCoordinatesTableWidget.setItem(0, 3, QtWidgets.QTableWidgetItem(self.column_in_coords_file_containing_x_values))
+        self.ui.RegisterCoordinatesTableWidget.setItem(0, 4, QtWidgets.QTableWidgetItem(self.column_in_coords_file_containing_y_values))
         self.ui.RegisterCoordinatesTableWidget.setItem(0, 5, QtWidgets.QTableWidgetItem(str(self.max_points)))
         self.ui.RegisterCoordinatesTableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 
@@ -4338,8 +4345,8 @@ class MainWindow(QMainWindow):
         Returns:
             no variables output, but App view changes.
         """
-        coordsFrameDone = (len(self.nmCoords) > 0 and len(self.nmMovingCoords) > 0 and len(self.ScaleCoords) > 0
-                           and len(self.xColumn) > 0 and len(self.yColumn) > 0  and len(self.max_points) > 0)
+        coordsFrameDone = (len(self.coordinates_filename) > 0 and len(self.moving_image_filename_corresponding_to_coordinates) > 0 and len(self.scale_coordinates_file) > 0
+                           and len(self.column_in_coords_file_containing_x_values) > 0 and len(self.column_in_coords_file_containing_y_values) > 0 and len(self.max_points) > 0)
 
         # make fixed frame green if completed
         if coordsFrameDone:
@@ -4375,7 +4382,7 @@ class MainWindow(QMainWindow):
         Returns:
             no variables output, but App view changes.
         """
-        self.editWhichImage = 0
+        self.edit_which_image = 0
         self.close_navigation_tab()
         self.ui.NavigationButton.setEnabled(False)
         self.ui.NavigationButton.setStyleSheet(self.inactive_button_style)
@@ -4403,7 +4410,7 @@ class MainWindow(QMainWindow):
         Returns:
             no variables output, but App view changes.
         """
-        self.editWhichImage = 1
+        self.edit_which_image = 1
         self.close_navigation_tab()
         self.ui.NavigationButton.setEnabled(False)
         self.ui.NavigationButton.setStyleSheet(self.inactive_button_style)
@@ -4431,7 +4438,7 @@ class MainWindow(QMainWindow):
         Returns:
             no variables output, but App view changes.
         """
-        self.editWhichImage = 2
+        self.edit_which_image = 2
         self.close_navigation_tab()
         self.ui.NavigationButton.setEnabled(False)
         self.ui.NavigationButton.setStyleSheet(self.inactive_button_style)
@@ -4459,7 +4466,7 @@ class MainWindow(QMainWindow):
         Returns:
             no variables output, but App view changes.
         """
-        self.editWhichImage = 3
+        self.edit_which_image = 3
         self.close_navigation_tab()
         self.ui.NavigationButton.setEnabled(False)
         self.ui.NavigationButton.setStyleSheet(self.inactive_button_style)
@@ -4489,15 +4496,16 @@ class MainWindow(QMainWindow):
         """
         # change some view settings while the data loads
         self.ui.MakingCoordOverlayText.setVisible(True)
+        self.ui.MakingCoordOverlayText.setText("Making the Coordinate Overlay Image. Please Wait...")
         self.ui.DisableFrame_C.setVisible(True)
         QtWidgets.QApplication.processEvents()
 
         # load the fixed image and the unregistered and registered moving images
-        image_path_fixed = os.path.join(self.pthFixed, self.nmFixed)
-        image_path_moving = os.path.join(self.pthMovingCoords, self.nmMovingCoords)
-        image_nm = self.nmMovingCoords[:self.nmMovingCoords.rfind('.')] + ".jpg"
-        image_path_reg = os.path.join(self.jobFolder, self.ResultsName, "Registered images", image_nm)
-        image_path_reg_elastic = os.path.join(self.jobFolder, self.ResultsName, "Registered images", "Elastic", image_nm)
+        image_path_fixed = os.path.join(self.fixed_image_folder, self.fixed_image_filename)
+        image_path_moving = os.path.join(self.moving_image_folder_corresponding_to_coordinates, self.moving_image_filename_corresponding_to_coordinates)
+        image_nm = self.moving_image_filename_corresponding_to_coordinates[:self.moving_image_filename_corresponding_to_coordinates.rfind('.')] + ".jpg"
+        image_path_reg = os.path.join(self.job_folder, self.results_name, "Registered images", image_nm)
+        image_path_reg_elastic = os.path.join(self.job_folder, self.results_name, "Registered images", "Elastic", image_nm)
 
         # uncheck the check boxes
         self.ui.UnregisteredMovingCheckBox.setCheckState(Qt.Unchecked)
@@ -4507,15 +4515,15 @@ class MainWindow(QMainWindow):
         self.all_images_checked = 0
 
         # load the desired images
-        if self.nmMovingCoords != self.nmLoadedMoving:
+        if self.moving_image_filename_corresponding_to_coordinates != self.loaded_moving_image_filename:
             try:
                 self.coord_registration_type = 0
-                self.imFixed0, self.MI_Fixed, self.mode_Fixed = self.load_image(image_path_fixed)         # load the fixed image
-                self.imMovingCoords, self.MI_MovingCoords, self.mode_Moving = self.load_image(image_path_moving)  # load the moving image
-                self.imMovingCoordsReg, self.MI_MovingCoordsReg, mode_MovingReg = self.load_image(image_path_reg)  # load the registered moving image
-                self.nmLoadedMoving = self.nmMovingCoords
+                self.im_fixed, self.max_intensity_fixed, self.mode_intensity_fixed = self.load_image(image_path_fixed)         # load the fixed image
+                self.im_moving_coords, self.max_intensity_moving_coords, self.mode_intensity_moving = self.load_image(image_path_moving)  # load the moving image
+                self.im_moving_coords_reg, self.max_intensity_moving_coords_reg, mode_MovingReg = self.load_image(image_path_reg)  # load the registered moving image
+                self.loaded_moving_image_filename = self.moving_image_filename_corresponding_to_coordinates
                 if os.path.exists(image_path_reg_elastic):
-                    self.imMovingCoordsRegElastic, MI_MovingCoordsRegE, mode_MovingRegE = self.load_image(image_path_reg_elastic)  # load the elastic registered moving image
+                    self.im_moving_coords_reg_elastic, MI_MovingCoordsRegE, mode_MovingRegE = self.load_image(image_path_reg_elastic)  # load the elastic registered moving image
                     self.coord_registration_type = 1
             except:
                 text = "One or more images could not be loaded."
@@ -4534,29 +4542,29 @@ class MainWindow(QMainWindow):
                 self.ui.SaveRegisteredECoordinatesButton.setStyleSheet(self.inactive_button_style)
 
         # define the first settings
-        self.editWhichImage = 0 # unregistered moving image
-        self.coords_flip_state = 0
-        self.coords_rotation_angle = 0
-        self.coords_brightness = 0
-        self.coords_contrast = 1
-        self.coords_pan_offset_x = 0
-        self.coords_pan_offset_y = 0
+        self.edit_which_image = 0 # unregistered moving image
+        self.moving_coords_flip_state = 0
+        self.moving_coords_rotation_angle = 0
+        self.moving_coords_brightness = 0
+        self.moving_coords_contrast = 1
+        self.moving_coords_pan_offset_x = 0
+        self.moving_coords_pan_offset_y = 0
 
         # set the zoom default
-        width_scale = self.ui.RegisterCoordsDisplayFrame.width() / self.imMovingCoords.width()
-        height_scale = self.ui.RegisterCoordsDisplayFrame.height() / self.imMovingCoords.height()
-        self.coords_zoom_default = min(width_scale, height_scale)
-        self.coords_zoom_scale = self.coords_zoom_default
+        width_scale = self.ui.RegisterCoordsDisplayFrame.width() / self.im_moving_coords.width()
+        height_scale = self.ui.RegisterCoordsDisplayFrame.height() / self.im_moving_coords.height()
+        self.moving_coords_zoom_default = min(width_scale, height_scale)
+        self.moving_coords_zoom_scale = self.moving_coords_zoom_default
 
         # load and subsample the coordinates
         coords_loaded = self.get_coordinates_from_file()
         if coords_loaded == 0:
             return
 
-        downsample_num = min([self.ptsCoords.shape[0], int(self.max_points)])
+        downsample_num = min([self.pts_coords.shape[0], int(self.max_points)])
         self.max_points = str(downsample_num)
         self.populate_coordinates_table()
-        self.sampled_indices = np.random.choice(self.ptsCoords.shape[0], size=downsample_num, replace=False)
+        self.sampled_indices = np.random.choice(self.pts_coords.shape[0], size=downsample_num, replace=False)
 
         # display the image
         self.update_image_view()
@@ -4612,34 +4620,34 @@ class MainWindow(QMainWindow):
         QtWidgets.QApplication.processEvents()
 
         # load the coordinates again
-        xCol = self.get_column_number(self.xColumn)
-        yCol = self.get_column_number(self.yColumn)
+        xCol = self.get_column_number(self.column_in_coords_file_containing_x_values)
+        yCol = self.get_column_number(self.column_in_coords_file_containing_y_values)
 
         # Save the updated matrix to a new file in a specified folder
-        output_folder = os.path.join(self.jobFolder, self.ResultsName, "Registered coordinate data")
+        output_folder = os.path.join(self.job_folder, self.results_name, "Registered coordinate data")
         os.makedirs(output_folder, exist_ok=True)  # Create the folder if it doesn't exist
-        image_name, _ = os.path.splitext(self.nmFixed)
+        image_name, _ = os.path.splitext(self.fixed_image_filename)
 
         # Substitute the registered coordinates into the X matrix
-        X = self.Coords
+        X = self.coordinate_data
         if self.coord_registration_type == 0: # save ICP registration
-            X[self.first_row:, [xCol, yCol]] = self.ptsCoordsReg
+            X[self.number_of_first_row_in_coords_file:, [xCol, yCol]] = self.pts_coords_reg
             self.ui.SaveRegisteredCoordinatesButton.setStyleSheet(self.inactive_button_style)
-            output_file = os.path.join(output_folder, f"Global_Registered_{self.nmCoords}")
+            output_file = os.path.join(output_folder, f"Global_Registered_{self.coordinates_filename}")
         else: # save elastic registration
-            X[self.first_row:, [xCol, yCol]] = self.ptsCoordsRegE
+            X[self.number_of_first_row_in_coords_file:, [xCol, yCol]] = self.pts_coords_reg_elastic
             self.ui.SaveRegisteredECoordinatesButton.setStyleSheet(self.inactive_button_style)
-            output_file = os.path.join(output_folder, f"Elastic_Registered_{self.nmCoords}")
+            output_file = os.path.join(output_folder, f"Elastic_Registered_{self.coordinates_filename}")
 
         # Save the updated X matrix as a CSV file
         pd.DataFrame(X).to_csv(output_file, header=None, index=False)
 
         # save a pkl file logging whether the coordinates were icp or elastically registered
-        tmp = self.nmMovingCoords[:self.nmMovingCoords.rfind('.')] + ".pkl"
-        outputFolder = os.path.join(self.jobFolder, self.ResultsName, "Registered coordinate data", "log")
-        outfile = os.path.join(outputFolder, tmp)
-        if not os.path.exists(outputFolder):
-            os.makedirs(outputFolder)
+        tmp = self.moving_image_filename_corresponding_to_coordinates[:self.moving_image_filename_corresponding_to_coordinates.rfind('.')] + ".pkl"
+        output_folder = os.path.join(self.job_folder, self.results_name, "Registered coordinate data", "log")
+        outfile = os.path.join(output_folder, tmp)
+        if not os.path.exists(output_folder):
+            os.makedirs(output_folder)
         coord_registration_type = self.coord_registration_type
         # Save variables to the pkl file
         with open(outfile, 'wb') as file:
@@ -4664,56 +4672,64 @@ class MainWindow(QMainWindow):
             no variables output, but saves registered coordinates to the job folder
         """
         # load the coordinates
-        xCol = self.get_column_number(self.xColumn)
-        yCol = self.get_column_number(self.yColumn)
-        file_path = os.path.join(self.pthCoords, self.nmCoords)
+        x_column = self.get_column_number(self.column_in_coords_file_containing_x_values)
+        y_column = self.get_column_number(self.column_in_coords_file_containing_y_values)
+        file_path = os.path.join(self.coordinates_file_folder, self.coordinates_filename)
         file_ext = os.path.splitext(file_path)[1]
-        if self.nmCoords != self.nmCoordsLoaded:
+        if self.coordinates_filename != self.loaded_coordinates_filename:
             if file_ext == ".csv":
-                self.Coords = pd.read_csv(file_path, header=None).values
+                self.coordinate_data = pd.read_csv(file_path, header=None).values
             elif file_ext in [".xlsx", ".xls"]:
-                self.Coords = pd.read_excel(file_path, header=None).values
-            self.nmCoordsLoaded = self.nmCoords
+                self.coordinate_data = pd.read_excel(file_path, header=None).values
+            self.loaded_coordinates_filename = self.coordinates_filename
 
         # Check if the first row contains text labels
         coords_loaded = 0
         try:
-            float(self.Coords[0, xCol])
-            float(self.Coords[0, yCol])
-            self.first_row = 0
+            float(self.coordinate_data[0, x_column])
+            float(self.coordinate_data[0, y_column])
+            self.number_of_first_row_in_coords_file = 0
         except (ValueError, IndexError):
             # try removing the top row in case it contains text headers
-            self.first_row = 1
+            self.number_of_first_row_in_coords_file = 1
             try:
-                float(self.Coords[1, xCol])
-                float(self.Coords[1, yCol])
+                float(self.coordinate_data[1, x_column])
+                float(self.coordinate_data[1, y_column])
             except (ValueError, IndexError):
                 text = "Coordinate data not found in the columns and csv file provided. Please double check your inputs."
                 self.show_error_message(text)
                 self.return_to_edit_table()
                 return coords_loaded
 
-        self.ptsCoords = self.Coords[self.first_row:, [xCol, yCol]].astype(float)
-        self.ptsCoords = np.round(self.ptsCoords)
-        self.ptsCoords = self.ptsCoords * float(self.ScaleCoords)
+        self.pts_coords = self.coordinate_data[self.number_of_first_row_in_coords_file:, [x_column, y_column]].astype(float)
+        self.pts_coords = np.round(self.pts_coords)
+        self.pts_coords = self.pts_coords * float(self.scale_coordinates_file)
 
         # Load the transformation data and register the coordinates
-        filename = self.nmMovingCoords[:self.nmMovingCoords.rfind('.')] + ".pkl"
-        outputFolder = os.path.join(self.jobFolder, self.ResultsName, "Registration transforms")
-        outfile = os.path.join(outputFolder, filename)
+        filename = self.moving_image_filename_corresponding_to_coordinates[:self.moving_image_filename_corresponding_to_coordinates.rfind('.')] + ".pkl"
+        output_folder = os.path.join(self.job_folder, self.results_name, "Registration transforms")
+        outfile = os.path.join(output_folder, filename)
         with open(outfile, 'rb') as file:
             data = pickle.load(file)
         self.tformCoords = data.get('tform')
-        self.ptsCoordsReg = (self.tformCoords[:2, :2] @ self.ptsCoords.T).T + self.tformCoords[:2, 2]
+        self.flip_im_coords = data.get('flip_im')
+
+        # flip the coordinates if required before registration
+        if self.flip_im_coords == 1:
+            image_width = self.im_moving_coords.width()
+            pts_coords_reg = np.column_stack([image_width - self.pts_coords[:, 0], self.pts_coords[:, 1]])
+        else:
+            pts_coords_reg = self.pts_coords
+        self.pts_coords_reg = (self.tformCoords[:2, :2] @ pts_coords_reg.T).T + self.tformCoords[:2, 2]
 
         # if it exists, load the elastic registration data and register the coordinates
-        outfile = os.path.join(outputFolder, "Elastic", filename)
+        outfile = os.path.join(output_folder, "Elastic", filename)
         if os.path.exists(outfile):
             with open(outfile, 'rb') as file:
                 data = pickle.load(file)
             self.DinvCoords = data.get('Dinv')
-            szz = (self.imFixed0.height(), self.imFixed0.width())
-            self.ptsCoordsRegE, tmp = self.register_points_elastic(self.ptsCoordsReg, szz, self.DinvCoords)
+            szz = (self.im_fixed.height(), self.im_fixed.width())
+            self.pts_coords_reg_elastic = self.register_points_elastic(self.pts_coords_reg, szz, self.DinvCoords)
         coords_loaded = 1
 
         return coords_loaded
@@ -4748,9 +4764,9 @@ class MainWindow(QMainWindow):
         Returns:
             no variables output, but coordinates are replotted on the overlay image
         """
-        tmp = self.xColumn
-        self.xColumn = self.yColumn
-        self.yColumn = tmp
+        tmp = self.column_in_coords_file_containing_x_values
+        self.column_in_coords_file_containing_x_values = self.column_in_coords_file_containing_y_values
+        self.column_in_coords_file_containing_y_values = tmp
 
         # update the table
         self.populate_coordinates_table()
@@ -4804,9 +4820,9 @@ class MainWindow(QMainWindow):
         """
         pts_moving0 = pts_moving
 
-        # Compute the initial RMSE (unregistered points)
+        # compute the initial RMSE (unregistered points)
         dist = (pts_fixed[:, 0] - pts_moving0[:, 0]) ** 2 + (pts_fixed[:, 1] - pts_moving0[:, 1]) ** 2
-        RMSE0 = round(np.sqrt(np.mean(dist)))
+        rmse0 = round(np.sqrt(np.mean(dist)))
 
         # scale is the ratio of the mean distance from the centroid
         centroid_fixed = np.mean(pts_fixed, axis=0)
@@ -4815,35 +4831,35 @@ class MainWindow(QMainWindow):
         dist_moving = np.sqrt(np.sum((pts_moving0 - centroid_moving) ** 2, axis=1))
         scale_val = np.mean(dist_fixed) / np.mean(dist_moving)
 
-        # ICP calculation for known point pairs
+        # point cloud calculation for known point pairs
         pts_moving = pts_moving0 * scale_val
         centroid_moving = np.mean(pts_moving, axis=0)
         centered_moving = pts_moving - np.mean(pts_moving, axis=0)
         centered_fixed = pts_fixed - np.mean(pts_fixed, axis=0)
         H = centered_moving.T @ centered_fixed
 
-        # Compute the Singular Value Decomposition (SVD), rotation, and translation
+        # compute the Singular Value Decomposition (SVD), rotation, and translation
         U, _, Vt = np.linalg.svd(H)
-        R = Vt.T @ U.T
-        if np.linalg.det(R) < 0:  # Handle reflection case
+        rotation_matrix = Vt.T @ U.T
+        if np.linalg.det(rotation_matrix) < 0:  # Handle reflection case
             Vt[-1, :] *= -1
-            R = Vt.T @ U.T
-        t = centroid_fixed - R @ centroid_moving
+            rotation_matrix = Vt.T @ U.T
+        xy_translation = centroid_fixed - rotation_matrix @ centroid_moving
 
-        # Construct the final transformation matrix
-        R_scale = R * scale_val
+        # construct the final transformation matrix
+        rotation_matrix_scaled = rotation_matrix * scale_val
         tform = np.eye(3)
-        tform[:2, :2] = R_scale
-        tform[:2, 2] = t
+        tform[:2, :2] = rotation_matrix_scaled
+        tform[:2, 2] = xy_translation
 
         # apply the transform to the points
         registered_pts = (tform[:2, :2] @ pts_moving0.T).T + tform[:2, 2]
 
-        # Compute the RMSE of the registered points
+        # compute the RMSE of the registered points
         dist = (pts_fixed[:, 0] - registered_pts[:, 0]) ** 2 + (pts_fixed[:, 1] - registered_pts[:, 1]) ** 2
-        RMSE = round(np.sqrt(np.mean(dist)))
+        rmse = round(np.sqrt(np.mean(dist)))
 
-        return registered_pts, tform, RMSE, RMSE0
+        return registered_pts, tform, rmse, rmse0
 
 
     def return_to_fiducials_tab(self):
@@ -4894,13 +4910,15 @@ class MainWindow(QMainWindow):
         self.ui.UnregisteredImageBorder.setStyleSheet(self.inactive_label_style)
         self.ui.UnregisteredImageFrameHeaderText.setStyleSheet(self.inactive_text_label_style)
         self.ui.UnregisteredImageDisplayFrame.setStyleSheet(self.inactive_frame_style)
-        tmp = self.ui.UnregisteredImageDisplayFrame.geometry()
-        self.ui.UnregisteredImageBorder.setGeometry(tmp.x() - 3, tmp.y() - 3, tmp.width() + 6, tmp.height() + 6)
         self.ui.RegisteredImageBorder.setStyleSheet(self.inactive_label_style)
         self.ui.RegisteredImageFrameHeaderText.setStyleSheet(self.inactive_text_label_style)
         self.ui.RegisteredImageDisplayFrame.setStyleSheet(self.inactive_frame_style)
-        tmp = self.ui.RegisteredImageDisplayFrame.geometry()
-        self.ui.RegisteredImageBorder.setGeometry(tmp.x() - 3, tmp.y() - 3, tmp.width() + 6, tmp.height() + 6)
+        ref_frame_a = self.ui.UnregisteredImageDisplayFrame.geometry()
+        ref_frame_b = self.ui.RegisteredImageDisplayFrame.geometry()
+        self.ui.UnregisteredImageBorder.setGeometry(ref_frame_a.x() - 3, ref_frame_a.y() - 3,
+                                                    ref_frame_a.width() + 6, ref_frame_a.height() + 6)
+        self.ui.RegisteredImageBorder.setGeometry(ref_frame_b.x() - 3, ref_frame_b.y() - 3,
+                                                  ref_frame_b.width() + 6, ref_frame_b.height() + 6)
 
         # disable some buttons
         self.close_navigation_tab()
@@ -4916,35 +4934,99 @@ class MainWindow(QMainWindow):
         QtWidgets.QApplication.processEvents()
 
         # save registration info
-        tmp = self.nmMoving[:self.nmMoving.rfind('.')] + ".pkl"
-        outputFolder = os.path.join(self.jobFolder, self.ResultsName, "Registration transforms")
-        outfile = os.path.join(outputFolder, tmp)
+        filename = self.moving_image_filename[:self.moving_image_filename.rfind('.')] + ".pkl"
+        output_folder = os.path.join(self.job_folder, self.results_name, "Registration transforms")
+        outfile = os.path.join(output_folder, filename)
+        save_results = 1
 
-        # Check if the folder exists, and create it if it doesn't
-        if not os.path.exists(outputFolder):
-            os.makedirs(outputFolder)
+        # check if the folder exists, and create it if it doesn't
+        if not os.path.exists(output_folder):
+            os.makedirs(output_folder)
 
-        tform = self.tform
-        RMSE0 = self.RMSE0
-        RMSE = self.RMSE
-        # Save variables to the pkl file
-        with open(outfile, 'wb') as file:
-            pickle.dump({'tform': tform, 'RMSE': RMSE, 'RMSE0': RMSE0, }, file)
+        if os.path.isfile(outfile):
+            # load the previous affine registration results to see if they are the same
+            with open(outfile, 'rb') as file:
+                data = pickle.load(file)
 
-        # save the images
-        self.save_registered_images()
+                # check the rmse and tform to see if either has changed
+                tform_old = data.get('tform')
+                flip_im_old = data.get('flip_im')
+                rmse_reg_old = data.get('RMSE')
+                rmse_unregistered_old = data.get('RMSE0')
 
-        # what to do next
-        self.ui.SaveRegistrationResultsButton_O.setEnabled(True)
-        self.ui.ReturnToFiducialsTab_O.setEnabled(True)
-        self.ui.ImageViewControlsFrame_O.setEnabled(True)
-        self.ui.NavigationButton.setEnabled(True)
-        self.ui.NavigationButton.setStyleSheet(self.active_button_style)
-        self.ui.KeyboardShortcutsButton.setEnabled(True)
-        self.ui.KeyboardShortcutsButton.setStyleSheet(self.active_button_style)
-        self.ui.TryElasticRegButton.setEnabled(True)
-        self.ui.TryElasticRegButton.setStyleSheet(self.style_button_green)
-        self.ui.DisableFrame_O1.setVisible(False)
+                old_reg_equals_new_reg = all([
+                    self.rmse_unregistered == rmse_unregistered_old,
+                    self.rmse_reg == rmse_reg_old,
+                    self.flip_im == flip_im_old,
+                    np.array_equal(self.tform, tform_old)
+                ])
+
+                # if registration has changed since the previous version, ask the user to confirm the update
+                if old_reg_equals_new_reg:
+                    # no need to save the results as this has already been done, skip the save and continue
+                    save_results = 0
+
+                    # what to do next
+                    self.ui.SaveRegistrationResultsButton_O.setEnabled(True)
+                    self.ui.ReturnToFiducialsTab_O.setEnabled(True)
+                    self.ui.ImageViewControlsFrame_O.setEnabled(True)
+                    self.ui.NavigationButton.setEnabled(True)
+                    self.ui.NavigationButton.setStyleSheet(self.active_button_style)
+                    self.ui.KeyboardShortcutsButton.setEnabled(True)
+                    self.ui.KeyboardShortcutsButton.setStyleSheet(self.active_button_style)
+                    self.ui.TryElasticRegButton.setEnabled(True)
+                    self.ui.TryElasticRegButton.setStyleSheet(self.style_button_green)
+                    self.ui.DisableFrame_O1.setVisible(False)
+                else:
+                    msg_box = QtWidgets.QMessageBox()  # Create a message box
+                    msg_box.setWindowTitle("Confirm update of registration")  # Set the window title
+                    msg_box.setText("Registration results already exist for this image pair. If you continue those "
+                                    "results will be replaced, and elastic registration metadata will be deleted if "
+                                    "it exists. Are you sure you want to proceed?")  # Set the message text
+                    msg_box.setIcon(QtWidgets.QMessageBox.Question)  # Set the icon
+                    msg_box.setStandardButtons(
+                        QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.Cancel)  # Add Yes and Cancel buttons
+                    msg_box.setStyleSheet(self.quest_box_style)
+
+                    # show the message box and get the response
+                    response = msg_box.exec()
+                    if response == QtWidgets.QMessageBox.Cancel:
+                        # the registration results have changed and the user does not want to replace them. abort
+                        return
+                    else:
+                        # check if elastic registration results exist and delete them if they do
+                        output_folder_image_elastic = os.path.join(self.job_folder, self.results_name, "Registered images", "Elastic")
+                        filename_image_elastic = self.moving_image_filename[:self.moving_image_filename.rfind('.')] + ".jpg"
+                        outfile_image_elastic = os.path.join(output_folder_image_elastic, filename_image_elastic)
+                        outfile_elastic = os.path.join(self.job_folder, self.results_name, "Registration transforms", "Elastic", filename)
+                        # delete the elastically registered image
+                        if os.path.isfile(outfile_image_elastic):
+                            os.remove(outfile_image_elastic)
+                        # delete the pkl metadata file
+                        if os.path.isfile(outfile_elastic):
+                            os.remove(outfile_elastic)
+
+        # save the registration results to the .pkl file as long as the user does not cancel
+        if save_results == 1:
+            # save variables to the pkl file
+            with open(outfile, 'wb') as file:
+                pickle.dump({'tform': self.tform, 'flip_im': self.flip_im,
+                    'RMSE': self.rmse_reg, 'RMSE0': self.rmse_unregistered, }, file)
+
+            # save the images
+            self.save_registered_images()
+
+            # what to do next
+            self.ui.SaveRegistrationResultsButton_O.setEnabled(True)
+            self.ui.ReturnToFiducialsTab_O.setEnabled(True)
+            self.ui.ImageViewControlsFrame_O.setEnabled(True)
+            self.ui.NavigationButton.setEnabled(True)
+            self.ui.NavigationButton.setStyleSheet(self.active_button_style)
+            self.ui.KeyboardShortcutsButton.setEnabled(True)
+            self.ui.KeyboardShortcutsButton.setStyleSheet(self.active_button_style)
+            self.ui.TryElasticRegButton.setEnabled(True)
+            self.ui.TryElasticRegButton.setStyleSheet(self.style_button_green)
+            self.ui.DisableFrame_O1.setVisible(False)
 
     def begin_calculate_icp_tabF(self):
         """Calculate the point-cloud registration of the fiducial points and apply the transform to the moving image.
@@ -4988,26 +5070,28 @@ class MainWindow(QMainWindow):
         # save the fiducial points
         self.save_fiducial_state()
 
-        pts_fixed = np.delete(self.ptsFixed, 0, axis=0)
-        pts_moving = np.delete(self.ptsMoving, 0, axis=0)
-        width = self.imMoving0.width()
+        pts_fixed = np.delete(self.pts_fixed, 0, axis=0)
+        pts_moving = np.delete(self.pts_moving, 0, axis=0)
+        width = self.im_moving.width()
 
+        # try registration of the fixed and moving image
         pts_moving_0 = pts_moving
-        pts_out_0, tform_0, RMSE_0, RMSE0 = self.icp_registration(pts_fixed, pts_moving_0)
+        pts_out_noflip, tform_noflip, rmse_noflip, rmse0 = self.icp_registration(pts_fixed, pts_moving_0)
 
-        pts_moving_f = np.column_stack([width - pts_moving[:, 0], pts_moving[:, 1]])
-        pts_out_f, tform_f, RMSE_f, RMSE0 = self.icp_registration(pts_fixed, pts_moving_f)
+        # try registration of the fixed and 'flipped' moving image
+        pts_moving_flip_image = np.column_stack([width - pts_moving[:, 0], pts_moving[:, 1]])
+        pts_out_flip_image, tform_flip_image, rmse_flip_image, rmse0 = self.icp_registration(pts_fixed, pts_moving_flip_image)
 
-        self.RMSE0 = RMSE0
-        if RMSE_0 < RMSE_f:
-            self.ptsMovingReg = pts_out_0
-            self.RMSE = RMSE_0
-            self.tform = tform_0
+        self.rmse_unregistered = rmse0
+        if rmse_noflip < rmse_flip_image:
+            self.pts_moving_reg = pts_out_noflip
+            self.rmse_reg = rmse_noflip
+            self.tform = tform_noflip
             self.flip_im = 0
         else:
-            self.ptsMovingReg = pts_out_f
-            self.RMSE = RMSE_f
-            self.tform = tform_f
+            self.pts_moving_reg = pts_out_flip_image
+            self.rmse_reg = rmse_flip_image
+            self.tform = tform_flip_image
             self.flip_im = 1
 
         self.initiate_overlay_tab()
@@ -5021,19 +5105,19 @@ class MainWindow(QMainWindow):
             no variables output, but an image is saved.
         """
         # save registered moving image
-        outputFolder = os.path.join(self.jobFolder, self.ResultsName, "Registered images")
+        output_folder = os.path.join(self.job_folder, self.results_name, "Registered images")
         # Check if the folder exists, and create it if it doesn't
-        if not os.path.exists(outputFolder):
-            os.makedirs(outputFolder)
-        tmp = self.nmMoving[:self.nmMoving.rfind('.')] + ".jpg"
-        outfile = os.path.join(outputFolder, tmp)
-        self.imMovingReg.save(outfile, "JPG")
+        if not os.path.exists(output_folder):
+            os.makedirs(output_folder)
+        filename = self.moving_image_filename[:self.moving_image_filename.rfind('.')] + ".jpg"
+        outfile = os.path.join(output_folder, filename)
+        self.im_moving_reg.save(outfile, "JPG")
 
         # save the fixed image if it does not already exist
-        tmp = self.nmFixed[:self.nmFixed.rfind('.')] + ".jpg"
-        outfile = os.path.join(outputFolder, tmp)
+        filename = self.fixed_image_filename[:self.fixed_image_filename.rfind('.')] + ".jpg"
+        outfile = os.path.join(output_folder, filename)
         if not os.path.exists(outfile):
-            self.imFixed0.save(outfile, "JPG")
+            self.im_fixed.save(outfile, "JPG")
 
 
     def call_CODA_elastic_registration(self):
@@ -5061,13 +5145,13 @@ class MainWindow(QMainWindow):
         self.view_squares = 2
 
         # set up fixed image for elastic registration
-        im_ref = self.pixmap_to_array(self.imFixed0)
-        im_ref_grey, mask_ref, = self.make_tissue_mask(im_ref, self.mode_Fixed)
+        im_ref = self.pixmap_to_array(self.im_fixed)
+        im_ref_grey, mask_ref, = self.make_tissue_mask(im_ref, self.mode_intensity_fixed)
 
         # set up moving image for elastic registration
-        im_moving = self.pixmap_to_array(self.imMovingReg)
+        im_moving = self.pixmap_to_array(self.im_moving_reg)
         im_moving = im_moving[:, :, :3]
-        im_moving_grey, mask_moving, = self.make_tissue_mask(im_moving, self.mode_Moving)
+        im_moving_grey, mask_moving, = self.make_tissue_mask(im_moving, self.mode_intensity_moving)
 
         # elastic registration settings
         tile_size = self.elastic_tilesize
@@ -5090,30 +5174,30 @@ class MainWindow(QMainWindow):
             "Applying the transform to generate the registered image. Please Wait...")
         QtWidgets.QApplication.processEvents()
         im_moving_elastic = self.register_image_elastic(im_moving, self.D)
-        self.imMovingRegElastic = self.array_to_pixmap(im_moving_elastic)
+        self.im_moving_reg_elastic = self.array_to_pixmap(im_moving_elastic)
 
         # apply elastic registration to the fiducial points
         self.ui.CalculatingElasticRegistrationText.setText("Applying the transform to the fiducial points. Please Wait...")
         QtWidgets.QApplication.processEvents()
-        szz = (self.imFixed0.height(), self.imFixed0.width())
-        self.ptsMovingRegE = self.register_points_elastic(self.ptsMovingReg, szz, self.Dinv, scale=None)
+        szz = (self.im_fixed.width(), self.im_fixed.height())
+        self.pts_moving_reg_elastic = self.register_points_elastic(self.pts_moving_reg, szz, self.Dinv, scale=None)
 
         # calculate the RMSE for the elastically registered points
-        pts_fixed = np.delete(self.ptsFixed, 0, axis=0)
-        dist = (pts_fixed[:, 0] - self.ptsMovingRegE[:, 0]) ** 2 + (pts_fixed[:, 1] - self.ptsMovingRegE[:, 1]) ** 2
-        self.RMSE_Elastic = round(np.sqrt(np.mean(dist)))
+        pts_fixed = np.delete(self.pts_fixed, 0, axis=0)
+        dist = (pts_fixed[:, 0] - self.pts_moving_reg_elastic[:, 0]) ** 2 + (pts_fixed[:, 1] - self.pts_moving_reg_elastic[:, 1]) ** 2
+        self.rmse_reg_elastic = round(np.sqrt(np.mean(dist)))
 
         # convert the elastically registered image back to a pixmap and view an overlay
-        pixmap_fixed = self.adjust_brightness_contrast(self.imFixed0, self.fixed_contrast, self.fixed_brightness)
-        pixmap_moving = self.adjust_brightness_contrast(self.imMovingRegElastic, self.moving_contrast,
+        pixmap_fixed = self.adjust_brightness_contrast(self.im_fixed, self.fixed_contrast, self.fixed_brightness)
+        pixmap_moving = self.adjust_brightness_contrast(self.im_moving_reg_elastic, self.moving_contrast,
                                                         self.moving_brightness)
-        self.imOverlayE = self.make_overlay_image(pixmap_fixed, pixmap_moving)
+        self.im_overlay_reg_elastic = self.make_overlay_image(pixmap_fixed, pixmap_moving)
 
         # update the text labels above the images
         self.ui.FiducialRegisteredImageFrameHeaderText.setText(
-            f"Fiducial Registration Overlay (RMSE: {round(self.RMSE)} pixels).")
+            f"Fiducial Registration Overlay (RMSE: {round(self.rmse_reg)} pixels).")
         self.ui.ElasticRegisteredImageFrameHeaderText.setText(
-            f"Fiducial + Elastic Registration Overlay (RMSE: {round(self.RMSE_Elastic)} pixels).")
+            f"Fiducial + Elastic Registration Overlay (RMSE: {round(self.rmse_reg_elastic)} pixels).")
 
         # update the tab view and button accessability
         self.ui.DisableFrame_E2.setVisible(False)
@@ -5137,60 +5221,60 @@ class MainWindow(QMainWindow):
         self.ui.KeyboardShortcutsButton.setEnabled(True)
         self.ui.KeyboardShortcutsButton.setStyleSheet(self.active_button_style)
         self.view_squares = 0
-        self.editWhichImage = 0
+        self.edit_which_image = 0
         self.reset_transformations()
         self.update_button_color()
-        self.editWhichImage = 1
+        self.edit_which_image = 1
         self.reset_transformations()
-        self.whichColor = 1
+        self.edit_which_pt_color = 1
         self.update_button_color()
         self.ui.UnregisteredImageFrameHeaderText.setText("Test view elastic reg overlay (ignore fiducials)")
         QtWidgets.QApplication.processEvents()
 
 
-    def invert_D(self, displacement_field):
+    def invert_D(self, D):
         """Calculates the inverted displacement field
         Used in tab 6 only
         Args:
-            displacement_field: elastic registration displacement field
+            D: elastic registration displacement field
         Returns:
             inverted_displacement_field: inverse of displacement field
         """
         # downsample factors for the inversion
-        grid_subsample = 5  # to speed up processing
-        grid_subsample_2 = 5  # to speed up processing
-
-        # flatten the displacement field
-        displacement_field_0 = displacement_field[:, :, 0].ravel()
-        displacement_field_1 = displacement_field[:, :, 1].ravel()
+        skk = 5  # to speed up processing
+        skk2 = 5  # to speed up processing
 
         # create grids starting at 1, shift each pixel by the displacement, and flatten
-        rows, cols, _ = displacement_field.shape
+        rows, cols, _ = D.shape
         xx, yy = np.meshgrid(np.arange(1, cols + 1), np.arange(1, rows + 1))
-        xx = xx + displacement_field[:, :, 0]
-        yy = yy + displacement_field[:, :, 1]
-        xx = xx.ravel()
-        yy = yy.ravel()
+        xnew = xx + D[:, :, 0]
+        ynew = yy + D[:, :, 1]
+
+        # flatten the displacement field
+        D1 = D[:, :, 0].ravel()
+        D2 = D[:, :, 1].ravel()
+        xnew2 = xnew.ravel()
+        ynew2 = ynew.ravel()
 
         # subsample the data (take every skk-th element)
-        points_sub = np.column_stack((xx[::grid_subsample], yy[::grid_subsample]))
-        values_d0_sub = displacement_field_0[::grid_subsample]
-        values_d1_sub = displacement_field_1[::grid_subsample]
+        points_sub = np.column_stack((xnew2[::skk], ynew2[::skk]))
+        values_D1_sub = D1[::skk]
+        values_D2_sub = D2[::skk]
 
         # create interpolators for each displacement component
-        f0 = LinearNDInterpolator(points_sub, values_d0_sub)
-        f1 = LinearNDInterpolator(points_sub, values_d1_sub)
+        F1 = LinearNDInterpolator(points_sub, values_D1_sub)
+        F2 = LinearNDInterpolator(points_sub, values_D2_sub)
 
         # evaluate the interpolants on a coarse grid
-        xx_coarse, yy_coarse = np.meshgrid(np.arange(1, cols + 1, grid_subsample_2),
-                                           np.arange(1, rows + 1, grid_subsample_2))
+        xx_coarse, yy_coarse = np.meshgrid(np.arange(1, cols + 1, skk2),
+                                           np.arange(1, rows + 1, skk2))
         points_coarse = np.column_stack((xx_coarse.ravel(), yy_coarse.ravel()))
 
         # evaluate and negate the transform
-        d0_interp = -f0(points_coarse)
-        d1_interp = -f1(points_coarse)
+        d0_interp = -F1(points_coarse)
+        d1_interp = -F2(points_coarse)
         d0_interp = d0_interp.reshape(xx_coarse.shape)
-        d1_interp = d1_interp.reshape(xx_coarse.shape)
+        d1_interp = d1_interp.reshape(yy_coarse.shape)
 
         # resize the interpolated displacement field to the original resolution
         inverted_displacement_field = np.zeros((rows, cols, 2))
@@ -5232,7 +5316,7 @@ class MainWindow(QMainWindow):
         # increase the tile size for elastic registration
         self.elastic_tilesize = self.elastic_tilesize + 25
         self.ui.TileSizeText.setHtml(f"<div align='right'>Size:<br>{self.elastic_tilesize}</div>")
-        self.editWhichImage = 0
+        self.edit_which_image = 0
         self.update_image_view()
 
 
@@ -5247,7 +5331,7 @@ class MainWindow(QMainWindow):
         # decrease the tile size for elastic registration
         self.elastic_tilesize = self.elastic_tilesize - 25
         self.ui.TileSizeText.setHtml(f"<div align='right'>Size:<br>{self.elastic_tilesize}</div>")
-        self.editWhichImage = 0
+        self.edit_which_image = 0
         self.update_image_view()
 
 
@@ -5262,7 +5346,7 @@ class MainWindow(QMainWindow):
         # increase the tile spacing for elastic registration
         self.elastic_tilespacing = self.elastic_tilespacing + 25
         self.ui.TileSpacingText.setHtml(f"<div align='right'>Spacing:<br>{self.elastic_tilespacing}</div>")
-        self.editWhichImage = 0
+        self.edit_which_image = 0
         self.update_image_view()
 
 
@@ -5277,7 +5361,7 @@ class MainWindow(QMainWindow):
         # decrease the tile spacing for elastic registration
         self.elastic_tilespacing = self.elastic_tilespacing - 25
         self.ui.TileSpacingText.setHtml(f"<div align='right'>Spacing:<br>{self.elastic_tilespacing}</div>")
-        self.editWhichImage = 0
+        self.edit_which_image = 0
         self.update_image_view()
 
 
@@ -5365,7 +5449,7 @@ class MainWindow(QMainWindow):
         mode_val = sum(mode_val) / len(mode_val)
         if mode_val < 200:  # flourescent image
             image_mask = image_grey > 10
-            array_grey = 255 - image_grey
+            image_grey = 255 - image_grey
         else:  # brightfield image
             image_mask = image_grey < 215
 
@@ -5396,8 +5480,8 @@ class MainWindow(QMainWindow):
         QtWidgets.QApplication.processEvents()
 
         # save registration info
-        file_name = self.nmMoving[:self.nmMoving.rfind('.')] + ".pkl"
-        output_folder = os.path.join(self.jobFolder, self.ResultsName, "Registration transforms", "Elastic")
+        file_name = self.moving_image_filename[:self.moving_image_filename.rfind('.')] + ".pkl"
+        output_folder = os.path.join(self.job_folder, self.results_name, "Registration transforms", "Elastic")
         file_path = os.path.join(output_folder, file_name)
 
         # Check if the folder exists, and create it if it doesn't
@@ -5409,7 +5493,7 @@ class MainWindow(QMainWindow):
             pickle.dump({
                 'D': self.D,
                 'Dinv': self.Dinv,
-                'RMSE_Elastic': self.RMSE_Elastic,
+                'RMSE_Elastic': self.rmse_reg_elastic,
                 'elastic_tilesize': self.elastic_tilespacing,
                 'elastic_tilespacing': self.elastic_tilesize,
                 'n_buffer_pix': 50},
@@ -5441,19 +5525,19 @@ class MainWindow(QMainWindow):
             no variables output, but saves the elastically registered image as a .jpg file
         """
         # save registered moving image
-        output_folder = os.path.join(self.jobFolder, self.ResultsName, "Registered images", "Elastic")
+        output_folder = os.path.join(self.job_folder, self.results_name, "Registered images", "Elastic")
         # Check if the folder exists, and create it if it doesn't
         if not os.path.exists(output_folder):
             os.makedirs(output_folder)
-        file_name = self.nmMoving[:self.nmMoving.rfind('.')] + ".jpg"
+        file_name = self.moving_image_filename[:self.moving_image_filename.rfind('.')] + ".jpg"
         file_path = os.path.join(output_folder, file_name)
-        self.imMovingRegElastic.save(file_path, "JPG")
+        self.im_moving_reg_elastic.save(file_path, "JPG")
 
         # save the fixed image if it does not already exist
-        file_name = self.nmFixed[:self.nmFixed.rfind('.')] + ".jpg"
+        file_name = self.fixed_image_filename[:self.fixed_image_filename.rfind('.')] + ".jpg"
         file_path = os.path.join(output_folder, file_name)
         if not os.path.exists(file_path):
-            self.imFixed0.save(file_path, "JPG")
+            self.im_fixed.save(file_path, "JPG")
 
 
     @staticmethod
@@ -5617,7 +5701,7 @@ class MainWindow(QMainWindow):
         """
         mx = np.array(list(max_locs)).reshape(1, -1)
         kk = round(window_size / 2)
-        max_intensity = 0
+        image_max_intensity = 0
         brightest_region_mask = None
         brightest_cand_i = None
         for cand_i in range(mx.shape[0]):
@@ -5641,8 +5725,8 @@ class MainWindow(QMainWindow):
             # Find the brightest region for this candidate
             for label_i in range(1, num_features):  # Skip the background label 0
                 region_intensity = np.sum(window_im[labeled_array == label_i])
-                if region_intensity > max_intensity:
-                    max_intensity = region_intensity
+                if region_intensity > image_max_intensity:
+                    image_max_intensity = region_intensity
                     brightest_region_mask = labeled_array == label_i
                     brightest_cand_i = cand_i
         if brightest_region_mask is None:

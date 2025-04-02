@@ -1094,7 +1094,7 @@ class Ui_MainWindow(object):
 "")
         self.ImageViewControlsFrame_C = QFrame(self.AlignDataTabName)
         self.ImageViewControlsFrame_C.setObjectName(u"ImageViewControlsFrame_C")
-        self.ImageViewControlsFrame_C.setGeometry(QRect(10, 585, 125, 75))
+        self.ImageViewControlsFrame_C.setGeometry(QRect(10, 585, 150, 75))
         self.ImageViewControlsFrame_C.setStyleSheet(u"QFrame { \n"
 "	background-color: #4b4b4b;\n"
 "	border: 1px solid #e6e6e6; /* Border  */\n"
@@ -1103,7 +1103,7 @@ class Ui_MainWindow(object):
         self.ImageViewControlsFrame_C.setFrameShadow(QFrame.Raised)
         self.ImageViewFrameHeaderText_C = QTextEdit(self.ImageViewControlsFrame_C)
         self.ImageViewFrameHeaderText_C.setObjectName(u"ImageViewFrameHeaderText_C")
-        self.ImageViewFrameHeaderText_C.setGeometry(QRect(0, 0, 125, 25))
+        self.ImageViewFrameHeaderText_C.setGeometry(QRect(0, 0, 150, 25))
         self.ImageViewFrameHeaderText_C.setFont(font)
         self.ImageViewFrameHeaderText_C.setStyleSheet(u"QTextEdit { \n"
 "	background-color: #4b4b4b;\n"
@@ -1589,7 +1589,7 @@ class Ui_MainWindow(object):
         self.SaveRegisteredECoordinatesButton.raise_()
         self.DisableFrame_C = QFrame(self.AlignDataTabName)
         self.DisableFrame_C.setObjectName(u"DisableFrame_C")
-        self.DisableFrame_C.setGeometry(QRect(160, 610, 10, 10))
+        self.DisableFrame_C.setGeometry(QRect(170, 590, 10, 10))
         self.DisableFrame_C.setStyleSheet(u"QFrame { \n"
 "	background-color: rgba(255, 255, 255, 0.4);\n"
 "	border: 1px solid #e6e6e6; /* Border  */\n"
@@ -1612,7 +1612,7 @@ class Ui_MainWindow(object):
         self.PlottingImageText.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.DisableFrame_C_2 = QFrame(self.AlignDataTabName)
         self.DisableFrame_C_2.setObjectName(u"DisableFrame_C_2")
-        self.DisableFrame_C_2.setGeometry(QRect(180, 610, 10, 10))
+        self.DisableFrame_C_2.setGeometry(QRect(190, 590, 10, 10))
         self.DisableFrame_C_2.setStyleSheet(u"QFrame { \n"
 "	background-color: rgba(255, 255, 255, 0.4);\n"
 "	border: 1px solid #e6e6e6; /* Border  */\n"
@@ -1621,7 +1621,7 @@ class Ui_MainWindow(object):
         self.DisableFrame_C_2.setFrameShadow(QFrame.Raised)
         self.DisableFrame_C_3 = QFrame(self.AlignDataTabName)
         self.DisableFrame_C_3.setObjectName(u"DisableFrame_C_3")
-        self.DisableFrame_C_3.setGeometry(QRect(200, 610, 10, 10))
+        self.DisableFrame_C_3.setGeometry(QRect(210, 590, 10, 10))
         self.DisableFrame_C_3.setStyleSheet(u"QFrame { \n"
 "	background-color: rgba(255, 255, 255, 0.4);\n"
 "	border: 1px solid #e6e6e6; /* Border  */\n"
@@ -2827,7 +2827,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.tabWidget.setCurrentIndex(5)
+        self.tabWidget.setCurrentIndex(2)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -2971,7 +2971,7 @@ class Ui_MainWindow(object):
         self.SavingRegistrationResultsText.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:4.125pt; font-weight:600; font-style:normal;\">\n"
+"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:600; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9pt;\">Saving Registration Results. Please Wait...</span></p></body></html>", None))
         self.ImageViewFrameHeaderText_O.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
@@ -3033,7 +3033,7 @@ class Ui_MainWindow(object):
         self.CalculatingElasticRegistrationText.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:4.125pt; font-weight:600; font-style:normal;\">\n"
+"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:600; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9pt;\">Calculating Elastic Registration. Please Wait...</span></p></body></html>", None))
         self.ViewElasticCheckBox.setText(QCoreApplication.translate("MainWindow", u"Visible", None))
         self.CalculateElasticRegistrationButton.setText(QCoreApplication.translate("MainWindow", u"Calculate Elastic", None))
