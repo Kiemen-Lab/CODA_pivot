@@ -1428,6 +1428,7 @@ class MainWindow(QMainWindow):
         self.ui.SaveRegisteredCoordinatesButton.setStyleSheet(self.style_button_green)
         self.ui.SaveRegisteredECoordinatesButton.setStyleSheet(self.style_button_green)
         self.ui.PlottingImageText.setText("Replotting the Image. Please Wait...")
+        self.ui.RegisterCoordsFrameHeaderText.setText("Unregistered Moving Image")
 
         # uncheck the check boxes
         self.ui.UnregisteredMovingCheckBox.setCheckState(Qt.Unchecked)
@@ -4071,6 +4072,10 @@ class MainWindow(QMainWindow):
             no variables output, but will update view of tab 2
         """
 
+        # turn off fiducial mode if it's active
+        if self.add_fiducial_active:
+            self.toggle_add_fiducial_mode()
+
         msg_box = QtWidgets.QMessageBox()  # Create a message box
         msg_box.setWindowTitle("Load a new moving image?")  # Set the window title
         msg_box.setText(
@@ -4401,6 +4406,7 @@ class MainWindow(QMainWindow):
         self.ui.NavigationButton.setStyleSheet(self.active_button_style)
         self.ui.KeyboardShortcutsButton.setEnabled(True)
         self.ui.KeyboardShortcutsButton.setStyleSheet(self.active_button_style)
+        self.ui.RegisterCoordsFrameHeaderText.setText("Unregistered Moving Image")
 
     def define_image_registered(self):
         """View the imported coordinates overlaid on the affine registered image.
@@ -4429,6 +4435,7 @@ class MainWindow(QMainWindow):
         self.ui.NavigationButton.setStyleSheet(self.active_button_style)
         self.ui.KeyboardShortcutsButton.setEnabled(True)
         self.ui.KeyboardShortcutsButton.setStyleSheet(self.active_button_style)
+        self.ui.RegisterCoordsFrameHeaderText.setText("Registered Moving Image")
 
     def define_image_fixed(self):
         """View the imported coordinates overlaid on the fixed image.
@@ -4457,6 +4464,7 @@ class MainWindow(QMainWindow):
         self.ui.NavigationButton.setStyleSheet(self.active_button_style)
         self.ui.KeyboardShortcutsButton.setEnabled(True)
         self.ui.KeyboardShortcutsButton.setStyleSheet(self.active_button_style)
+        self.ui.RegisterCoordsFrameHeaderText.setText("Fixed Image")
 
     def define_image_registered_elastic(self):
         """View the imported coordinates overlaid on the elastically registered image.
@@ -4485,6 +4493,7 @@ class MainWindow(QMainWindow):
         self.ui.NavigationButton.setStyleSheet(self.active_button_style)
         self.ui.KeyboardShortcutsButton.setEnabled(True)
         self.ui.KeyboardShortcutsButton.setStyleSheet(self.active_button_style)
+        self.ui.RegisterCoordsFrameHeaderText.setText("Elastically Registered Moving Image")
 
     def load_coordinates_to_register(self):
         """Loads the coordinates and image data defined in the table.
