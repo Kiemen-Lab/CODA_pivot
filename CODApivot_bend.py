@@ -22,6 +22,9 @@ from PySide6.QtCore import Qt, QPointF, Signal, QEvent
 from PySide6.QtGui import QPixmap, QTransform, QImage, QPainter, QCursor, QColor, QPen
 from PySide6.QtWidgets import QDialog, QStyledItemDelegate, QFileDialog, QLabel, QColorDialog, QHeaderView, QMainWindow, QVBoxLayout, QWidget
 
+# disable the decompression bomb protection entirely:
+Image.MAX_IMAGE_PIXELS = None
+
 class CustomDelegateTable(QStyledItemDelegate):
     # Define a custom signal
     valueUpdatedTable = Signal(str, int, int)  # Emit new_value, row, and column
@@ -75,6 +78,7 @@ class MainWindow(QMainWindow):
         self.overlay_tab = 4 # fifth tab
         self.elastic_reg_tab = 5 # sixth tab
         self.keyboard_tab = 6 # seventh tab
+        self.apply_to_images_tab = 7  # eight tab
         self.current_index = self.import_project_tab # which tab is currently visible
         # variables needed for app rescaling
         self.widget_dimensions = 0
@@ -263,6 +267,13 @@ class MainWindow(QMainWindow):
         self.coordinate_data = "" # table of all coordinate data read from the coordinate file
         self.which_moving_images_are_registered = [[0], [0]] # keep track of which images have registration data saved
         self.sampled_indices = [] # keep track of which rows of the coordinate file are selected to plot
+        # apply to images variables
+        self.images_to_register_list = []  # list of all moving images in this project
+        self.num_image_delete = [[], []]  # variable to keep track of a potential moving image to delete
+        self.image_file_folder = ""
+        self.image_filename = ""
+        self.num_image_row = 0
+        self.num_image_column = 0
         # populate the keyboard shortcuts table
         self.ui.keyboardShortCutsTableWidget.setHorizontalHeaderLabels(["R", "F", "D"])
         self.ui.keyboardShortCutsTableWidget_2.setHorizontalHeaderLabels(["B", "C", "A"])
@@ -278,17 +289,17 @@ class MainWindow(QMainWindow):
         # reference the keyboard shortcuts pop-up dialog so it's ready for later
         self.keyboardShortcutsDialog = None
         self.ui.KeyboardShortcutsButton.clicked.connect(self.show_keyboard_shortcuts)
-        self.ui.KeyboardShortcutsButton.setGeometry(615, 620, 130, 30)
+        self.ui.KeyboardShortcutsButton.setGeometry(625, 620, 130, 30)
 
         # define the app navigation button settings
-        self.ui.NavigationButton.setGeometry(750, 620, 70, 30)
+        self.ui.NavigationButton.setGeometry(760, 620, 65, 30)
         self.ui.NavigationButton.clicked.connect(self.view_navigation_tab)
         self.ui.CloseNavigationButton.clicked.connect(self.close_navigation_tab)
         self.ui.GoToImportProjectTab.clicked.connect(self.initiate_import_project_tab)
         self.ui.GoToFiducialsTab.clicked.connect(self.initiate_fiducials_tab)
         self.ui.GoToCoordsTab.clicked.connect(self.initiate_apply_to_coords_tab)
         self.ui.GoToJobStatusTab.clicked.connect(self.initiate_job_status_tab)
-
+        self.ui.GoToApplyImageTab.clicked.connect(self.initiate_apply_to_image_tab)
         # create and set the custom delegate to allow double-clicking in tables
         # import project tab
         self.delegate = CustomDelegateTable(self.ui.fixedImageTableWidget)
@@ -304,6 +315,10 @@ class MainWindow(QMainWindow):
         self.delegate = CustomDelegateTable(self.ui.RegisterCoordinatesTableWidget)
         self.ui.RegisterCoordinatesTableWidget.setItemDelegate(self.delegate)
         self.delegate.valueUpdatedTable.connect(self.handle_value_update_coordinates)
+        # apply to images tab
+        self.delegate = CustomDelegateTable(self.ui.ApplyToImageTableWidget)
+        self.ui.ApplyToImageTableWidget.setItemDelegate(self.delegate)
+        self.delegate.valueUpdatedTable.connect(self.handle_value_update_image)
 
         # make the image frames communicate with mouse clicks and scrolls
         # add fiducials tab
@@ -328,26 +343,31 @@ class MainWindow(QMainWindow):
         # Move some buttons around (easier to move here than in QT Designer)
         # add fiducials tab
         self.ui.ChooseMovingImageFrame.setGeometry(10, 565, 480, 85)
-        self.ui.DisableFrame_F1.setGeometry(self.ui.FiducialPointControlsFrame.geometry())
         self.ui.FixedImageFrameHeaderText.setGeometry(self.ui.UnregisteredImageFrameHeaderText.geometry())
         self.ui.MovingImageFrameHeaderText.setGeometry(self.ui.RegisteredImageFrameHeaderText.geometry())
         self.ui.FixedImageDisplayFrame.setGeometry(self.ui.UnregisteredImageDisplayFrame.geometry())
         self.ui.MovingImageDisplayFrame.setGeometry(self.ui.RegisteredImageDisplayFrame.geometry())
         self.ui.FixedImageBorder.setGeometry(self.ui.UnregisteredImageBorder.geometry())
         self.ui.MovingImageBorder.setGeometry(self.ui.RegisteredImageBorder.geometry())
+        self.ui.DisableFrame_F1.setGeometry(self.ui.FiducialPointControlsFrame.geometry())
         # registration overlay tab
         self.ui.DisableFrame_O1.setGeometry(self.ui.ImageViewControlsFrame_O.geometry())
         # elastic registration tab
         self.ui.ImageViewControlsFrame_E.setGeometry(self.ui.ImageViewControlsFrame_O.geometry())
-        self.ui.DisableFrame_E1.setGeometry(self.ui.ImageViewControlsFrame_E.geometry())
-        self.ui.DisableFrame_E2.setGeometry(self.ui.ElasticRegistrationControlsFrame.geometry())
         self.ui.SaveRegistrationResultsButton_E.setGeometry(self.ui.SaveRegistrationResultsButton_O.geometry())
         self.ui.ReturnToFiducialsTabButton_E.setGeometry(self.ui.ReturnToFiducialsTab_O.geometry())
         self.ui.QuitElasticRegistrationButton2.setGeometry(self.ui.TryElasticRegButton.geometry())
+        self.ui.DisableFrame_E1.setGeometry(self.ui.ImageViewControlsFrame_E.geometry())
+        self.ui.DisableFrame_E2.setGeometry(self.ui.ElasticRegistrationControlsFrame.geometry())
         # apply to coordinates tab
         self.ui.DisableFrame_C.setGeometry(self.ui.RegisterCoordinatesFrame.geometry())
         self.ui.DisableFrame_C_2.setGeometry(self.ui.CoordinatesOverlayControlsFrame.geometry())
         self.ui.DisableFrame_C_3.setGeometry(self.ui.ImageViewControlsFrame_C.geometry())
+        # apply to images tab
+        self.ui.DisableFrame_I1.setGeometry(self.ui.ApplyToImageFrame.geometry())
+        self.ui.KeepApplyToImageButton.setGeometry(700, 30, 50, 30)
+        self.ui.DeleteApplyToImageButton.setGeometry(755, 30, 50, 30)
+        self.ui.ApplyToImageComboBox.setGeometry(605, 36, 200, 25)
 
         # What functions to call when a button is clicked
         # import project tab
@@ -405,7 +425,6 @@ class MainWindow(QMainWindow):
         # apply registration to coordinates tab
         self.ui.chooseCoordinatesFileButton.clicked.connect(self.browse_for_coordinates_file)
         self.ui.CorrespondingImageComboBox.currentIndexChanged.connect(self.on_combo_box_changed)
-        self.ui.RegisterCoordinatesTableWidget.cellDoubleClicked.connect(self.doubleclick_coordinates_table)
         self.ui.LoadCoordinatesButton.clicked.connect(self.load_coordinates_to_register)
         self.ui.SwapXYButton.clicked.connect(self.swap_xy)
         self.ui.EditTableButton.clicked.connect(self.return_to_edit_table)
@@ -422,6 +441,14 @@ class MainWindow(QMainWindow):
         self.ui.ColorFiducialButton_C.clicked.connect(self.change_fiducial_color)
         self.ui.ShrinkFiducialButton_C.clicked.connect(self.decrease_fiducial_size)
         self.ui.GrowFiducialButton_C.clicked.connect(self.increase_fiducial_size)
+        self.ui.RegisterCoordinatesTableWidget.cellDoubleClicked.connect(self.doubleclick_coordinates_table)
+        # apply registration to images tab
+        self.ui.ApplyToImageComboBox.currentIndexChanged.connect(self.on_combo_box_changed_image)
+        self.ui.chooseImageFileButton.clicked.connect(self.browse_for_image_to_register)
+        self.ui.RegisterImageButton.clicked.connect(self.apply_registration_to_an_image)
+        self.ui.ApplyToImageTableWidget.cellDoubleClicked.connect(self.doubleclick_image_table)
+        self.ui.DeleteApplyToImageButton.clicked.connect(self.delete_apply_to_image)
+        self.ui.KeepApplyToImageButton.clicked.connect(self.keep_apply_to_image)
 
         # define some style sheets that we will use later
         self.define_some_stylesheets()
@@ -556,7 +583,6 @@ class MainWindow(QMainWindow):
                                         background-color: #7b8e9c; /* More blue when pressed */
                                     }
                                 """
-
 
     def promote_text_to_clickable_label(self, text_widget, click_handler):
         """Make each of the image frames clickable so they interact with mouse commands
@@ -1212,6 +1238,7 @@ class MainWindow(QMainWindow):
         self.ui.LoadOldMovingImageButton.setEnabled(False)
         self.ui.FiducialPointControlsFrame.setVisible(False)
         self.ui.PickNewMovingImageButton.setVisible(False)
+        self.ui.PickNewMovingImageButton.setEnabled(True)
         self.ui.AttemptICPRegistrationButton.setVisible(False)
         self.ui.AttemptICPRegistrationButton.setEnabled(True)
         self.ui.AttemptICPRegistrationButton.setStyleSheet(self.style_button_green)
@@ -1315,7 +1342,8 @@ class MainWindow(QMainWindow):
         self.reset_transformations()
 
         # register the moving image
-        self.im_moving_reg = self.transform_image(self.im_moving, self.mode_intensity_moving)
+        size_fixed_image = [self.im_fixed.width(), self.im_fixed.height()]
+        self.im_moving_reg = self.transform_image(self.im_moving, self.tform, self.flip_im, size_fixed_image, self.mode_intensity_moving)
         pixmap_moving_reg = self.adjust_brightness_contrast(self.im_moving_reg, self.moving_contrast, self.moving_brightness)
 
         # make the desired overlay image
@@ -1478,6 +1506,184 @@ class MainWindow(QMainWindow):
             self.ui.RegisterCoordinatesTableWidget.setVerticalHeaderLabels([""])
         self.populate_coordinates_table()
 
+    def initiate_apply_to_image_tab(self):
+        """Populate and navigate to tab 7, apply to images tab
+        Used in multiple tabs
+        Args:
+            none, draws from 'self'
+        Returns:
+            no variables output, but will update tab 3
+        """
+        # move the navigation tab
+        self.ui.WhatNextControlFrame.setParent(self.ui.ApplyToImageTabName)
+        self.ui.NavigationButton.setParent(self.ui.ApplyToImageTabName)
+        self.close_navigation_tab()
+
+        # save the current fiducial points and view settings if the user is in the fiducials tab
+        self.save_fiducial_state()
+
+        # move to apply to coordinates tab
+        self.ui.tabWidget.setCurrentIndex(self.apply_to_images_tab)
+
+        # initial view settings
+        self.ui.DisableFrame_I1.setVisible(False)
+        self.ui.RegisterImageButton.setVisible(False)
+        self.ui.ApplyToImageText_1.setVisible(False) #self.ui.RegisterCoordsFrameHeaderText.setText("Unregistered Moving Image")
+        self.ui.ApplyToImageText_2.setVisible(False)
+        self.ui.ApplyToImageText_3.setVisible(False)
+        self.ui.ApplyToImageText_4.setVisible(False)
+        self.ui.NavigationButton.setEnabled(True)
+        self.ui.NavigationButton.setStyleSheet(self.active_button_style)
+        self.ui.SaveRegisteredCoordinatesButton.setStyleSheet(self.style_button_green)
+        self.ui.ApplyToImageComboBox.setVisible(False)
+        self.ui.KeepApplyToImageButton.setVisible(False)
+        self.ui.DeleteApplyToImageButton.setVisible(False)
+
+        # clear large variables to save memory
+        self.im_moving = []
+        self.im_moving_reg = []
+        self.im_moving_reg_elastic = []
+        self.im_moving_coords = []
+        self.im_moving_coords_reg = []
+        self.im_moving_coords_reg_elastic = []
+        self.moving_image_filename = []
+        self.num_image_row = 0
+        self.num_image_column = 0
+
+        # initiate coordinates variables
+        self.image_file_folder = ""
+        self.image_filename = ""
+
+        # populate the blank table
+        self.ui.ApplyToImageTableWidget.setHorizontalHeaderLabels(
+            ["Image Filename", "Corresponding Moving Image", "Apply Which Registration", "Status"])
+        if self.image_filename:
+            self.ui.ApplyToImageTableWidget.setVerticalHeaderLabels([""])
+        self.populate_image_table()
+
+    def apply_registration_to_an_image(self):
+        """Let the user browse for a .csv coordinates file.
+        Used in tab 7 only
+        Args:
+            none, draws from 'self'
+        Returns:
+            no variables output, but will save a registered image.
+        """
+
+        self.ui.DisableFrame_I1.setVisible(True)
+        self.ui.NavigationButton.setEnabled(False)
+        self.ui.KeyboardShortcutsButton.setEnabled(False)
+        QtWidgets.QApplication.processEvents()
+
+        # go through the list of images
+        n_rows = self.images_to_register_list.shape[0]
+        for i in range(n_rows):
+            self.ui.ApplyToImageText_1.setVisible(False)
+            self.ui.ApplyToImageText_2.setVisible(False)
+            self.ui.ApplyToImageText_3.setVisible(False)
+            self.ui.ApplyToImageText_4.setVisible(False)
+
+            # check if affine or elastic registration is requested
+            apply_elastic = self.images_to_register_list[i, 4]
+
+            # check if the registered image already exists
+            self.image_filename = self.images_to_register_list[i, 0]
+            self.image_file_folder = self.images_to_register_list[i, 1]
+            if apply_elastic == 'Affine':
+                output_folder = os.path.join(self.image_file_folder, "Apply_" + self.results_name)
+            else:
+                output_folder = os.path.join(self.image_file_folder, "Apply_" + self.results_name, "Elastic")
+            # Check if the folder exists, and create it if it doesn't
+            if not os.path.exists(output_folder):
+                os.makedirs(output_folder)
+
+            filename = self.image_filename
+            outfile = os.path.join(output_folder, filename)
+            if os.path.exists(outfile):
+                self.images_to_register_list[i][5] = "Already Done!"
+                self.populate_image_table()
+                continue
+
+            # load the image
+            self.ui.ApplyToImageText_1.setText(f"Step 1 of 3. Loading Image: {self.image_filename}...")
+            self.ui.ApplyToImageText_1.setVisible(True)
+            QtWidgets.QApplication.processEvents()
+            corresponding_moving_image_filename = self.images_to_register_list[i, 2]
+            image_path = os.path.join(self.image_file_folder, self.image_filename)
+            im_moving_apply, max_intensity, mode_intensity_moving_apply = self.load_image(image_path)  # store the original pixmap
+
+            # load the affine registration variables
+            filename, _ = os.path.splitext(corresponding_moving_image_filename)
+            self.ui.ApplyToImageText_2.setText(f"Step 2 of 3. Applying Registration Metadata from Image: "
+                                               f"{corresponding_moving_image_filename}...")
+            self.ui.ApplyToImageText_2.setVisible(True)
+            QtWidgets.QApplication.processEvents()
+            data_filename = filename + ".pkl"
+            data_folder = os.path.join(self.job_folder, self.results_name, "Registration transforms")
+            outfile = os.path.join(data_folder, data_filename)
+            with open(outfile, 'rb') as file:
+                data = pickle.load(file)
+            tform = data.get('tform')
+            flip_im = data.get('flip_im')
+            size_fixed_image = data.get('size_fixed_image')
+            size_moving_image = data.get('size_moving_image')
+
+            # determine the difference in size between this image and the original moving image
+            scale_width = im_moving_apply.width() / size_moving_image[0]
+            scale_height = im_moving_apply.height() / size_moving_image[1]
+            rescale_to_new_image_size = (scale_width + scale_height) / 2
+
+            # remove the scaling portion of tform, and account for the different image size of the loaded image
+            affine_scale_factor = np.linalg.norm(tform[:2, 0])
+            tform_noscale = np.eye(3)
+            tform_noscale[:2, :2] = tform[:2, :2] / affine_scale_factor
+            tform_noscale[:2, 2] = (tform[:2, 2] / affine_scale_factor) * rescale_to_new_image_size
+
+            # apply affine registration to the image
+            size_in = [int(round(size_fixed_image[0] * rescale_to_new_image_size)),
+                                int(round(size_fixed_image[1] * rescale_to_new_image_size))]
+            size_out = [round(size_fixed_image[0] / affine_scale_factor * rescale_to_new_image_size),
+                        round(size_fixed_image[1] / affine_scale_factor * rescale_to_new_image_size)]
+            registered_mask = self.transform_image(im_moving_apply, tform_noscale, flip_im, size_in, mode_intensity_moving_apply, size_out)
+            self.debug_show_image(self.pixmap_to_array(registered_mask), 1)
+
+            # apply elastic registration if requested
+            if apply_elastic == "Elastic":
+                # load the elastic registration variables
+                data_folder = os.path.join(self.job_folder, self.results_name, "Registration transforms", "Elastic")
+                outfile = os.path.join(data_folder, data_filename)
+                with open(outfile, 'rb') as file:
+                    data = pickle.load(file)
+                D = data.get('D')
+
+                # apply the elastic registration
+                scale_elastic = rescale_to_new_image_size / affine_scale_factor
+                registered_mask = self.register_image_elastic(self.pixmap_to_array(registered_mask), D, mode_intensity_moving_apply, scale_elastic)
+                registered_mask = self.array_to_pixmap(registered_mask)
+
+            # save the registered image
+            self.ui.ApplyToImageText_3.setText("Step 3 of 3. Saving Registered Image...")
+            self.ui.ApplyToImageText_3.setVisible(True)
+            QtWidgets.QApplication.processEvents()
+
+            filetype = self.image_filename.lower()
+            outfile = os.path.join(output_folder, self.image_filename)
+            if filetype.endswith(('.tif', '.png')):
+                registered_mask.save(outfile, format='TIFF')
+            else:
+                registered_mask.save(outfile, 'JPG')
+
+            self.ui.ApplyToImageText_4.setText("Done!")
+            self.ui.ApplyToImageText_4.setVisible(True)
+            self.images_to_register_list[i][5] = "Done!"
+            self.populate_image_table()
+            QtWidgets.QApplication.processEvents()
+
+        self.ui.DisableFrame_I1.setVisible(False)
+        self.ui.NavigationButton.setEnabled(True)
+        self.ui.KeyboardShortcutsButton.setEnabled(True)
+        QtWidgets.QApplication.processEvents()
+
     def initiate_job_status_tab(self):
         """Populate and navigate to tab 5, job status tab
         Used in multiple tabs
@@ -1513,8 +1719,7 @@ class MainWindow(QMainWindow):
 
         row_count = 1
         for row in self.moving_images_list:
-            self.ui.JobStatusTableWidget.setItem(row_count, 0,
-                                                 QtWidgets.QTableWidgetItem(f"Moving image {row_count}:  {row[0]}  "))
+            self.ui.JobStatusTableWidget.setItem(row_count, 0, QtWidgets.QTableWidgetItem(f"Moving image {row_count}:  {row[0]}  "))
             row_count += 1
 
         # check if corresponding files exist
@@ -1801,7 +2006,8 @@ class MainWindow(QMainWindow):
         array = self.pixmap_to_array(im_moving)
         array_mask = np.ones_like(array, dtype=np.uint8)
         array_mask = self.array_to_pixmap(array_mask)
-        registered_mask = self.transform_image(array_mask, [0, 0, 0])
+        size_fixed_image = [self.im_fixed.width(), self.im_fixed.height()]
+        registered_mask = self.transform_image(array_mask, self.tform, self.flip_im, size_fixed_image, [0, 0, 0])
         registered_mask = self.pixmap_to_array(registered_mask)  # [..., :3]
 
         # Convert pixmaps to arrays
@@ -2087,6 +2293,8 @@ class MainWindow(QMainWindow):
                 img.verify()  # Verify that it is an image
             return True
         except (IOError, SyntaxError):
+            text = "The selected file is not an image. Please select an image"
+            self.show_error_message(text)
             return False
 
     def add_points_to_image(self, pixmap, pts, pt_size, color):
@@ -2671,9 +2879,14 @@ class MainWindow(QMainWindow):
             child_y = self.widget_dimensions[3, idx + 1] * scale_height
             child.move(int(child_x), int(child_y))
 
+        self.ui.DisableFrame_F1.setGeometry(self.ui.FiducialPointControlsFrame.geometry())
+        self.ui.DisableFrame_O1.setGeometry(self.ui.ImageViewControlsFrame_O.geometry())
+        self.ui.DisableFrame_E1.setGeometry(self.ui.ImageViewControlsFrame_E.geometry())
+        self.ui.DisableFrame_E2.setGeometry(self.ui.ElasticRegistrationControlsFrame.geometry())
         self.ui.DisableFrame_C.setGeometry(self.ui.RegisterCoordinatesFrame.geometry())
         self.ui.DisableFrame_C_2.setGeometry(self.ui.CoordinatesOverlayControlsFrame.geometry())
         self.ui.DisableFrame_C_3.setGeometry(self.ui.ImageViewControlsFrame_C.geometry())
+        self.ui.DisableFrame_I1.setGeometry(self.ui.ApplyToImageFrame.geometry())
 
         # document that we have scaled the app at least once
         self.scaleCount = self.scaleCount + 1
@@ -2694,7 +2907,6 @@ class MainWindow(QMainWindow):
         if scale is None:
             scale = 1
 
-        print(f"size Dinv: {inverted_displacement_field.shape}, resized to size of the image: {szz}")
         inverted_displacement_field_resized = resize(inverted_displacement_field, (szz[0], szz[1], 2),
                                                      preserve_range=True) * scale
         inverted_displacement_field_a = inverted_displacement_field_resized[:, :, 0]
@@ -2712,26 +2924,28 @@ class MainWindow(QMainWindow):
         )
         pts_elastic = pts + pts_move
 
-        # Display the result
-        print("Transformed coordinates (xye):")
-
         return pts_elastic
 
-    def register_image_elastic(self, image, displacement_field, scale=None):
+    def register_image_elastic(self, image, displacement_field, mode_vals=None, scale=None):
         """Applies the nonlinear displacement field to an image to perform elastic registration
         Used in multiple tabs
         Args:
             image: an image array to be registered
             displacement_field: a nonlinear dispacement field corresponding to image
+            mode_vals: mode intensity of each rgb channel of the moving image
             scale: the scale between the image and the image that the elastic registration was calculated on
+
         Returns:
             image_elastic: elastically registered image
         """
         # rescale the transformation matrix
         displacement_field = cv2.resize(displacement_field, (image.shape[1], image.shape[0]),
                                         interpolation=cv2.INTER_LINEAR)
+        if mode_vals is None:
+            mode_vals = [241, 241, 241]
+
         if scale is not None and scale != 1:
-            displacement_field = displacement_field ** scale
+            displacement_field = displacement_field * scale
 
         # Create the base coordinate grid
         base_x, base_y = np.meshgrid(np.arange(image.shape[1]), np.arange(image.shape[0]))
@@ -2740,7 +2954,7 @@ class MainWindow(QMainWindow):
         map_x = (base_x + displacement_field[..., 0]).astype(np.float32)
         map_y = (base_y + displacement_field[..., 1]).astype(np.float32)
         remapped_channels = [
-            cv2.remap(channel, map_x, map_y, interpolation=cv2.INTER_NEAREST, borderMode=cv2.BORDER_CONSTANT,borderValue=float(241))
+            cv2.remap(channel, map_x, map_y, interpolation=cv2.INTER_NEAREST, borderMode=cv2.BORDER_CONSTANT,borderValue=float(mode_vals[i-1]))
             for i, channel in enumerate(cv2.split(image))
         ]
         image_elastic = cv2.merge(remapped_channels)
@@ -2748,44 +2962,58 @@ class MainWindow(QMainWindow):
 
         return image_elastic
 
-    def debug_show_image(self, image):
+    def debug_show_image(self, image, adapt_brightness=None):
         """plot the input image for debugging purposes.
         Used in multiple tabs
         Args:
             image: numpy array image to plot
+            adapt_brightness: if given, scale color intensities to the min and max intensity of the array
         Returns:
             no variables output, but plots the image
         """
-        plt.imshow(image)
+
+        if adapt_brightness is None:
+            plt.imshow(image)
+        else:
+            plt.imshow(image, cmap='gray',
+                       vmin=image.min(),
+                       vmax=image.max())
+            plt.colorbar()
         plt.axis("off")
         plt.show()
 
-    def transform_image(self, pixmap, mode_vals):
+    def transform_image(self, pixmap, tform, flip_im, size_fixed_image, mode_vals, size_out=None):
         """Register an image using pixmap and other metadata inputs.
         Used in multiple tabs
         Args:
             pixmap: image to register in pixmap format
+            tform: transformation matrix
+            flip_im: logical input, flip image along vertical axis of not
             mode_vals: mode of each channel of the RGB pixmap
+            size_fixed_image: size of image to pad the moving image to before registration
+            size_out: (optional) pixel size of target registered image
         Returns:
             registered_pixmap: registered version of the input pixmap, also in pixmap format
         """
-        if self.flip_im:
+        if size_out is None:
+            size_out = size_fixed_image
+
+        if flip_im:
             transform = QTransform().scale(-1, 1)  # Horizontal flip
             pixmap = pixmap.transformed(transform, mode=Qt.SmoothTransformation)
 
         # Pad the image to the size of the fixed image
-        border = 0  # add border around fixed image
-        width = max([self.im_fixed.width(), pixmap.width()])
-        height = max([self.im_fixed.height(), pixmap.height()])
-        szz = (width, height)  # (width, height)
-        array, array_g = self.pad_images(pixmap, width, height, mode_vals, border)
+        width = max([size_fixed_image[0], pixmap.width()])
+        height = max([size_fixed_image[1], pixmap.height()])
+        array, array_g = self.pad_images(pixmap, width, height, mode_vals)
 
         # Apply the adjusted transformation and crop the image to the size of the fixed image
         fv1, fv2, fv3 = int(mode_vals[0]), int(mode_vals[1]), int(mode_vals[2])
-        transformed_array = cv2.warpAffine(array, self.tform[:2, :], szz, flags=cv2.INTER_LINEAR,
-                                           borderMode=cv2.BORDER_CONSTANT, borderValue=[fv1, fv2, fv3])
-        if transformed_array.shape[1] > self.im_fixed.height() or transformed_array.shape[0] > self.im_fixed.width():
-            transformed_array = transformed_array[:self.im_fixed.height(), :self.im_fixed.width()]
+        #transformed_array = cv2.warpAffine(array, tform[:2, :], szz, flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=[fv1, fv2, fv3])
+        transformed_array = cv2.warpAffine(array, tform[:2, :], size_out, flags=cv2.INTER_NEAREST,
+            borderMode=cv2.BORDER_CONSTANT, borderValue=[fv1, fv2, fv3])
+        if transformed_array.shape[1] > size_out[1] or transformed_array.shape[0] > size_out[0]:
+            transformed_array = transformed_array[:size_out[1], :size_out[0]]
         transformed_array = np.ascontiguousarray(transformed_array)
 
         # Convert back to pixmap
@@ -2824,11 +3052,10 @@ class MainWindow(QMainWindow):
 
         # extract the filename selected by the user and update table 1 in the app
         file_path, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Select Fixed Image File", "")
-        if file_path:  # if a file is selected
-            self.fixed_image_folder, self.fixed_image_filename = os.path.split(file_path)
-            # file_path = os.path.join(self.pthFixed, self.nmFixed)
-            if self.is_file_an_image(file_path):
-                self.populate_fixed_table()
+        if self.is_file_an_image(file_path):  # if a file is selected
+            self.fixed_image_folder = os.path.normpath(os.path.dirname(file_path))  # Extract the folder
+            self.fixed_image_filename = os.path.basename(file_path)  # Extract the filename
+            self.populate_fixed_table()
 
     def browse_for_moving_image(self):
         """Allows the user to select a file to serve as the fixed image for the job.
@@ -2841,14 +3068,14 @@ class MainWindow(QMainWindow):
         # extract the filename selected by the user and update table 2 in the app
         file_path, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Select Moving Image File", "")
         if file_path:  # If a file is selected
-            self.moving_image_folder, self.moving_image_filename = os.path.split(file_path)
+            self.moving_image_folder = os.path.normpath(os.path.dirname(file_path))  # Extract the folder
+            self.moving_image_filename = os.path.basename(file_path)  # Extract the filename
             self.scale_moving_image = ""
             # file_path = os.path.join(self.pthMoving, self.nmMoving)
             if self.is_file_an_image(file_path):
 
                 if len(self.moving_images_list) == 0:
-                    self.moving_images_list = np.array([[self.moving_image_filename, self.scale_moving_image, self.moving_image_folder]],
-                                                       dtype=object)
+                    self.moving_images_list = np.array([[self.moving_image_filename, self.scale_moving_image, self.moving_image_folder]], dtype=object)
                 else:
                     add_to_list = np.array([self.moving_image_filename, self.scale_moving_image, self.moving_image_folder])
                     self.moving_images_list = np.vstack([self.moving_images_list, add_to_list])
@@ -2882,7 +3109,7 @@ class MainWindow(QMainWindow):
         # extract the folder selected by the user and update table 3 in the app
         folder = QFileDialog.getExistingDirectory(self, "Select Job Folder", "")
         if folder:  # If a file is selected
-            self.job_folder = folder
+            self.job_folder = os.path.normpath(folder)
             self.populate_project_table()
 
     def populate_fixed_table(self):
@@ -3079,21 +3306,17 @@ class MainWindow(QMainWindow):
         # Get location and name of fixed image
         self.fixed_image_filename = X[2, 1]
         self.scale_fixed_image = X[2, 2]
-        self.fixed_image_folder = X[2, 3]
+        self.fixed_image_folder = os.path.normpath(X[2, 3])
 
         # Get location of output folder
         self.results_name = X[4, 1]
-        self.job_folder = X[4, 3]
+        self.job_folder = os.path.normpath(X[4, 3])
         if not os.path.isdir(self.job_folder):
             os.makedirs(self.job_folder)
 
         # Get a list of all moving images
-        mvims = np.array([["", "", ""]], dtype=object)
-        for b in range(6, len(X)):  # Adjusting for 0-based indexing in Python
-            add_to_list = np.array([X[b, 1], X[b, 2], X[b, 3]])
-            mvims = np.vstack([mvims, add_to_list])
-        mvims = np.delete(mvims, 0, axis=0)
-        self.moving_images_list = mvims
+        self.moving_images_list = X[6:, [1, 2, 3]]
+        self.moving_images_list[:, 2] = [os.path.normpath(p) for p in self.moving_images_list[:, 2]]
 
         self.populate_fixed_table()
         self.populate_moving_table()
@@ -3223,7 +3446,7 @@ class MainWindow(QMainWindow):
         """
 
         # Optionally update other variables or UI elements
-        if column == 1:  # For example, update ScaleFixed if editing the Scale column
+        if column == 1:
             # Check if the string is a number
             try:
                 float(new_value)
@@ -3276,20 +3499,29 @@ class MainWindow(QMainWindow):
             no variables output, but will update the first and second tables of tab 1
         """
 
-        # disable some buttons
-        self.ui.setJobTableWidget.setEnabled(False)
-        self.ui.chooseFixedImageButton.setEnabled(False)
-        self.ui.chooseMovingImageButton.setEnabled(False)
-        self.ui.loadTemplateButton.setEnabled(False)
+        # app-wide buttons
         self.close_navigation_tab()
         self.ui.NavigationButton.setEnabled(False)
         self.ui.NavigationButton.setStyleSheet(self.inactive_button_style)
         self.ui.KeyboardShortcutsButton.setEnabled(False)
         self.ui.KeyboardShortcutsButton.setStyleSheet(self.inactive_button_style)
-        if self.edit_table_active == 1:
-            self.ui.DefineMovingImageFrame.setEnabled(False)
-        elif self.edit_table_active == 2:
-            self.ui.DefineFixedImageFrame.setEnabled(False)
+
+        # disable some buttons
+        if self.edit_table_active == 5:
+            self.ui.chooseImageFileButton.setEnabled(False)
+            self.ui.RegisterImageButton.setVisible(False)
+            if self.num_image_column == 0: # keep vs delete
+                self.ui.KeepApplyToImageButton.setVisible(True)
+                self.ui.DeleteApplyToImageButton.setVisible(True)
+        else:
+            self.ui.setJobTableWidget.setEnabled(False)
+            self.ui.chooseFixedImageButton.setEnabled(False)
+            self.ui.chooseMovingImageButton.setEnabled(False)
+            self.ui.loadTemplateButton.setEnabled(False)
+            if self.edit_table_active == 1:
+                self.ui.DefineMovingImageFrame.setEnabled(False)
+            elif self.edit_table_active == 2:
+                self.ui.DefineFixedImageFrame.setEnabled(False)
 
     def exit_edit_table(self):
         """Updates the table view settings for all tables in tab 1 when exiting edit table mode
@@ -3300,26 +3532,35 @@ class MainWindow(QMainWindow):
             no variables output, but will update the first and second tables of tab 1
         """
 
-        # turn off edit table active
-        self.edit_table_active = 0
-
-        # make disabled buttons enabled again
-        self.ui.DefineFixedImageFrame.setEnabled(True)
-        self.ui.DefineMovingImageFrame.setEnabled(True)
-        self.ui.setJobTableWidget.setEnabled(True)
-        self.ui.chooseFixedImageButton.setEnabled(True)
-        self.ui.chooseMovingImageButton.setEnabled(True)
-        self.ui.loadTemplateButton.setEnabled(True)
+        # app-wide buttons
         self.ui.NavigationButton.setEnabled(True)
         self.ui.NavigationButton.setStyleSheet(self.active_button_style)
         self.ui.KeyboardShortcutsButton.setEnabled(True)
         self.ui.KeyboardShortcutsButton.setStyleSheet(self.active_button_style)
 
-        # make the keep and delete buttons invisible
-        self.ui.keepFixedImageButton.setVisible(False)
-        self.ui.deleteFixedImageButton.setVisible(False)
-        self.ui.keepMovingImageButton.setVisible(False)
-        self.ui.deleteMovingImageButton.setVisible(False)
+        if self.edit_table_active == 5:
+            self.ui.chooseImageFileButton.setEnabled(True)
+            if self.num_image_column == 0:  # keep vs delete
+                self.ui.KeepApplyToImageButton.setVisible(False)
+                self.ui.DeleteApplyToImageButton.setVisible(False)
+            self.populate_image_table()
+        else:
+            # make disabled buttons enabled again
+            self.ui.DefineFixedImageFrame.setEnabled(True)
+            self.ui.DefineMovingImageFrame.setEnabled(True)
+            self.ui.setJobTableWidget.setEnabled(True)
+            self.ui.chooseFixedImageButton.setEnabled(True)
+            self.ui.chooseMovingImageButton.setEnabled(True)
+            self.ui.loadTemplateButton.setEnabled(True)
+
+            # make the keep and delete buttons invisible
+            self.ui.keepFixedImageButton.setVisible(False)
+            self.ui.deleteFixedImageButton.setVisible(False)
+            self.ui.keepMovingImageButton.setVisible(False)
+            self.ui.deleteMovingImageButton.setVisible(False)
+
+        # turn off edit table active
+        self.edit_table_active = 0
 
     def keep_fixed_image(self):
         """Exits edit table mode without removing the fixed image
@@ -3352,6 +3593,35 @@ class MainWindow(QMainWindow):
             self.ui.JobFolderCheckBox.setChecked(False)
             self.job_folder = ""
             self.populate_project_table()
+        self.exit_edit_table()
+
+    def keep_apply_to_image(self):
+        """Exits edit table mode without removing the selected moving image
+        Used in tab 7 only
+        Args:
+            none, draws from 'self'
+        Returns:
+            no variables output, but will update the second table of tab 1
+        """
+
+        # update the table view
+        self.exit_edit_table()
+
+    def delete_apply_to_image(self):
+        """Removes the desired moving image, updates the list of moving images,
+           updates the table, and exits edit table mode
+        Used in tab 7 only
+        Args:
+            none, draws from 'self'
+        Returns:
+            no variables output, but will update the second table of tab 1
+        """
+
+        # remove the selected image from the table
+        self.images_to_register_list = np.delete(self.images_to_register_list, self.num_image_row , axis=0)
+
+        # update the table view
+        self.populate_image_table()
         self.exit_edit_table()
 
     def keep_moving_image(self):
@@ -3852,9 +4122,9 @@ class MainWindow(QMainWindow):
         # add items from column 1 of self.moving_images_list
         for index, row in enumerate(self.moving_images_list):
             if len(row) > 1:  # Ensure the row has at least two columns
-                filename = row[0]  # Get the filename from column 1
-                filename_out = filename[:filename.rfind('.')] + ".pkl"
-                filepath = os.path.join(self.job_folder, self.results_name, "Registration transforms", filename_out)
+                filename, _ = os.path.splitext(row[0]) # Get the filename from column 1
+                filename = filename + ".pkl"
+                filepath = os.path.join(self.job_folder, self.results_name, "Registration transforms", filename)
 
                 if os.path.isfile(filepath):  # Check if the file exists
                     self.ui.OldMovingImagesComboBox.addItem(filename)  # Add to OldMovingImagesComboBox
@@ -3960,9 +4230,10 @@ class MainWindow(QMainWindow):
         self.im_moving, self.max_intensity_moving, self.mode_intensity_moving = self.load_image(file_path)  # store the original pixmap
 
         # check if saved fiducial points exist
-        data_filename = self.moving_image_filename[:self.moving_image_filename.rfind('.')] + ".pkl"
+        filename, _ = os.path.splitext(self.moving_image_filename)  # Get the filename from column 1
+        filename = filename + ".pkl"
         output_folder = os.path.join(self.job_folder, self.results_name, "Fiducial point selection")
-        output_file = os.path.join(output_folder, data_filename)
+        output_file = os.path.join(output_folder, filename)
         if os.path.exists(output_file):
             self.load_previous_settings(output_file)
             self.update_both_images()
@@ -3996,9 +4267,10 @@ class MainWindow(QMainWindow):
         self.define_edit_frame()
         if self.current_index == self.fiducials_tab and self.pts_fixed.shape[0] > 1:
             # save fiducial info
-            tmp = self.moving_image_filename[:self.moving_image_filename.rfind('.')] + ".pkl"
+            filename, _ = os.path.splitext(self.moving_image_filename)  # Get the filename from column 1
+            filename = filename + ".pkl"
             output_folder = os.path.join(self.job_folder, self.results_name, "Fiducial point selection")
-            output_file = os.path.join(output_folder, tmp)
+            output_file = os.path.join(output_folder, filename)
 
             # check if the folder exists, and create it if it doesn't
             if not os.path.exists(output_folder):
@@ -4096,26 +4368,52 @@ class MainWindow(QMainWindow):
         self.save_fiducial_state()
         self.initiate_fiducials_tab()
 
+    def browse_for_image_to_register(self):
+        """Allows the user to select a file to serve as the fixed image for the job.
+        Used in tab 7 only
+        Args:
+            none, draws from 'self'
+        Returns:
+            no variables output, but will update the second table of tab 7.
+        """
+        # extract the filename selected by the user and update table 2 in the app
+        open_to = os.path.join(self.job_folder, self.results_name)
+        file_path, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Select an image to register",
+                                                             open_to, "All Files (*.*)")
+
+        if not self.is_file_an_image(file_path):
+            return
+
+        if file_path:  # If a file is selected
+            image_file_folder = os.path.normpath(os.path.dirname(file_path))  # Extract the folder
+            image_filename = os.path.basename(file_path)  # Extract the filename
+            emp = ""
+            # file_path = os.path.join(self.pthMoving, self.nmMoving)
+            if self.is_file_an_image(file_path):
+                if len(self.images_to_register_list) == 0:
+                    self.images_to_register_list = np.array([[image_filename, image_file_folder, emp, emp, emp, emp]], dtype=object)
+                else:
+                    add_to_list = np.array([image_filename, image_file_folder, emp, emp, emp, emp])
+                    self.images_to_register_list = np.vstack([self.images_to_register_list, add_to_list])
+                self.populate_image_table()
+
     def browse_for_coordinates_file(self):
         """Let the user browse for a .csv coordinates file.
-        Used in tab 3 only
+        Used in tab 3
         Args:
-            row: row in the table selected
-            column: column in the table selected
+            none, draws from self
         Returns:
             no variables output, but App view changes.
         """
-        open_to = os.path.join(self.job_folder, self.results_name)
-        file_path, _ = QtWidgets.QFileDialog.getOpenFileName(
-            self,
-            "Select .csv or .xlsx File containing coordinates",
-            open_to,  # Specify the initial folder here
-            "Data Files (*.csv *.xlsx);;All Files (*)")
-        if file_path:
-            self.coordinates_file_folder = os.path.dirname(file_path)  # Extract the folder
-            self.coordinates_filename = os.path.basename(file_path)  # Extract the filename
 
-        # add this information to the table
+        open_to = os.path.join(self.job_folder, self.results_name)
+        file_path, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Select .csv or .xlsx file containing coordinates",
+                                                             open_to, "Data Files (*.csv *.xlsx);;All Files (*)")
+        if not file_path:
+            return
+
+        self.coordinates_file_folder = os.path.normpath(os.path.dirname(file_path))  # Extract the folder
+        self.coordinates_filename = os.path.basename(file_path)  # Extract the filename
         self.column_in_coords_file_containing_x_values = ""
         self.column_in_coords_file_containing_y_values = ""
         self.populate_coordinates_table()
@@ -4202,35 +4500,247 @@ class MainWindow(QMainWindow):
 
     def populate_coordinates_combo_box(self):
         """Populate the QComboBox with strings from column 1 of self.moving_images_list.
-        Used in tab 3 only
+        Used in tab 3 and tab 7 only
         Args:
         Returns:
             no variables output, but App view changes.
         """
+
+        self.define_edit_frame()
+        if self.current_index == self.apply_to_data_tab:
+            combo_box = self.ui.CorrespondingImageComboBox
+        elif self.current_index == self.apply_to_images_tab:
+            combo_box = self.ui.ApplyToImageComboBox
+        else:
+            return
+
         # Clear the current items in the combo box
-        self.ui.CorrespondingImageComboBox.clear()
-
+        combo_box.clear()
         # initialize the combo box list
-        self.ui.CorrespondingImageComboBox.addItem("Select")
-        self.which_moving_images_are_registered = [[], []]
+        combo_box.addItem("Select")
 
-        # Add items from column 1 of self.moving_images_list
-        for index, row in enumerate(self.moving_images_list):
-            if len(row) > 1:  # Ensure the row has at least two columns
-                filename = row[0]  # Get the filename from column 1
-                filename_out1 = filename[:filename.rfind('.')] + ".pkl"
-                filename_out2 = filename[:filename.rfind('.')] + ".jpg"
+        if self.num_image_column == 2: # TO DO edit to make sure elastic exists
+            # allow selection if the elastic registration exists, else pick affine automatically
+            image_name = self.images_to_register_list[self.num_image_row][2]
+            image_name, _ = os.path.splitext(image_name)  # Get the filename from column 1
+            image_name = image_name + ".jpg"
+            filename = os.path.join(self.job_folder, self.results_name, "Registered images", "Elastic", image_name)
+            if os.path.exists(filename):
+                combo_box.addItem("Affine")
+                combo_box.addItem("Elastic")
+            else:
+                self.ui.ApplyToImageComboBox.setVisible(False)
 
-                # check if fiducial points, a transform, and a registered image exists
-                filepath1 = os.path.join(self.job_folder, self.results_name, "Fiducial point selection", filename_out1) # os.path.join(self.jobFolder, self.ResultsName, "aligned_stack", filename_out)
-                filepath2 = os.path.join(self.job_folder, self.results_name, "Registration transforms", filename_out1)
-                filepath3 = os.path.join(self.job_folder, self.results_name, "Registered images", filename_out2)
+        elif self.num_image_column in [0, 1]:
+            self.which_moving_images_are_registered = [[], []]
 
-                if os.path.isfile(filepath1) and os.path.isfile(filepath2) and os.path.isfile(filepath3):  # Check if the file exists
-                    self.ui.CorrespondingImageComboBox.addItem(filename)  # Add to OldMovingImagesComboBox
-                    self.which_moving_images_are_registered[0].append(index)
-                else:
-                    self.which_moving_images_are_registered[1].append(index)
+            # Add items from column 1 of self.moving_images_list
+            for index, row in enumerate(self.moving_images_list):
+                if len(row) > 1:  # Ensure the row has at least two columns
+                    filename = row[0]  # Get the filename from column 1
+                    filename, _ = os.path.splitext(filename)
+                    filename_out1 = filename + ".pkl"
+                    filename_out2 = filename + ".jpg"
+
+                    # check if fiducial points, a transform, and a registered image exists
+                    filepath1 = os.path.join(self.job_folder, self.results_name, "Fiducial point selection",
+                                             filename_out1)  # os.path.join(self.jobFolder, self.ResultsName, "aligned_stack", filename_out)
+                    filepath2 = os.path.join(self.job_folder, self.results_name, "Registration transforms",
+                                             filename_out1)
+                    filepath3 = os.path.join(self.job_folder, self.results_name, "Registered images", filename_out2)
+
+                    if os.path.isfile(filepath1) and os.path.isfile(filepath2) and os.path.isfile(
+                            filepath3):  # Check if the file exists
+                        combo_box.addItem(filename)  # Add to OldMovingImagesComboBox
+                        self.which_moving_images_are_registered[0].append(index)
+                    else:
+                        self.which_moving_images_are_registered[1].append(index)
+
+    def on_combo_box_changed_image(self):
+        """Grab the name of the moving image filename selected from the pull down window.
+        Used in tab 7
+        Args:
+            none, draws from 'self'
+        Returns:
+            no variables output, but App view changes.
+        """
+
+        combo_box = self.ui.ApplyToImageComboBox
+
+        # get the current filename and index from the droplist
+        current_index_in_table = combo_box.currentIndex()
+        if current_index_in_table in {-1, 0}:
+            return
+        elif self.num_image_column == 1:
+            row_number = self.which_moving_images_are_registered[0]
+            row_number = row_number[current_index_in_table - 1]
+            moving_filename = self.moving_images_list[row_number][0]
+            moving_folder = self.moving_images_list[row_number][2]
+            self.images_to_register_list[self.num_image_row][2] = moving_filename
+            self.images_to_register_list[self.num_image_row][3] = moving_folder
+            self.images_to_register_list[self.num_image_row][4] = "" # remove the registration choice if it exists
+            self.ui.ApplyToImageComboBox.setVisible(False)
+
+            # pick affine registration automatically if the elastic registration does not exist
+            image_name = self.images_to_register_list[self.num_image_row][2]
+            image_name, _ = os.path.splitext(image_name)  # Get the filename from column 1
+            image_name = image_name + ".jpg"
+            filename = os.path.join(self.job_folder, self.results_name, "Registered images", "Elastic", image_name)
+            if not os.path.exists(filename):
+                self.images_to_register_list[self.num_image_row][4] = "Affine"
+
+        elif self.num_image_column == 2:
+            if current_index_in_table == 1:
+                self.images_to_register_list[self.num_image_row][4] = "Affine"
+            elif current_index_in_table == 2:
+                self.images_to_register_list[self.num_image_row][4] = "Elastic"
+            self.ui.ApplyToImageComboBox.setVisible(False)
+        else:
+            return
+
+        # update the table
+        self.populate_image_table()
+
+        # exit edit table mode
+        self.exit_edit_table()
+
+    def on_combo_box_changed(self):
+        """Grab the name of the moving image filename selected from the pull down window.
+        Used in tab 3
+        Args:
+            none, draws from 'self'
+        Returns:
+            no variables output, but App view changes.
+        """
+
+        combo_box = self.ui.CorrespondingImageComboBox
+
+        # get the current filename and index from the droplist
+        current_index_in_table = combo_box.currentIndex()
+        if current_index_in_table in {-1, 0}:
+            moving_filename = ""
+            moving_folder = ""
+            scale = ""
+        else:
+            row_number = self.which_moving_images_are_registered[0]
+            row_number = row_number[current_index_in_table - 1]
+
+            moving_filename = self.moving_images_list[row_number][0]
+            moving_folder = self.moving_images_list[row_number][2]
+            scale = self.moving_images_list[row_number][1]
+
+        self.moving_image_filename_corresponding_to_coordinates = moving_filename
+        self.moving_image_folder_corresponding_to_coordinates = moving_folder
+        self.scale_coordinates_file = scale
+        # update the table
+        self.populate_coordinates_table()
+
+    def populate_image_table(self):
+        """Fill in values from the variables in the coordinates table. Turn the table green when complete.
+        Used in tab 7
+        Args:
+            none, draws from 'self'
+        Returns:
+            no variables output, but App view changes.
+        """
+
+        # set the number of rows in the table to the current number of moving images
+        if len(self.images_to_register_list) == 0:
+            self.ui.ApplyToImageTableWidget.setRowCount(0)
+            return
+        num_rows = self.images_to_register_list.size / 6
+        self.ui.ApplyToImageTableWidget.setRowCount(num_rows)
+
+        # populate the rows of the table with the info in movingIMS
+        row_count = 0
+        for row in self.images_to_register_list:
+            #print(row)
+            self.ui.ApplyToImageTableWidget.setItem(row_count, 0, QtWidgets.QTableWidgetItem(f"{row[0]}  "))
+            self.ui.ApplyToImageTableWidget.setItem(row_count, 1, QtWidgets.QTableWidgetItem(f"{row[2]}  "))
+            self.ui.ApplyToImageTableWidget.setItem(row_count, 2, QtWidgets.QTableWidgetItem(f"{row[4]}  "))
+            self.ui.ApplyToImageTableWidget.setItem(row_count, 3, QtWidgets.QTableWidgetItem(f"{row[5]}  "))
+            row_count += 1
+
+        if self.images_to_register_list.shape[0] > 0:
+            self.ui.ApplyToImageTableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+
+        # turn the frame green if all fixed image inputs are defined correctly
+        self.check_if_table_is_complete_image_tab()
+
+    def check_if_table_is_complete_image_tab(self):
+        """Determines if the table is correctly filled. If yes, allow the user to load the coordinates and image.
+        Used in tab 7
+        Args:
+            none, draws from 'self'
+        Returns:
+            no variables output, but App view changes.
+        """
+
+        image_frame_done = 1  # complete
+        if len(self.images_to_register_list) == 0:
+            image_frame_done = 0  # not started
+        else:
+            for row in self.images_to_register_list:
+                row_count = 1
+                for cell in row:
+                    if (not isinstance(cell, str) or not cell.strip()) and row_count != 6:
+                        image_frame_done = 2  # incomplete
+                    row_count = row_count + 1
+
+        # make fixed frame green if completed
+        if image_frame_done == 1: # complete
+            self.ui.ApplyToImageFrame.setStyleSheet("background-color: #375c46;")
+            self.ui.RegisterImageButton.setVisible(True)
+        elif image_frame_done == 0: # not started
+            self.ui.ApplyToImageFrame.setStyleSheet("background-color: #4b4b4b;")
+            self.ui.RegisterImageButton.setVisible(False)
+        else: # incomplete
+            self.ui.ApplyToImageFrame.setStyleSheet("background-color: #5c3737;")
+            self.ui.RegisterImageButton.setVisible(False)
+
+    def populate_coordinates_table(self):
+        """Fill in values from the variables in the coordinates table. Turn the table green when complete.
+        Used in tab 3
+        Args:
+            none, draws from 'self'
+        Returns:
+            no variables output, but App view changes.
+        """
+
+        # Populate the first row with the variables' values
+        self.ui.RegisterCoordinatesTableWidget.setItem(0, 0, QtWidgets.QTableWidgetItem(f"{self.coordinates_filename}  "))
+        self.ui.RegisterCoordinatesTableWidget.setItem(0, 1, QtWidgets.QTableWidgetItem(f"{self.moving_image_filename_corresponding_to_coordinates}  "))  # Convert scale to string if necessary
+        self.ui.RegisterCoordinatesTableWidget.setItem(0, 2, QtWidgets.QTableWidgetItem(self.scale_coordinates_file))
+        self.ui.RegisterCoordinatesTableWidget.setItem(0, 3, QtWidgets.QTableWidgetItem(self.column_in_coords_file_containing_x_values))
+        self.ui.RegisterCoordinatesTableWidget.setItem(0, 4, QtWidgets.QTableWidgetItem(self.column_in_coords_file_containing_y_values))
+        self.ui.RegisterCoordinatesTableWidget.setItem(0, 5, QtWidgets.QTableWidgetItem(str(self.max_points)))
+        self.ui.RegisterCoordinatesTableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+
+        # turn the frame green if all fixed image inputs are defined correctly
+        self.check_if_table_is_complete_coords_tab()
+
+    def check_if_table_is_complete_coords_tab(self):
+        """Determines if the table is correctly filled. If yes, allow the user to load the coordinates and image.
+        Used in tab 3
+        Args:
+            none, draws from 'self'
+        Returns:
+            no variables output, but App view changes.
+        """
+
+        coordsFrameDone = (len(self.coordinates_filename) > 0
+            and len(self.moving_image_filename_corresponding_to_coordinates) > 0
+            and len(self.scale_coordinates_file) > 0
+            and len(self.column_in_coords_file_containing_x_values) > 0
+            and len(self.column_in_coords_file_containing_y_values) > 0 and len(self.max_points) > 0)
+
+        # make fixed frame green if completed
+        if coordsFrameDone:
+            self.ui.RegisterCoordinatesFrame.setStyleSheet("background-color: #375c46;")
+            self.ui.LoadCoordinatesButton.setVisible(True)
+        else:
+            self.ui.RegisterCoordinatesFrame.setStyleSheet("background-color: #4b4b4b;")
+            self.ui.LoadCoordinatesButton.setVisible(False)
 
     def doubleclick_coordinates_table(self, row, column):
         """Handle the user double-clicking the coordinates table.
@@ -4241,6 +4751,11 @@ class MainWindow(QMainWindow):
         Returns:
             no variables output, but App view changes.
         """
+
+        # don't allow if table edit mode is active
+        if self.edit_table_active == 5:
+            return
+
         # if the table is populated and table edit mode is not already active
         if len(self.coordinates_filename) > 0 or len(self.moving_image_filename_corresponding_to_coordinates) > 0:
 
@@ -4253,6 +4768,65 @@ class MainWindow(QMainWindow):
                     item.setFlags(item.flags() | Qt.ItemIsEditable)  # Enable editing
                     self.ui.RegisterCoordinatesTableWidget.editItem(item)  # Put the cell into edit mode
 
+    def doubleclick_image_table(self, row, column):
+        """Enable editing of the moving image variables in table 2
+        Used in tab 7 only
+        Args:
+            row: row of the table that the user double-clicked on
+            column: column of the table that the user double-clicked on
+        Returns:
+            no variables output, but allows the user to edit the image to register parameters
+        """
+
+        # disable doubleclicking in the table during other edit actions
+        if self.edit_table_active == 5:
+            return
+
+        # if the table is populated
+        if len(self.images_to_register_list) > 0:
+
+            self.num_image_row = row
+            self.num_image_column = column
+            if column == 0: # enable the user to keep or delete the image TO DO
+                self.edit_table_active = 5
+                self.enter_edit_table()
+            elif column == 1: # enable combobox to choose the image
+                self.edit_table_active = 5
+                self.enter_edit_table()
+                self.ui.ApplyToImageComboBox.setVisible(True)
+                self.populate_coordinates_combo_box()
+            elif column == 2: # choose affine or elastic registration TO DO
+                # only allow registration style selection after the image is chosen
+                txt = self.images_to_register_list[self.num_image_row][2]
+                if txt is None or txt == '':
+                    return
+                self.edit_table_active = 5
+                self.enter_edit_table()
+                self.ui.ApplyToImageComboBox.setVisible(True)
+                self.populate_coordinates_combo_box()
+
+
+    def handle_value_update_image(self, new_value, row, column):
+        """Make sure that the moving image table inputs are valid.
+        Used in tab 7 only
+        Args:
+            new_value: new value input by the user for this cell of the table
+            row: row of the table that the user double-clicked on
+            column: column of the table that the user double-clicked on
+        Returns:
+            no variables output, but updates table 2
+        """
+
+        print("handle value update image table")
+
+        # Optionally update other variables or UI elements
+        if column == 1:
+            print(" clicked in column 2")
+            self.populate_moving_table()
+        elif column == 2:
+            print(" clicked in column 3")
+            self.populate_moving_table()
+
     def handle_value_update_coordinates(self, new_value, row, column):
         """Check that the inputted scale value is compatible, if not throw an error message.
         Used in tab 3 only
@@ -4263,6 +4837,7 @@ class MainWindow(QMainWindow):
         Returns:
             no variables output, but App view changes.
         """
+
         if column == 2: # scale
             try:
                 float(new_value)
@@ -4296,70 +4871,6 @@ class MainWindow(QMainWindow):
             return
         self.ui.LoadCoordinatesButton.setVisible(True)
         self.populate_coordinates_table()
-
-    def on_combo_box_changed(self):
-        """Grab the name of the moving image filename selected from the pull down window.
-        Used in tab 3 only
-        Args:
-            none, draws from 'self'
-        Returns:
-            no variables output, but App view changes.
-        """
-        # get the current filename and index from the droplist
-        current_index_in_table = self.ui.CorrespondingImageComboBox.currentIndex()
-        if current_index_in_table in {-1, 0}:
-            self.moving_image_filename_corresponding_to_coordinates = ""
-            self.scale_coordinates_file = ""
-            self.moving_image_folder_corresponding_to_coordinates = ""
-        else:
-            row_number = self.which_moving_images_are_registered[0]
-            row_number = row_number[current_index_in_table - 1]
-
-            self.moving_image_filename_corresponding_to_coordinates = self.moving_images_list[row_number][0]
-            self.scale_coordinates_file = self.moving_images_list[row_number][1]
-            self.moving_image_folder_corresponding_to_coordinates = self.moving_images_list[row_number][2]
-
-        # update the table
-        self.populate_coordinates_table()
-
-    def populate_coordinates_table(self):
-        """Fill in values from the variables in the coordinates table. Turn the table green when complete.
-        Used in tab 3 only
-        Args:
-            none, draws from 'self'
-        Returns:
-            no variables output, but App view changes.
-        """
-        # Populate the first row with the variables' values
-        self.ui.RegisterCoordinatesTableWidget.setItem(0, 0, QtWidgets.QTableWidgetItem(f"{self.coordinates_filename}  "))
-        self.ui.RegisterCoordinatesTableWidget.setItem(0, 1, QtWidgets.QTableWidgetItem(f"{self.moving_image_filename_corresponding_to_coordinates}  "))  # Convert scale to string if necessary
-        self.ui.RegisterCoordinatesTableWidget.setItem(0, 2, QtWidgets.QTableWidgetItem(self.scale_coordinates_file))
-        self.ui.RegisterCoordinatesTableWidget.setItem(0, 3, QtWidgets.QTableWidgetItem(self.column_in_coords_file_containing_x_values))
-        self.ui.RegisterCoordinatesTableWidget.setItem(0, 4, QtWidgets.QTableWidgetItem(self.column_in_coords_file_containing_y_values))
-        self.ui.RegisterCoordinatesTableWidget.setItem(0, 5, QtWidgets.QTableWidgetItem(str(self.max_points)))
-        self.ui.RegisterCoordinatesTableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-
-        # turn the frame green if all fixed image inputs are defined correctly
-        self.check_if_table_is_complete_coords_tab()
-
-    def check_if_table_is_complete_coords_tab(self):
-        """Determines if the table is correctly filled. If yes, allow the user to load the coordinates and image.
-        Used in tab 3 only
-        Args:
-            none, draws from 'self'
-        Returns:
-            no variables output, but App view changes.
-        """
-        coordsFrameDone = (len(self.coordinates_filename) > 0 and len(self.moving_image_filename_corresponding_to_coordinates) > 0 and len(self.scale_coordinates_file) > 0
-                           and len(self.column_in_coords_file_containing_x_values) > 0 and len(self.column_in_coords_file_containing_y_values) > 0 and len(self.max_points) > 0)
-
-        # make fixed frame green if completed
-        if coordsFrameDone:
-            self.ui.RegisterCoordinatesFrame.setStyleSheet("background-color: #375c46;")
-            self.ui.LoadCoordinatesButton.setVisible(True)
-        else:
-            self.ui.RegisterCoordinatesFrame.setStyleSheet("background-color: #4b4b4b;")
-            self.ui.LoadCoordinatesButton.setVisible(False)
 
     def return_to_edit_table(self):
         """Stop viewing the coordinates and return to editing the coordinates table.
@@ -4512,7 +5023,8 @@ class MainWindow(QMainWindow):
         # load the fixed image and the unregistered and registered moving images
         image_path_fixed = os.path.join(self.fixed_image_folder, self.fixed_image_filename)
         image_path_moving = os.path.join(self.moving_image_folder_corresponding_to_coordinates, self.moving_image_filename_corresponding_to_coordinates)
-        image_nm = self.moving_image_filename_corresponding_to_coordinates[:self.moving_image_filename_corresponding_to_coordinates.rfind('.')] + ".jpg"
+        filename, _ = os.path.splitext(self.moving_image_filename_corresponding_to_coordinates)
+        image_nm = filename + ".jpg"
         image_path_reg = os.path.join(self.job_folder, self.results_name, "Registered images", image_nm)
         image_path_reg_elastic = os.path.join(self.job_folder, self.results_name, "Registered images", "Elastic", image_nm)
 
@@ -4652,9 +5164,10 @@ class MainWindow(QMainWindow):
         pd.DataFrame(X).to_csv(output_file, header=None, index=False)
 
         # save a pkl file logging whether the coordinates were icp or elastically registered
-        tmp = self.moving_image_filename_corresponding_to_coordinates[:self.moving_image_filename_corresponding_to_coordinates.rfind('.')] + ".pkl"
+        filename, _ = os.path.splitext(self.moving_image_filename_corresponding_to_coordinates)
+        filename = filename + ".pkl"
         output_folder = os.path.join(self.job_folder, self.results_name, "Registered coordinate data", "log")
-        outfile = os.path.join(output_folder, tmp)
+        outfile = os.path.join(output_folder, filename)
         if not os.path.exists(output_folder):
             os.makedirs(output_folder)
         coord_registration_type = self.coord_registration_type
@@ -4715,7 +5228,8 @@ class MainWindow(QMainWindow):
         self.pts_coords = self.pts_coords * float(self.scale_coordinates_file)
 
         # Load the transformation data and register the coordinates
-        filename = self.moving_image_filename_corresponding_to_coordinates[:self.moving_image_filename_corresponding_to_coordinates.rfind('.')] + ".pkl"
+        filename, _ = os.path.splitext(self.moving_image_filename_corresponding_to_coordinates)
+        filename = filename + ".pkl"
         output_folder = os.path.join(self.job_folder, self.results_name, "Registration transforms")
         outfile = os.path.join(output_folder, filename)
         with open(outfile, 'rb') as file:
@@ -4943,7 +5457,8 @@ class MainWindow(QMainWindow):
         QtWidgets.QApplication.processEvents()
 
         # save registration info
-        filename = self.moving_image_filename[:self.moving_image_filename.rfind('.')] + ".pkl"
+        filename, _ = os.path.splitext(self.moving_image_filename)
+        filename = filename + ".pkl"
         output_folder = os.path.join(self.job_folder, self.results_name, "Registration transforms")
         outfile = os.path.join(output_folder, filename)
         save_results = 1
@@ -5005,7 +5520,8 @@ class MainWindow(QMainWindow):
                     else:
                         # check if elastic registration results exist and delete them if they do
                         output_folder_image_elastic = os.path.join(self.job_folder, self.results_name, "Registered images", "Elastic")
-                        filename_image_elastic = self.moving_image_filename[:self.moving_image_filename.rfind('.')] + ".jpg"
+                        filename, _ = os.path.splitext(self.moving_image_filename)
+                        filename_image_elastic = filename + ".jpg"
                         outfile_image_elastic = os.path.join(output_folder_image_elastic, filename_image_elastic)
                         outfile_elastic = os.path.join(self.job_folder, self.results_name, "Registration transforms", "Elastic", filename)
                         # delete the elastically registered image
@@ -5015,12 +5531,15 @@ class MainWindow(QMainWindow):
                         if os.path.isfile(outfile_elastic):
                             os.remove(outfile_elastic)
 
+        save_results = 1
         # save the registration results to the .pkl file as long as the user does not cancel
         if save_results == 1:
+            size_fixed_image = [self.im_fixed.width(), self.im_fixed.height()]
+            size_moving_image = [self.im_moving.width(), self.im_moving.height()]
             # save variables to the pkl file
             with open(outfile, 'wb') as file:
-                pickle.dump({'tform': self.tform, 'flip_im': self.flip_im,
-                    'RMSE': self.rmse_reg, 'RMSE0': self.rmse_unregistered, }, file)
+                pickle.dump({'tform': self.tform, 'flip_im': self.flip_im, 'size_fixed_image': size_fixed_image,
+                    'size_moving_image': size_moving_image,'RMSE': self.rmse_reg, 'RMSE0': self.rmse_unregistered}, file)
 
             # save the images
             self.save_registered_images()
@@ -5118,16 +5637,17 @@ class MainWindow(QMainWindow):
         # Check if the folder exists, and create it if it doesn't
         if not os.path.exists(output_folder):
             os.makedirs(output_folder)
-        filename = self.moving_image_filename[:self.moving_image_filename.rfind('.')] + ".jpg"
+        filename, _ = os.path.splitext(self.moving_image_filename)
+        filename = filename + ".jpg"
         outfile = os.path.join(output_folder, filename)
         self.im_moving_reg.save(outfile, "JPG")
 
         # save the fixed image if it does not already exist
-        filename = self.fixed_image_filename[:self.fixed_image_filename.rfind('.')] + ".jpg"
+        filename, _ = os.path.splitext(self.fixed_image_filename)
+        filename = filename + ".jpg"
         outfile = os.path.join(output_folder, filename)
         if not os.path.exists(outfile):
             self.im_fixed.save(outfile, "JPG")
-
 
     def call_CODA_elastic_registration(self):
         """Calls CODA elastic registration and handles visual updates to tab six
@@ -5489,9 +6009,10 @@ class MainWindow(QMainWindow):
         QtWidgets.QApplication.processEvents()
 
         # save registration info
-        file_name = self.moving_image_filename[:self.moving_image_filename.rfind('.')] + ".pkl"
+        filename, _ = os.path.splitext(self.moving_image_filename)
+        filename = filename + ".pkl"
         output_folder = os.path.join(self.job_folder, self.results_name, "Registration transforms", "Elastic")
-        file_path = os.path.join(output_folder, file_name)
+        file_path = os.path.join(output_folder, filename)
 
         # Check if the folder exists, and create it if it doesn't
         if not os.path.exists(output_folder):
@@ -5538,15 +6059,17 @@ class MainWindow(QMainWindow):
         # Check if the folder exists, and create it if it doesn't
         if not os.path.exists(output_folder):
             os.makedirs(output_folder)
-        file_name = self.moving_image_filename[:self.moving_image_filename.rfind('.')] + ".jpg"
-        file_path = os.path.join(output_folder, file_name)
-        self.im_moving_reg_elastic.save(file_path, "JPG")
+        filename, _ = os.path.splitext(self.moving_image_filename)
+        filename = filename + ".jpg"
+        filepath = os.path.join(output_folder, filename)
+        self.im_moving_reg_elastic.save(filepath, "JPG")
 
         # save the fixed image if it does not already exist
-        file_name = self.fixed_image_filename[:self.fixed_image_filename.rfind('.')] + ".jpg"
-        file_path = os.path.join(output_folder, file_name)
-        if not os.path.exists(file_path):
-            self.im_fixed.save(file_path, "JPG")
+        filename, _ = os.path.splitext(self.fixed_image_filename)
+        filename = filename + ".jpg"
+        filepath = os.path.join(output_folder, filename)
+        if not os.path.exists(filepath):
+            self.im_fixed.save(filepath, "JPG")
 
 
     @staticmethod
@@ -6021,8 +6544,6 @@ class MainWindow(QMainWindow):
             )
             xgg0[w_i // unique_x_len, w_i % unique_x_len] = displacements_x
             ygg0[w_i // unique_x_len, w_i % unique_x_len] = displacements_y
-
-        print(f"  found tissue in {num_true} tiles of {x.shape[0]}")
 
         # smooth registration grid and make interpolated displacement map
         if np.max(szim) > 4000:

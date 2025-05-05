@@ -24,7 +24,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(862, 720)
+        MainWindow.resize(854, 718)
         icon = QIcon()
         icon.addFile(u"logo square large.jpg", QSize(), QIcon.Normal, QIcon.Off)
         MainWindow.setWindowIcon(icon)
@@ -518,14 +518,14 @@ class Ui_MainWindow(object):
 "}")
         self.NavigationButton = QPushButton(self.ImportProjectTabName)
         self.NavigationButton.setObjectName(u"NavigationButton")
-        self.NavigationButton.setGeometry(QRect(350, 620, 70, 30))
+        self.NavigationButton.setGeometry(QRect(350, 620, 65, 30))
         self.NavigationButton.setFont(font1)
         self.NavigationButton.setStyleSheet(u"QPushButton {\n"
 "    background-color: #5a5a5a;\n"
 "    color: #e6e6e6; /* Text color */\n"
 "    border: 1px solid #e6e6e6; /* Border  */\n"
 "    border-radius: 5px; /* Optional: Rounded corners */\n"
-"    padding: 5px; /* Optional: Padding around text */\n"
+"    padding: 1px; /* Optional: Padding around text */\n"
 "}\n"
 "\n"
 "QPushButton:hover {\n"
@@ -560,14 +560,14 @@ class Ui_MainWindow(object):
         self.WhatNextText.setReadOnly(True)
         self.GoToImportProjectTab = QPushButton(self.WhatNextControlFrame)
         self.GoToImportProjectTab.setObjectName(u"GoToImportProjectTab")
-        self.GoToImportProjectTab.setGeometry(QRect(10, 35, 78, 30))
+        self.GoToImportProjectTab.setGeometry(QRect(5, 35, 48, 30))
         self.GoToImportProjectTab.setFont(font1)
         self.GoToImportProjectTab.setStyleSheet(u"QPushButton {\n"
 "    background-color: #5a5a5a;\n"
 "    color: #e6e6e6; /* Text color */\n"
 "    border: 1px solid #e6e6e6; /* Border  */\n"
 "    border-radius: 5px; /* Optional: Rounded corners */\n"
-"    padding: 5px; /* Optional: Padding around text */\n"
+"    padding: 1px; /* Optional: Padding around text */\n"
 "}\n"
 "\n"
 "QPushButton:hover {\n"
@@ -579,14 +579,14 @@ class Ui_MainWindow(object):
 "}")
         self.GoToFiducialsTab = QPushButton(self.WhatNextControlFrame)
         self.GoToFiducialsTab.setObjectName(u"GoToFiducialsTab")
-        self.GoToFiducialsTab.setGeometry(QRect(93, 35, 84, 30))
+        self.GoToFiducialsTab.setGeometry(QRect(58, 35, 58, 30))
         self.GoToFiducialsTab.setFont(font1)
         self.GoToFiducialsTab.setStyleSheet(u"QPushButton {\n"
 "    background-color: #5a5a5a;\n"
 "    color: #e6e6e6; /* Text color */\n"
 "    border: 1px solid #e6e6e6; /* Border  */\n"
 "    border-radius: 5px; /* Optional: Rounded corners */\n"
-"    padding: 5px; /* Optional: Padding around text */\n"
+"    padding: 1px; /* Optional: Padding around text */\n"
 "}\n"
 "\n"
 "QPushButton:hover {\n"
@@ -596,16 +596,16 @@ class Ui_MainWindow(object):
 "QPushButton:pressed {\n"
 "    background-color: #7b8e9c; /* More blue when pressed */\n"
 "}")
-        self.GoToJobStatusTab = QPushButton(self.WhatNextControlFrame)
-        self.GoToJobStatusTab.setObjectName(u"GoToJobStatusTab")
-        self.GoToJobStatusTab.setGeometry(QRect(265, 35, 56, 30))
-        self.GoToJobStatusTab.setFont(font1)
-        self.GoToJobStatusTab.setStyleSheet(u"QPushButton {\n"
+        self.GoToApplyImageTab = QPushButton(self.WhatNextControlFrame)
+        self.GoToApplyImageTab.setObjectName(u"GoToApplyImageTab")
+        self.GoToApplyImageTab.setGeometry(QRect(197, 35, 80, 30))
+        self.GoToApplyImageTab.setFont(font1)
+        self.GoToApplyImageTab.setStyleSheet(u"QPushButton {\n"
 "    background-color: #5a5a5a;\n"
 "    color: #e6e6e6; /* Text color */\n"
 "    border: 1px solid #e6e6e6; /* Border  */\n"
 "    border-radius: 5px; /* Optional: Rounded corners */\n"
-"    padding: 5px; /* Optional: Padding around text */\n"
+"    padding: 1px; /* Optional: Padding around text */\n"
 "}\n"
 "\n"
 "QPushButton:hover {\n"
@@ -617,14 +617,14 @@ class Ui_MainWindow(object):
 "}")
         self.GoToCoordsTab = QPushButton(self.WhatNextControlFrame)
         self.GoToCoordsTab.setObjectName(u"GoToCoordsTab")
-        self.GoToCoordsTab.setGeometry(QRect(182, 35, 78, 30))
+        self.GoToCoordsTab.setGeometry(QRect(121, 35, 71, 30))
         self.GoToCoordsTab.setFont(font1)
         self.GoToCoordsTab.setStyleSheet(u"QPushButton {\n"
 "    background-color: #5a5a5a;\n"
 "    color: #e6e6e6; /* Text color */\n"
 "    border: 1px solid #e6e6e6; /* Border  */\n"
 "    border-radius: 5px; /* Optional: Rounded corners */\n"
-"    padding: 5px; /* Optional: Padding around text */\n"
+"    padding: 1px; /* Optional: Padding around text */\n"
 "}\n"
 "\n"
 "QPushButton:hover {\n"
@@ -636,14 +636,33 @@ class Ui_MainWindow(object):
 "}")
         self.CloseNavigationButton = QPushButton(self.WhatNextControlFrame)
         self.CloseNavigationButton.setObjectName(u"CloseNavigationButton")
-        self.CloseNavigationButton.setGeometry(QRect(326, 35, 69, 30))
+        self.CloseNavigationButton.setGeometry(QRect(335, 35, 65, 30))
         self.CloseNavigationButton.setFont(font1)
         self.CloseNavigationButton.setStyleSheet(u"QPushButton {\n"
 "    background-color: #5a5a5a;\n"
 "    color: #e6e6e6; /* Text color */\n"
 "    border: 1px solid #e6e6e6; /* Border  */\n"
 "    border-radius: 5px; /* Optional: Rounded corners */\n"
-"    padding: 5px; /* Optional: Padding around text */\n"
+"    padding: 1px; /* Optional: Padding around text */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #666f75; /* Grey-blue when hovered */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: #7b8e9c; /* More blue when pressed */\n"
+"}")
+        self.GoToJobStatusTab = QPushButton(self.WhatNextControlFrame)
+        self.GoToJobStatusTab.setObjectName(u"GoToJobStatusTab")
+        self.GoToJobStatusTab.setGeometry(QRect(282, 35, 48, 30))
+        self.GoToJobStatusTab.setFont(font1)
+        self.GoToJobStatusTab.setStyleSheet(u"QPushButton {\n"
+"    background-color: #5a5a5a;\n"
+"    color: #e6e6e6; /* Text color */\n"
+"    border: 1px solid #e6e6e6; /* Border  */\n"
+"    border-radius: 5px; /* Optional: Rounded corners */\n"
+"    padding: 1px; /* Optional: Padding around text */\n"
 "}\n"
 "\n"
 "QPushButton:hover {\n"
@@ -2820,6 +2839,405 @@ class Ui_MainWindow(object):
         self.TileSizeText_8.raise_()
         self.keyboardShortCutsTableWidget_2.raise_()
         self.tabWidget.addTab(self.KeyboardTabName, "")
+        self.ApplyToImageTabName = QWidget()
+        self.ApplyToImageTabName.setObjectName(u"ApplyToImageTabName")
+        self.ApplyToImageFrame = QFrame(self.ApplyToImageTabName)
+        self.ApplyToImageFrame.setObjectName(u"ApplyToImageFrame")
+        self.ApplyToImageFrame.setGeometry(QRect(10, 10, 815, 370))
+        self.ApplyToImageFrame.setStyleSheet(u"QFrame { \n"
+"	background-color: #4b4b4b;\n"
+"	border: 1px solid #e6e6e6; /* Border  */\n"
+"}")
+        self.ApplyToImageFrame.setFrameShape(QFrame.StyledPanel)
+        self.ApplyToImageFrame.setFrameShadow(QFrame.Raised)
+        self.ApplyToImageTableHeaderText = QTextEdit(self.ApplyToImageFrame)
+        self.ApplyToImageTableHeaderText.setObjectName(u"ApplyToImageTableHeaderText")
+        self.ApplyToImageTableHeaderText.setGeometry(QRect(0, 0, 815, 25))
+        self.ApplyToImageTableHeaderText.setFont(font)
+        self.ApplyToImageTableHeaderText.setStyleSheet(u"QTextEdit { \n"
+"	background-color: #4b4b4b;\n"
+"	color: #e6e6e6; /* Text color */\n"
+"	border: 1px solid #e6e6e6; /* Border  */\n"
+"    text-align: left;\n"
+"    font-weight: bold;\n"
+"}")
+        self.ApplyToImageTableHeaderText.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.ApplyToImageTableHeaderText.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.ApplyToImageTableHeaderText.setReadOnly(True)
+        self.chooseImageFileButton = QPushButton(self.ApplyToImageFrame)
+        self.chooseImageFileButton.setObjectName(u"chooseImageFileButton")
+        self.chooseImageFileButton.setGeometry(QRect(10, 35, 41, 31))
+        self.chooseImageFileButton.setFont(font2)
+        self.chooseImageFileButton.setStyleSheet(u"QPushButton {\n"
+"    background-color: #323232;\n"
+"    color: #e6e6e6; /* Text color */\n"
+"    border: 1px solid #e6e6e6; /* Border  */\n"
+"    border-radius: 0px; /* Optional: Rounded corners */\n"
+"    padding: 5px; /* Optional: Padding around text */\n"
+"	qproperty-icon: url(Folder.jpg); /* Default icon */\n"
+"}\n"
+" ")
+        self.chooseImageFileButton.setIconSize(QSize(35, 35))
+        self.BrowseForImageText = QTextEdit(self.ApplyToImageFrame)
+        self.BrowseForImageText.setObjectName(u"BrowseForImageText")
+        self.BrowseForImageText.setGeometry(QRect(51, 38, 201, 24))
+        self.BrowseForImageText.setFont(font1)
+        self.BrowseForImageText.setStyleSheet(u"QTextEdit { \n"
+"	background-color: transparent;\n"
+"	color: #e6e6e6; /* Text color */\n"
+"	border: 0px solid #4b4b4b; /* Border  */\n"
+"    border-radius: 5px; /* Optional: Rounded corners */\n"
+"}")
+        self.BrowseForImageText.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.BrowseForImageText.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.BrowseForImageText.setReadOnly(True)
+        self.ApplyToImageComboBox = QComboBox(self.ApplyToImageFrame)
+        self.ApplyToImageComboBox.setObjectName(u"ApplyToImageComboBox")
+        self.ApplyToImageComboBox.setGeometry(QRect(370, 36, 200, 25))
+        self.ApplyToImageComboBox.setFont(font4)
+        self.ApplyToImageComboBox.setStyleSheet(u"QComboBox {\n"
+"    background-color: #707070; /* Light gray background color */\n"
+"    color: #e6e6e6; /* Dark gray font color */\n"
+"    padding: 5px; /* Optional: adds padding inside the combobox */\n"
+"    border: 1px solid #555555; /* Optional: border color */\n"
+"    border-radius: 5px; /* Optional: rounded corners */\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView { /* Styles for dropdown list */\n"
+"    background-color: #707070; /* Dropdown background color */\n"
+"    color: #e6e6e6; /* Dropdown font color */\n"
+"    selection-background-color: #cce5ff; /* Background color when an item is selected */\n"
+"    selection-color: #e6e6e6; /* Font color of selected item */\n"
+"}\n"
+"\n"
+"")
+        self.RegisterImageButton = QPushButton(self.ApplyToImageFrame)
+        self.RegisterImageButton.setObjectName(u"RegisterImageButton")
+        self.RegisterImageButton.setGeometry(QRect(695, 30, 110, 30))
+        self.RegisterImageButton.setFont(font1)
+        self.RegisterImageButton.setStyleSheet(u"QPushButton {\n"
+"    background-color: #5a5a5a;\n"
+"    color: #e6e6e6; /* Text color */\n"
+"    border: 1px solid #e6e6e6; /* Border  */\n"
+"    border-radius: 5px; /* Optional: Rounded corners */\n"
+"    padding: 5px; /* Optional: Padding around text */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #666f75; /* Grey-blue when hovered */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: #7b8e9c; /* More blue when pressed */\n"
+"}")
+        self.ApplyToImageTableWidget = QTableWidget(self.ApplyToImageFrame)
+        if (self.ApplyToImageTableWidget.columnCount() < 4):
+            self.ApplyToImageTableWidget.setColumnCount(4)
+        if (self.ApplyToImageTableWidget.rowCount() < 1):
+            self.ApplyToImageTableWidget.setRowCount(1)
+        self.ApplyToImageTableWidget.setObjectName(u"ApplyToImageTableWidget")
+        self.ApplyToImageTableWidget.setGeometry(QRect(10, 65, 795, 295))
+        self.ApplyToImageTableWidget.setFont(font1)
+        self.ApplyToImageTableWidget.setStyleSheet(u"QTableView {\n"
+"    background-color: #5a5a5a;\n"
+"    color: #e6e6e6; \n"
+"    font-weight: bold;\n"
+"    border: 1px solid #e6e6e6; /* Border  */\n"
+"    border-radius: 0px; /* Optional: Rounded corners */\n"
+"}\n"
+"\n"
+"QHeaderView::section {\n"
+"    border: 0px solid #e6e6e6; /* Border  */\n"
+"    gridline-color: #e6e6e6; /* Set the color of the gridlines */\n"
+"    background-color: #646464;\n"
+"    color: #e6e6e6; \n"
+"    font-weight: bold;\n"
+"    padding: 4px;\n"
+"}\n"
+"\n"
+"QHeaderView {\n"
+"	border: 0px solid #e6e6e6; /* Border  */\n"
+"    background-color: #646464; /* Background for the entire header area */\n"
+"}\n"
+"\n"
+"QTableCornerButton::section {\n"
+"    background-color: #646464; /* Match the header background */\n"
+"}\n"
+"\n"
+"QTableWidget::item {\n"
+"    border: 0px solid #e6e6e6; /* Border  */\n"
+"    gridline-color: #e6e6e6; /* Set the color of the gridlines */\n"
+"	text-align: center;\n"
+"}\n"
+"\n"
+"QTableView::viewport {\n"
+"    background-color: #646464; /* Background beneath the las"
+                        "t row */\n"
+"}\n"
+"\n"
+"QTableWidget::item:selected {\n"
+"    background-color: #666f75; /* background for selected cells */\n"
+"   color: #e6e6e6; /* Text color for selected cells */\n"
+"}\n"
+"\n"
+"QTableWidget::item:selected:!active {\n"
+"    background-color: #5a5a5a; /* background when table loses focus */\n"
+"    color: #e6e6e6; /* Text color */\n"
+"}\n"
+"\n"
+"QTableWidget QLineEdit {\n"
+"    background-color: #666f75; /* Background when editing (light orange) */\n"
+"    color: #e6e6e6; /* Text color while editing */\n"
+"    border: 1px solid #e6e6e6; /* Border for the editor */\n"
+"}")
+        self.ApplyToImageTableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.ApplyToImageTableWidget.setRowCount(1)
+        self.ApplyToImageTableWidget.setColumnCount(4)
+        self.ApplyToImageTableWidget.horizontalHeader().setCascadingSectionResizes(True)
+        self.ApplyToImageTableWidget.horizontalHeader().setMinimumSectionSize(175)
+        self.ApplyToImageTableWidget.horizontalHeader().setDefaultSectionSize(175)
+        self.ApplyToImageTableWidget.horizontalHeader().setStretchLastSection(True)
+        self.ApplyToImageTableWidget.verticalHeader().setVisible(False)
+        self.ApplyToImageTableWidget.verticalHeader().setMinimumSectionSize(25)
+        self.ApplyToImageTableWidget.verticalHeader().setDefaultSectionSize(25)
+        self.KeepApplyToImageButton = QPushButton(self.ApplyToImageFrame)
+        self.KeepApplyToImageButton.setObjectName(u"KeepApplyToImageButton")
+        self.KeepApplyToImageButton.setEnabled(True)
+        self.KeepApplyToImageButton.setGeometry(QRect(585, 30, 50, 30))
+        self.KeepApplyToImageButton.setFont(font1)
+        self.KeepApplyToImageButton.setStyleSheet(u"QPushButton {\n"
+"    background-color: #5a5a5a;\n"
+"    color: #e6e6e6; /* Text color */\n"
+"    border: 1px solid #e6e6e6; /* Border  */\n"
+"    border-radius: 5px; /* Optional: Rounded corners */\n"
+"    padding: 5px; /* Optional: Padding around text */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #666f75; /* Grey-blue when hovered */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: #7b8e9c; /* More blue when pressed */\n"
+"}")
+        self.DeleteApplyToImageButton = QPushButton(self.ApplyToImageFrame)
+        self.DeleteApplyToImageButton.setObjectName(u"DeleteApplyToImageButton")
+        self.DeleteApplyToImageButton.setGeometry(QRect(640, 30, 50, 30))
+        self.DeleteApplyToImageButton.setFont(font1)
+        self.DeleteApplyToImageButton.setStyleSheet(u"QPushButton {\n"
+"    background-color: #5a5a5a;\n"
+"    color: #e6e6e6; /* Text color */\n"
+"    border: 1px solid #e6e6e6; /* Border  */\n"
+"    border-radius: 5px; /* Optional: Rounded corners */\n"
+"    padding: 5px; /* Optional: Padding around text */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #666f75; /* Grey-blue when hovered */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: #7b8e9c; /* More blue when pressed */\n"
+"}")
+        self.ApplyToImageText_1 = QLabel(self.ApplyToImageTabName)
+        self.ApplyToImageText_1.setObjectName(u"ApplyToImageText_1")
+        self.ApplyToImageText_1.setGeometry(QRect(20, 400, 781, 24))
+        self.ApplyToImageText_1.setFont(font6)
+        self.ApplyToImageText_1.setStyleSheet(u"QLabel { \n"
+"	background-color: transparent;\n"
+"	color: #e6e6e6; /* Text color */\n"
+"	border: 0px solid #e6e6e6; /* Border  */\n"
+"    qproperty-alignment: 'AlignLeft';\n"
+"}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+"<ui version=\"4.0\">\n"
+" <widget name=\"__qt_fake_top_level\">\n"
+"  <widget class=\"QLabel\" name=\"RegisterCoordsFrameHeaderText\">\n"
+"   <property name=\"geometry\">\n"
+"    <rect>\n"
+"     <x>10</x>\n"
+"     <y>156</y>\n"
+"     <width>510</width>\n"
+"     <height>24</height>\n"
+"    </rect>\n"
+"   </property>\n"
+"   <property name=\"font\">\n"
+"    <font>\n"
+"     <pointsize>11</pointsize>\n"
+"     <weight>75</weight>\n"
+"     <bold>true</bold>\n"
+"    </font>\n"
+"   </property>\n"
+"   <property name=\"styleSheet\">\n"
+"    <string notr=\"true\">QLabel { \n"
+"	background-color: transparent;\n"
+"	color: #e6e6e6; /* Text color */\n"
+"	border: 0px solid #e6e6e6; /* Border  */\n"
+"    qproperty-alignment: 'AlignCenter';\n"
+"}</string>\n"
+"   </property>\n"
+"   <property name=\"text\">\n"
+""
+                        "    <string>Unregistered Moving Image</string>\n"
+"   </property>\n"
+"  </widget>\n"
+" </widget>\n"
+" <resources/>\n"
+"</ui>\n"
+"")
+        self.ApplyToImageText_2 = QLabel(self.ApplyToImageTabName)
+        self.ApplyToImageText_2.setObjectName(u"ApplyToImageText_2")
+        self.ApplyToImageText_2.setGeometry(QRect(20, 440, 791, 24))
+        self.ApplyToImageText_2.setFont(font6)
+        self.ApplyToImageText_2.setStyleSheet(u"QLabel { \n"
+"	background-color: transparent;\n"
+"	color: #e6e6e6; /* Text color */\n"
+"	border: 0px solid #e6e6e6; /* Border  */\n"
+"    qproperty-alignment: 'AlignLeft';\n"
+"}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+"<ui version=\"4.0\">\n"
+" <widget name=\"__qt_fake_top_level\">\n"
+"  <widget class=\"QLabel\" name=\"RegisterCoordsFrameHeaderText\">\n"
+"   <property name=\"geometry\">\n"
+"    <rect>\n"
+"     <x>10</x>\n"
+"     <y>156</y>\n"
+"     <width>510</width>\n"
+"     <height>24</height>\n"
+"    </rect>\n"
+"   </property>\n"
+"   <property name=\"font\">\n"
+"    <font>\n"
+"     <pointsize>11</pointsize>\n"
+"     <weight>75</weight>\n"
+"     <bold>true</bold>\n"
+"    </font>\n"
+"   </property>\n"
+"   <property name=\"styleSheet\">\n"
+"    <string notr=\"true\">QLabel { \n"
+"	background-color: transparent;\n"
+"	color: #e6e6e6; /* Text color */\n"
+"	border: 0px solid #e6e6e6; /* Border  */\n"
+"    qproperty-alignment: 'AlignCenter';\n"
+"}</string>\n"
+"   </property>\n"
+"   <property name=\"text\">\n"
+""
+                        "    <string>Unregistered Moving Image</string>\n"
+"   </property>\n"
+"  </widget>\n"
+" </widget>\n"
+" <resources/>\n"
+"</ui>\n"
+"")
+        self.ApplyToImageText_3 = QLabel(self.ApplyToImageTabName)
+        self.ApplyToImageText_3.setObjectName(u"ApplyToImageText_3")
+        self.ApplyToImageText_3.setGeometry(QRect(20, 480, 761, 24))
+        self.ApplyToImageText_3.setFont(font6)
+        self.ApplyToImageText_3.setStyleSheet(u"QLabel { \n"
+"	background-color: transparent;\n"
+"	color: #e6e6e6; /* Text color */\n"
+"	border: 0px solid #e6e6e6; /* Border  */\n"
+"    qproperty-alignment: 'AlignLeft';\n"
+"}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+"<ui version=\"4.0\">\n"
+" <widget name=\"__qt_fake_top_level\">\n"
+"  <widget class=\"QLabel\" name=\"RegisterCoordsFrameHeaderText\">\n"
+"   <property name=\"geometry\">\n"
+"    <rect>\n"
+"     <x>10</x>\n"
+"     <y>156</y>\n"
+"     <width>510</width>\n"
+"     <height>24</height>\n"
+"    </rect>\n"
+"   </property>\n"
+"   <property name=\"font\">\n"
+"    <font>\n"
+"     <pointsize>11</pointsize>\n"
+"     <weight>75</weight>\n"
+"     <bold>true</bold>\n"
+"    </font>\n"
+"   </property>\n"
+"   <property name=\"styleSheet\">\n"
+"    <string notr=\"true\">QLabel { \n"
+"	background-color: transparent;\n"
+"	color: #e6e6e6; /* Text color */\n"
+"	border: 0px solid #e6e6e6; /* Border  */\n"
+"    qproperty-alignment: 'AlignCenter';\n"
+"}</string>\n"
+"   </property>\n"
+"   <property name=\"text\">\n"
+""
+                        "    <string>Unregistered Moving Image</string>\n"
+"   </property>\n"
+"  </widget>\n"
+" </widget>\n"
+" <resources/>\n"
+"</ui>\n"
+"")
+        self.ApplyToImageText_4 = QLabel(self.ApplyToImageTabName)
+        self.ApplyToImageText_4.setObjectName(u"ApplyToImageText_4")
+        self.ApplyToImageText_4.setGeometry(QRect(20, 520, 801, 24))
+        self.ApplyToImageText_4.setFont(font6)
+        self.ApplyToImageText_4.setStyleSheet(u"QLabel { \n"
+"	background-color: transparent;\n"
+"	color: #e6e6e6; /* Text color */\n"
+"	border: 0px solid #e6e6e6; /* Border  */\n"
+"    qproperty-alignment: 'AlignLeft';\n"
+"}<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+"<ui version=\"4.0\">\n"
+" <widget name=\"__qt_fake_top_level\">\n"
+"  <widget class=\"QLabel\" name=\"RegisterCoordsFrameHeaderText\">\n"
+"   <property name=\"geometry\">\n"
+"    <rect>\n"
+"     <x>10</x>\n"
+"     <y>156</y>\n"
+"     <width>510</width>\n"
+"     <height>24</height>\n"
+"    </rect>\n"
+"   </property>\n"
+"   <property name=\"font\">\n"
+"    <font>\n"
+"     <pointsize>11</pointsize>\n"
+"     <weight>75</weight>\n"
+"     <bold>true</bold>\n"
+"    </font>\n"
+"   </property>\n"
+"   <property name=\"styleSheet\">\n"
+"    <string notr=\"true\">QLabel { \n"
+"	background-color: transparent;\n"
+"	color: #e6e6e6; /* Text color */\n"
+"	border: 0px solid #e6e6e6; /* Border  */\n"
+"    qproperty-alignment: 'AlignCenter';\n"
+"}</string>\n"
+"   </property>\n"
+"   <property name=\"text\">\n"
+""
+                        "    <string>Unregistered Moving Image</string>\n"
+"   </property>\n"
+"  </widget>\n"
+" </widget>\n"
+" <resources/>\n"
+"</ui>\n"
+"")
+        self.DisableFrame_I1 = QFrame(self.ApplyToImageTabName)
+        self.DisableFrame_I1.setObjectName(u"DisableFrame_I1")
+        self.DisableFrame_I1.setGeometry(QRect(810, 400, 10, 10))
+        self.DisableFrame_I1.setStyleSheet(u"QFrame { \n"
+"	background-color: rgba(115, 115, 115, 0.4);\n"
+"	border: 1px solid #e6e6e6; /* Border  */\n"
+"}")
+        self.DisableFrame_I1.setFrameShape(QFrame.StyledPanel)
+        self.DisableFrame_I1.setFrameShadow(QFrame.Raised)
+        self.DisableFrame_E1_12 = QFrame(self.DisableFrame_I1)
+        self.DisableFrame_E1_12.setObjectName(u"DisableFrame_E1_12")
+        self.DisableFrame_E1_12.setGeometry(QRect(-190, 30, 31, 31))
+        self.DisableFrame_E1_12.setStyleSheet(u"QFrame { \n"
+"	background-color: rgba(255, 255, 255, 0.4);\n"
+"	border: 1px solid #e6e6e6; /* Border  */\n"
+"}")
+        self.DisableFrame_E1_12.setFrameShape(QFrame.StyledPanel)
+        self.DisableFrame_E1_12.setFrameShadow(QFrame.Raised)
+        self.tabWidget.addTab(self.ApplyToImageTabName, "")
         MainWindow.setCentralWidget(self.centralWidget)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
@@ -2827,7 +3245,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.tabWidget.setCurrentIndex(2)
+        self.tabWidget.setCurrentIndex(7)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -2866,12 +3284,13 @@ class Ui_MainWindow(object):
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:9pt; font-weight:600; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">App Navigation</p></body></html>", None))
-        self.GoToImportProjectTab.setText(QCoreApplication.translate("MainWindow", u"Define Job", None))
-        self.GoToFiducialsTab.setText(QCoreApplication.translate("MainWindow", u"Align Image", None))
-        self.GoToJobStatusTab.setText(QCoreApplication.translate("MainWindow", u"Status", None))
+        self.GoToImportProjectTab.setText(QCoreApplication.translate("MainWindow", u"Set Up", None))
+        self.GoToFiducialsTab.setText(QCoreApplication.translate("MainWindow", u"Fiducials", None))
+        self.GoToApplyImageTab.setText(QCoreApplication.translate("MainWindow", u"Align Image", None))
         self.GoToCoordsTab.setText(QCoreApplication.translate("MainWindow", u"Align Data", None))
         self.CloseNavigationButton.setText(QCoreApplication.translate("MainWindow", u"Close", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.ImportProjectTabName), QCoreApplication.translate("MainWindow", u"Define Job", None))
+        self.GoToJobStatusTab.setText(QCoreApplication.translate("MainWindow", u"Status", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.ImportProjectTabName), QCoreApplication.translate("MainWindow", u"Set Up Job", None))
         self.LoadNewMovingImageButton.setText(QCoreApplication.translate("MainWindow", u"Load Image", None))
         self.LoadOldMovingImageButton.setText(QCoreApplication.translate("MainWindow", u"Load Image", None))
         self.MovingImagesText.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
@@ -2906,7 +3325,7 @@ class Ui_MainWindow(object):
         self.PickNewMovingImageButton.setText(QCoreApplication.translate("MainWindow", u"View New Image", None))
         self.AttemptICPRegistrationButton.setText(QCoreApplication.translate("MainWindow", u"Calculate Transform", None))
         self.KeyboardShortcutsButton.setText(QCoreApplication.translate("MainWindow", u"Keyboard Shortcuts", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.AlignImageTabName), QCoreApplication.translate("MainWindow", u"Align Image", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.AlignImageTabName), QCoreApplication.translate("MainWindow", u"Set Fiducials", None))
         self.RegisterCoordsFrameHeaderText.setText(QCoreApplication.translate("MainWindow", u"Unregistered Moving Image", None))
         self.RegisterCoordsImageBorder.setText("")
         self.ImageViewFrameHeaderText_C.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
@@ -3082,5 +3501,24 @@ class Ui_MainWindow(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9pt; font-weight:600;\">&quot;Shift A&quot; auto-adjust right image</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:9pt; font-weight:600;\"><br /></p></body></html>", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.KeyboardTabName), QCoreApplication.translate("MainWindow", u"Keyboard", None))
+        self.ApplyToImageTableHeaderText.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:600; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Define Image to Register</p></body></html>", None))
+        self.chooseImageFileButton.setText("")
+        self.BrowseForImageText.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:9pt; font-weight:600; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Browse for Image File</p></body></html>", None))
+        self.RegisterImageButton.setText(QCoreApplication.translate("MainWindow", u"Register Image", None))
+        self.KeepApplyToImageButton.setText(QCoreApplication.translate("MainWindow", u"Keep", None))
+        self.DeleteApplyToImageButton.setText(QCoreApplication.translate("MainWindow", u"Delete", None))
+        self.ApplyToImageText_1.setText(QCoreApplication.translate("MainWindow", u"Step 1 of 3: Loading Image, this can take a minute...", None))
+        self.ApplyToImageText_2.setText(QCoreApplication.translate("MainWindow", u"Step 2 of 3: Applying Registration...", None))
+        self.ApplyToImageText_3.setText(QCoreApplication.translate("MainWindow", u"Step 3 of 3: Saving Registered Image...", None))
+        self.ApplyToImageText_4.setText(QCoreApplication.translate("MainWindow", u"Done!", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.ApplyToImageTabName), QCoreApplication.translate("MainWindow", u"Align Images", None))
     # retranslateUi
 
