@@ -1225,6 +1225,7 @@ class MainWindow(QMainWindow):
         self.ui.KeyboardShortcutsButton.setParent(self.ui.AlignImageTabName)
         self.close_navigation_tab()
 
+
         # save the current fiducial points and view settings if the user is in the fiducials tab
         self.save_fiducial_state()
 
