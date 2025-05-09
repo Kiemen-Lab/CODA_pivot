@@ -1228,6 +1228,8 @@ class MainWindow(QMainWindow):
         # save the current fiducial points and view settings if the user is in the fiducials tab
         self.save_fiducial_state()
 
+
+
         # save job settings in a template file
         self.save_template_file()
 
