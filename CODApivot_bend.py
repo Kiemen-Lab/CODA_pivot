@@ -4519,7 +4519,7 @@ class MainWindow(QMainWindow):
         # initialize the combo box list
         combo_box.addItem("Select")
 
-        if self.num_image_column == 2: # TO DO edit to make sure elastic exists
+        if self.num_image_column == 2: # make sure elastic exists
             # allow selection if the elastic registration exists, else pick affine automatically
             image_name = self.images_to_register_list[self.num_image_row][2]
             image_name, _ = os.path.splitext(image_name)  # Get the filename from column 1
@@ -5049,17 +5049,19 @@ class MainWindow(QMainWindow):
             except:
                 text = "One or more images could not be loaded."
                 self.show_error_message(text)
-                self.ui.SaveRegisteredECoordinatesButton.setEnabled(True)
-                self.ui.SaveRegisteredECoordinatesButton.setStyleSheet(self.active_button_style)
 
             self.ui.SaveRegisteredCoordinatesButton.setStyleSheet(self.style_button_green)
             self.ui.SaveRegisteredECoordinatesButton.setStyleSheet(self.style_button_green)
+            self.ui.ViewRegisteredEMovingButton.setStyleSheet(self.active_button_style)
+            self.ui.SaveRegisteredECoordinatesButton.setEnabled(True)
+            self.ui.ViewRegisteredEMovingButton.setEnabled(True)
+            self.ui.RegisteredEMovingCheckBox.setEnabled(True)
             if self.coord_registration_type == 0:
                 self.ui.ViewRegisteredEMovingButton.setEnabled(False)
-                self.ui.ViewRegisteredEMovingButton.setStyleSheet(self.inactive_button_style)
-                self.ui.RegisteredEMovingCheckBox.setCheckState(Qt.Checked)
                 self.ui.RegisteredEMovingCheckBox.setEnabled(False)
                 self.ui.SaveRegisteredECoordinatesButton.setEnabled(False)
+                self.ui.RegisteredEMovingCheckBox.setCheckState(Qt.Checked)
+                self.ui.ViewRegisteredEMovingButton.setStyleSheet(self.inactive_button_style)
                 self.ui.SaveRegisteredECoordinatesButton.setStyleSheet(self.inactive_button_style)
 
         # define the first settings
