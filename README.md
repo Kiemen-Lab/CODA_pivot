@@ -1,12 +1,12 @@
 # CODApivot
 
-CODApivot is an intuitive, Python-powered graphical application for streamlined image registration and transformation. Whether you're working with histology slides, spatial datasets, or medical imaging, CODApivot simplifies the process of aligning, transforming, and visualizing data — all through an elegant GUI.
+CODApivot is a user interface guided tool for streamlined image registration which simplifies the process of aligning and visualizing data.
 
 ---
 ## 🚀 Key Features
 
-* **Project-Based Workflow:** Organize your fixed and moving images, results, and associated data within structured job folders.
-* **Interactive Fiducial Point Selection:** Add, move, and remove fiducial points directly on your images — fast and visually intuitive.
+* **Project-Based Workflow:** Organize your fixed and moving images, results, and associated data.
+* **Interactive Fiducial Point Selection:** Add, move, and remove fiducial points directly on your images.
 * **Smart Image Viewer:** Dynamically adjust brightness, contrast, zoom, pan, flip, and rotate to tailor your view.
 * **Robust Registration Algorithms:**
 
@@ -15,7 +15,7 @@ CODApivot is an intuitive, Python-powered graphical application for streamlined 
 * **Transformation Engine:**
 
   * Apply saved transformations to coordinate datasets (CSV, Excel).
-  * Transfer registrations seamlessly to new images.
+  * Transfer registrations to new images.
 * **Overlay Visualization:** Instantly visualize overlays of fixed and moving images, plus transformed fiducials, to verify alignment quality.
 * **Keyboard Shortcuts:** Work efficiently with built-in shortcut support for most actions.
 
