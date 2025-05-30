@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "CODApivot"
+version = "0.1.0"
+description = "A GUI application for image registration and analysis."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { file = "LICENSE" }
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+]
+
+authors = [
+    { name = "Ashley Kiemen", email = "kiemen@jhmi.edu" },
+    { name = "Valentina Matos-Romero", email = "vmatosr1@jh.edu" }
+]
+
+keywords = ["medical imaging", "image registration"]
+
+dependencies = [
+    "opencv-python",
+    "scipy",
+    "numpy",
+    "pandas",
+    "Pillow",
+    "matplotlib",
+    "scikit-image",
+    "PySide6",
+]
+
+[project.scripts]
+codapivot = "CODApivot:main"
+
+[project.urls]
+"Homepage" = "https://github.com/user/CODApivot"
+"Bug Tracker" = "https://github.com/user/CODApivot/issues"
