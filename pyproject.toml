@@ -38,5 +38,5 @@ dependencies = [
 codapivot = "CODApivot:main"
 
 [project.urls]
-"Homepage" = "https://github.com/user/CODApivot"
-"Bug Tracker" = "https://github.com/user/CODApivot/issues"
+"Homepage" = "https://github.com/Kiemen-Lab/CODA_pivot"
+"Bug Tracker" = "https://github.com/Kiemen-Lab/CODA_pivot.git/issues"
