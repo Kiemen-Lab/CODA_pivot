@@ -49,7 +49,7 @@ Install the CODApivot package via Git:
 
 To open the application, execute the `CODApivot.py` script in your terminal or IDE.
 
-After launching, follow the built-in instructions or refer to the [CODA pivot user guide (PDF)](./CODA%20pivot%20user%20guide.pdf)` for a comprehensive walkthrough.
+After launching, follow the built-in instructions or refer to the [CODA pivot user guide (PDF)](./CODA%20pivot%20user%20guide.pdf) for a comprehensive walkthrough.
 
 ---
 ## 📄 License
