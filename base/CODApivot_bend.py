@@ -21,6 +21,7 @@ from PySide6 import QtWidgets
 from PySide6.QtCore import Qt, QPointF, Signal, QEvent
 from PySide6.QtGui import QPixmap, QTransform, QImage, QPainter, QCursor, QColor, QPen
 from PySide6.QtWidgets import QDialog, QStyledItemDelegate, QFileDialog, QLabel, QColorDialog, QHeaderView, QMainWindow, QVBoxLayout, QWidget
+from .CODApivot_v0 import Ui_MainWindow
 
 # disable the decompression bomb protection entirely:
 Image.MAX_IMAGE_PIXELS = None
