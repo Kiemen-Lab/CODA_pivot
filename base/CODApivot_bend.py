@@ -2813,8 +2813,8 @@ class MainWindow(QMainWindow):
             # return
 
         # Define the folder where screenshots will be saved
-        # folder = os.path.join(self.jobFolder, self.ResultsName, "Screenshots")
-        folder = r'C:\Users\Ashley\Documents\sample data\HE\screenshots for paper'
+        folder = os.path.join(self.jobFolder, self.ResultsName, "Screenshots")
+        #folder = r'C:\Users\Ashley\Documents\sample data\HE\screenshots for paper'
         if not os.path.exists(folder):
             os.makedirs(folder)
 
