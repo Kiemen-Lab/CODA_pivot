@@ -5,6 +5,7 @@ Date: October 23, 2024
 
 import os
 import cv2
+import time
 import scipy
 import random
 import pickle
@@ -16,6 +17,7 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 from typing import Optional, Tuple
 from skimage.transform import resize
+from scipy.interpolate import griddata
 from scipy.interpolate import LinearNDInterpolator
 from PySide6 import QtWidgets
 from PySide6.QtCore import Qt, QPointF, Signal, QEvent
@@ -1876,7 +1878,7 @@ class MainWindow(QMainWindow):
         self.brightness = self.brightness + delta_val
         self.return_edit_frame()
         self.update_image_view()
-        print(f"brightness: {self.brightness}, contrast: {self.contrast}")
+        #print(f"brightness: {self.brightness}, contrast: {self.contrast}")
 
     def change_contrast(self, delta_val=0):
         """Change the image contrast.
@@ -1894,7 +1896,7 @@ class MainWindow(QMainWindow):
         self.contrast = self.contrast + delta_val
         self.return_edit_frame()
         self.update_image_view()
-        print(f"brightness: {self.brightness}, contrast: {self.contrast}")
+        #print(f"brightness: {self.brightness}, contrast: {self.contrast}")
 
     def auto_adjust_contrast(self):
         """Estimate a good contrast to adjust the image by, using the maximum intensity of the image.
@@ -1915,7 +1917,7 @@ class MainWindow(QMainWindow):
         # determine the contrast to increase the maximum intensity to 255
         contrast_old = self.contrast
         self.contrast = 255 / min(image_max_intensity, 255)
-        print(f"  new auto contrast is {self.contrast}, adjusted from {contrast_old}")
+        #print(f"  new auto contrast is {self.contrast}, adjusted from {contrast_old}")
         self.return_edit_frame()
         self.update_image_view()
 
@@ -2183,7 +2185,10 @@ class MainWindow(QMainWindow):
             self.fiducial_pts_to_plot = np.delete(self.fiducial_pts_to_plot, 0, axis=0)  # remove the first point
         elif self.current_index == self.apply_to_data_tab:
             # randomly subsample the coordinate points
-            self.fiducial_pts_to_plot = self.fiducial_pts_to_plot[self.sampled_indices]
+            if isinstance(self.sampled_indices, np.ndarray):
+                self.fiducial_pts_to_plot = self.fiducial_pts_to_plot[self.sampled_indices]
+            else:
+                return
         else:
             return
 
@@ -3055,6 +3060,17 @@ class MainWindow(QMainWindow):
         if self.is_file_an_image(file_path):  # if a file is selected
             self.fixed_image_folder = os.path.normpath(os.path.dirname(file_path))  # Extract the folder
             self.fixed_image_filename = os.path.basename(file_path)  # Extract the filename
+
+            # check if the scale factor is saved in the same folder
+            csv_filename = os.path.splitext(self.fixed_image_filename)[0] + '.csv'
+            csv_path = os.path.join(self.fixed_image_folder, csv_filename)
+            if os.path.exists(csv_path):
+                try:
+                    with open(csv_path, "r") as f:
+                        lines = f.readlines()
+                    self.scale_fixed_image = lines[1].strip()
+                except:
+                    self.scale_fixed_image = ""
             self.populate_fixed_table()
 
     def browse_for_moving_image(self):
@@ -3068,11 +3084,23 @@ class MainWindow(QMainWindow):
         # extract the filename selected by the user and update table 2 in the app
         file_path, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Select Moving Image File", "")
         if file_path:  # If a file is selected
-            self.moving_image_folder = os.path.normpath(os.path.dirname(file_path))  # Extract the folder
-            self.moving_image_filename = os.path.basename(file_path)  # Extract the filename
-            self.scale_moving_image = ""
+
             # file_path = os.path.join(self.pthMoving, self.nmMoving)
             if self.is_file_an_image(file_path):
+                self.moving_image_folder = os.path.normpath(os.path.dirname(file_path))  # Extract the folder
+                self.moving_image_filename = os.path.basename(file_path)  # Extract the filename
+
+                # check if the scale factor is saved in the same folder
+                csv_filename = os.path.splitext(self.moving_image_filename)[0] + '.csv'
+                csv_path = os.path.join(self.moving_image_folder, csv_filename)
+                if os.path.exists(csv_path):
+                    try:
+                        with open(csv_path, "r") as f:
+                            lines = f.readlines()
+                        self.scale_moving_image = lines[1].strip()
+                    except:
+                        self.scale_moving_image = ""
+                self.populate_moving_table()
 
                 if len(self.moving_images_list) == 0:
                     self.moving_images_list = np.array([[self.moving_image_filename, self.scale_moving_image, self.moving_image_folder]], dtype=object)
@@ -3237,7 +3265,7 @@ class MainWindow(QMainWindow):
             self.ui.JobFolderCheckBox.setStyleSheet("color: #e6e6e6;")
 
         # enable app navigation if all frames are completed
-        if fixed_frame_done and job_frame_done and moving_frame_done:
+        if fixed_frame_done == 3 and job_frame_done == 2 and moving_frame_done == 1:
             self.close_navigation_tab()
             self.ui.NavigationButton.setEnabled(True)
             self.ui.NavigationButton.setStyleSheet(self.active_button_style)
@@ -3740,6 +3768,21 @@ class MainWindow(QMainWindow):
             tmp = self.frame_right.geometry()
             self.border_right.setGeometry(tmp.x() - 3, tmp.y() - 3, tmp.width() + 6, tmp.height() + 6)
 
+    def save_pts_to_csv(self):
+
+        combined = np.hstack((self.pts_moving, self.pts_fixed))  # shape [N x 4]
+        columns = ['moving_x', 'moving_y', 'fixed_x', 'fixed_y']
+        df = pd.DataFrame(combined, columns=columns)
+        df = df.iloc[1:]
+
+        folder = r'\\10.99.134.183\kiemen-lab-data\admin\papers\fiducial point registration\final data\OHSU data\PIVOT_validation_points\coordinates'
+        base_name = os.path.splitext(self.moving_image_filename)[0]
+        csv_filename = f"{base_name}.csv"
+        csv_path = os.path.join(folder, csv_filename)
+
+        # Save the CSV
+        df.to_csv(csv_path, index=False)
+
     def toggle_add_fiducial_mode(self):
         """Toggle fiducial selection mode to enable or disable adding points.
         Used in tab 2 only
@@ -3748,6 +3791,8 @@ class MainWindow(QMainWindow):
         Returns:
             no variables output, but app view changes
         """
+
+        #self.save_pts_to_csv()
         if self.current_index != self.fiducials_tab:
             return
         self.add_fiducial_active = not self.add_fiducial_active
@@ -4122,11 +4167,13 @@ class MainWindow(QMainWindow):
         # add items from column 1 of self.moving_images_list
         for index, row in enumerate(self.moving_images_list):
             if len(row) > 1:  # Ensure the row has at least two columns
-                filename, _ = os.path.splitext(row[0]) # Get the filename from column 1
-                filename = filename + ".pkl"
-                filepath = os.path.join(self.job_folder, self.results_name, "Registration transforms", filename)
+                # filename, _ = os.path.splitext(row[0]) # Get the filename from column 1
+                # filename = filename + ".pkl"
+                filename = row[0]
+                datafile = os.path.splitext(filename)[0] + '.pkl'
+                filepath = os.path.join(self.job_folder, self.results_name, "Registration transforms", datafile)
 
-                if os.path.isfile(filepath):  # Check if the file exists
+                if os.path.isfile(filepath): # Check if the file exists
                     self.ui.OldMovingImagesComboBox.addItem(filename)  # Add to OldMovingImagesComboBox
                     self.num_moving_delete[0].append(index)
                 else:
@@ -4847,13 +4894,21 @@ class MainWindow(QMainWindow):
                     text = "The entered value is not a number. Please enter a number"
                     self.show_error_message(text)
         elif column == 3: # x column
-            if self.get_column_number(new_value):
+            col_num = self.get_column_number(new_value)
+            if not col_num:
+                text = "Enter fully numeric (e.g. '5') or alphabetical (e.g. 'AB') text"
+                self.show_error_message(text)
+            elif col_num > 0:
                 self.column_in_coords_file_containing_x_values = new_value
             else:
                 text = "Enter fully numeric (e.g. '5') or alphabetical (e.g. 'AB') text"
                 self.show_error_message(text)
         elif column == 4: # y column
-            if self.get_column_number(new_value):
+            col_num = self.get_column_number(new_value)
+            if not col_num:
+                text = "Enter fully numeric (e.g. '5') or alphabetical (e.g. 'AB') text"
+                self.show_error_message(text)
+            elif col_num > 0:
                 self.column_in_coords_file_containing_y_values = new_value
             else:
                 text = "Enter fully numeric (e.g. '5') or alphabetical (e.g. 'AB') text"
@@ -5143,8 +5198,8 @@ class MainWindow(QMainWindow):
         QtWidgets.QApplication.processEvents()
 
         # load the coordinates again
-        xCol = self.get_column_number(self.column_in_coords_file_containing_x_values)
-        yCol = self.get_column_number(self.column_in_coords_file_containing_y_values)
+        xCol = self.get_column_number(self.column_in_coords_file_containing_x_values) - 1
+        yCol = self.get_column_number(self.column_in_coords_file_containing_y_values) - 1
 
         # Save the updated matrix to a new file in a specified folder
         output_folder = os.path.join(self.job_folder, self.results_name, "Registered coordinate data")
@@ -5196,8 +5251,9 @@ class MainWindow(QMainWindow):
             no variables output, but saves registered coordinates to the job folder
         """
         # load the coordinates
-        x_column = self.get_column_number(self.column_in_coords_file_containing_x_values)
-        y_column = self.get_column_number(self.column_in_coords_file_containing_y_values)
+        x_column = self.get_column_number(self.column_in_coords_file_containing_x_values) - 1
+        y_column = self.get_column_number(self.column_in_coords_file_containing_y_values) - 1
+
         file_path = os.path.join(self.coordinates_file_folder, self.coordinates_filename)
         file_ext = os.path.splitext(file_path)[1]
         if self.coordinates_filename != self.loaded_coordinates_filename:
@@ -5275,7 +5331,7 @@ class MainWindow(QMainWindow):
             for b, xb in enumerate(alphabetical_column_index):
                 asc = ord(xb.upper()) - ord('A') + 1  # Convert character to 1-based index
                 numerical_column_index += asc * (26 ** b) # Multiply by 26^(position-1)
-            numerical_column_index = numerical_column_index - 1  # because python
+            #numerical_column_index = numerical_column_index - 1  # because python
             return numerical_column_index
         else:
             # Raise an error for mixed inputs
@@ -5698,7 +5754,16 @@ class MainWindow(QMainWindow):
         D = self.calculate_elastic_registration(im_ref_grey, im_moving_grey, mask_ref, mask_moving, tile_size,
                                                 buffer_pix_size, inter_tile_distance)
         self.D = D.astype(np.float32)
-        self.Dinv = self.invert_D(self.D)
+
+        #start_time = time.time()
+        #self.Dinv = self.invert_D(self.D)
+        #end_time = time.time()
+        #print(f"Inversion completed in {end_time - start_time:.2f} seconds")
+
+        #start_time = time.time()
+        self.Dinv = self.invert_D_optimized(D)
+        #end_time = time.time()
+        #print(f"Optimized inversion completed in {end_time - start_time:.2f} seconds")
 
         # apply elastic registration to the moving image
         self.ui.CalculatingElasticRegistrationText.setText(
@@ -5762,6 +5827,46 @@ class MainWindow(QMainWindow):
         self.ui.UnregisteredImageFrameHeaderText.setText("Test view elastic reg overlay (ignore fiducials)")
         QtWidgets.QApplication.processEvents()
 
+    def invert_D_optimized(self, D, skk=5, skk2=5):
+        """Fast inverse of a dense displacement field"""
+        rows, cols, _ = D.shape
+
+        # Generate full coordinates
+        xx, yy = np.meshgrid(np.arange(1, cols + 1), np.arange(1, rows + 1))
+        xnew = xx + D[:, :, 0]
+        ynew = yy + D[:, :, 1]
+
+        # Subsample
+        x_flat = xnew[::skk, ::skk].ravel()
+        y_flat = ynew[::skk, ::skk].ravel()
+        D1_flat = D[::skk, ::skk, 0].ravel()
+        D2_flat = D[::skk, ::skk, 1].ravel()
+
+        # Points and values
+        points_sub = np.column_stack((x_flat, y_flat))
+        values_D1 = -D1_flat
+        values_D2 = -D2_flat
+
+        # Coarse grid
+        xx_coarse, yy_coarse = np.meshgrid(
+            np.arange(1, cols + 1, skk2), np.arange(1, rows + 1, skk2)
+        )
+        grid_points = np.column_stack((xx_coarse.ravel(), yy_coarse.ravel()))
+
+        # Interpolate using griddata (much faster than LinearNDInterpolator)
+        d0_interp = griddata(points_sub, values_D1, grid_points, method='linear', fill_value=0.0)
+        d1_interp = griddata(points_sub, values_D2, grid_points, method='linear', fill_value=0.0)
+
+        # Reshape
+        d0_interp = d0_interp.reshape(xx_coarse.shape)
+        d1_interp = d1_interp.reshape(yy_coarse.shape)
+
+        # Resize back to full resolution (anti-aliasing disabled for speed)
+        d0_full = resize(d0_interp, (rows, cols), preserve_range=True, anti_aliasing=False)
+        d1_full = resize(d1_interp, (rows, cols), preserve_range=True, anti_aliasing=False)
+
+        inverted_displacement_field = np.stack((d0_full, d1_full), axis=-1)
+        return np.nan_to_num(inverted_displacement_field)
 
     def invert_D(self, D):
         """Calculates the inverted displacement field

@@ -2094,7 +2094,7 @@ QPushButton:pressed {
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>156</y>
+        <y>174</y>
         <width>510</width>
         <height>24</height>
        </rect>
@@ -2122,7 +2122,7 @@ QPushButton:pressed {
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>185</y>
+        <y>203</y>
         <width>530</width>
         <height>360</height>
        </rect>
@@ -2144,7 +2144,7 @@ QPushButton:pressed {
       <property name="geometry">
        <rect>
         <x>7</x>
-        <y>182</y>
+        <y>200</y>
         <width>536</width>
         <height>366</height>
        </rect>
@@ -2341,7 +2341,7 @@ QPushButton:pressed {
         <x>10</x>
         <y>10</y>
         <width>810</width>
-        <height>140</height>
+        <height>155</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -2440,7 +2440,7 @@ p, li { white-space: pre-wrap; }
          <x>10</x>
          <y>65</y>
          <width>791</width>
-         <height>65</height>
+         <height>80</height>
         </rect>
        </property>
        <property name="font">
@@ -2516,10 +2516,10 @@ QTableWidget QLineEdit {
         <bool>true</bool>
        </attribute>
        <attribute name="horizontalHeaderMinimumSectionSize">
-        <number>75</number>
+        <number>50</number>
        </attribute>
        <attribute name="horizontalHeaderDefaultSectionSize">
-        <number>109</number>
+        <number>90</number>
        </attribute>
        <attribute name="horizontalHeaderStretchLastSection">
         <bool>true</bool>
@@ -2706,7 +2706,7 @@ QPushButton:pressed {
       <property name="geometry">
        <rect>
         <x>555</x>
-        <y>185</y>
+        <y>200</y>
         <width>265</width>
         <height>265</height>
        </rect>
@@ -3221,7 +3221,7 @@ QPushButton:pressed {
       <property name="geometry">
        <rect>
         <x>555</x>
-        <y>455</y>
+        <y>470</y>
         <width>270</width>
         <height>24</height>
        </rect>
@@ -3305,7 +3305,7 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>155</y>
+        <y>170</y>
         <width>400</width>
         <height>24</height>
        </rect>
