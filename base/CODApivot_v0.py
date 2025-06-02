@@ -1086,7 +1086,7 @@ class Ui_MainWindow(object):
         self.AlignDataTabName.setObjectName(u"AlignDataTabName")
         self.RegisterCoordsFrameHeaderText = QLabel(self.AlignDataTabName)
         self.RegisterCoordsFrameHeaderText.setObjectName(u"RegisterCoordsFrameHeaderText")
-        self.RegisterCoordsFrameHeaderText.setGeometry(QRect(10, 156, 510, 24))
+        self.RegisterCoordsFrameHeaderText.setGeometry(QRect(10, 174, 510, 24))
         self.RegisterCoordsFrameHeaderText.setFont(font6)
         self.RegisterCoordsFrameHeaderText.setStyleSheet(u"QLabel { \n"
 "	background-color: transparent;\n"
@@ -1096,7 +1096,7 @@ class Ui_MainWindow(object):
 "}")
         self.RegisterCoordsDisplayFrame = QFrame(self.AlignDataTabName)
         self.RegisterCoordsDisplayFrame.setObjectName(u"RegisterCoordsDisplayFrame")
-        self.RegisterCoordsDisplayFrame.setGeometry(QRect(10, 185, 530, 360))
+        self.RegisterCoordsDisplayFrame.setGeometry(QRect(10, 203, 530, 360))
         self.RegisterCoordsDisplayFrame.setStyleSheet(u"QFrame { \n"
 "	background-color: #4b4b4b;\n"
 "	border: 0px solid #e6e6e6; /* Border  */\n"
@@ -1105,7 +1105,7 @@ class Ui_MainWindow(object):
         self.RegisterCoordsDisplayFrame.setFrameShadow(QFrame.Raised)
         self.RegisterCoordsImageBorder = QLabel(self.AlignDataTabName)
         self.RegisterCoordsImageBorder.setObjectName(u"RegisterCoordsImageBorder")
-        self.RegisterCoordsImageBorder.setGeometry(QRect(7, 182, 536, 366))
+        self.RegisterCoordsImageBorder.setGeometry(QRect(7, 200, 536, 366))
         self.RegisterCoordsImageBorder.setStyleSheet(u"QLabel {\n"
 "        background-color: transparent; /* Transparent fill */\n"
 "        border: 5px solid #e6e6e6;       /* Green border */\n"
@@ -1193,7 +1193,7 @@ class Ui_MainWindow(object):
 "}")
         self.RegisterCoordinatesFrame = QFrame(self.AlignDataTabName)
         self.RegisterCoordinatesFrame.setObjectName(u"RegisterCoordinatesFrame")
-        self.RegisterCoordinatesFrame.setGeometry(QRect(10, 10, 810, 140))
+        self.RegisterCoordinatesFrame.setGeometry(QRect(10, 10, 810, 155))
         self.RegisterCoordinatesFrame.setStyleSheet(u"QFrame { \n"
 "	background-color: #4b4b4b;\n"
 "	border: 1px solid #e6e6e6; /* Border  */\n"
@@ -1234,7 +1234,7 @@ class Ui_MainWindow(object):
         if (self.RegisterCoordinatesTableWidget.rowCount() < 1):
             self.RegisterCoordinatesTableWidget.setRowCount(1)
         self.RegisterCoordinatesTableWidget.setObjectName(u"RegisterCoordinatesTableWidget")
-        self.RegisterCoordinatesTableWidget.setGeometry(QRect(10, 65, 791, 65))
+        self.RegisterCoordinatesTableWidget.setGeometry(QRect(10, 65, 791, 80))
         self.RegisterCoordinatesTableWidget.setFont(font1)
         self.RegisterCoordinatesTableWidget.setStyleSheet(u"QTableView {\n"
 "    background-color: #5a5a5a;\n"
@@ -1292,8 +1292,8 @@ class Ui_MainWindow(object):
         self.RegisterCoordinatesTableWidget.setRowCount(1)
         self.RegisterCoordinatesTableWidget.setColumnCount(7)
         self.RegisterCoordinatesTableWidget.horizontalHeader().setCascadingSectionResizes(True)
-        self.RegisterCoordinatesTableWidget.horizontalHeader().setMinimumSectionSize(75)
-        self.RegisterCoordinatesTableWidget.horizontalHeader().setDefaultSectionSize(109)
+        self.RegisterCoordinatesTableWidget.horizontalHeader().setMinimumSectionSize(50)
+        self.RegisterCoordinatesTableWidget.horizontalHeader().setDefaultSectionSize(90)
         self.RegisterCoordinatesTableWidget.horizontalHeader().setStretchLastSection(True)
         self.RegisterCoordinatesTableWidget.verticalHeader().setVisible(False)
         self.RegisterCoordinatesTableWidget.verticalHeader().setMinimumSectionSize(25)
@@ -1372,7 +1372,7 @@ class Ui_MainWindow(object):
         self.LoadCoordinatesButton.raise_()
         self.CoordinatesOverlayControlsFrame = QFrame(self.AlignDataTabName)
         self.CoordinatesOverlayControlsFrame.setObjectName(u"CoordinatesOverlayControlsFrame")
-        self.CoordinatesOverlayControlsFrame.setGeometry(QRect(555, 185, 265, 265))
+        self.CoordinatesOverlayControlsFrame.setGeometry(QRect(555, 200, 265, 265))
         self.CoordinatesOverlayControlsFrame.setStyleSheet(u"QFrame { \n"
 "	background-color: #4b4b4b;\n"
 "	border: 1px solid #e6e6e6; /* Border  */\n"
@@ -1617,7 +1617,7 @@ class Ui_MainWindow(object):
         self.DisableFrame_C.setFrameShadow(QFrame.Raised)
         self.PlottingImageText = QTextEdit(self.AlignDataTabName)
         self.PlottingImageText.setObjectName(u"PlottingImageText")
-        self.PlottingImageText.setGeometry(QRect(555, 455, 270, 24))
+        self.PlottingImageText.setGeometry(QRect(555, 470, 270, 24))
         self.PlottingImageText.setFont(font1)
         self.PlottingImageText.setStyleSheet(u"QTextEdit { \n"
 "	background-color: #323232;\n"
@@ -1649,7 +1649,7 @@ class Ui_MainWindow(object):
         self.DisableFrame_C_3.setFrameShadow(QFrame.Raised)
         self.MakingCoordOverlayText = QTextEdit(self.AlignDataTabName)
         self.MakingCoordOverlayText.setObjectName(u"MakingCoordOverlayText")
-        self.MakingCoordOverlayText.setGeometry(QRect(10, 155, 400, 24))
+        self.MakingCoordOverlayText.setGeometry(QRect(10, 170, 400, 24))
         self.MakingCoordOverlayText.setFont(font1)
         self.MakingCoordOverlayText.setStyleSheet(u"QTextEdit { \n"
 "	background-color: #323232;\n"
@@ -3245,7 +3245,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(2)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -3390,7 +3390,7 @@ class Ui_MainWindow(object):
         self.SavingRegistrationResultsText.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:600; font-style:normal;\">\n"
+"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:4.125pt; font-weight:600; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9pt;\">Saving Registration Results. Please Wait...</span></p></body></html>", None))
         self.ImageViewFrameHeaderText_O.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
@@ -3452,7 +3452,7 @@ class Ui_MainWindow(object):
         self.CalculatingElasticRegistrationText.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:600; font-style:normal;\">\n"
+"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:4.125pt; font-weight:600; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9pt;\">Calculating Elastic Registration. Please Wait...</span></p></body></html>", None))
         self.ViewElasticCheckBox.setText(QCoreApplication.translate("MainWindow", u"Visible", None))
         self.CalculateElasticRegistrationButton.setText(QCoreApplication.translate("MainWindow", u"Calculate Elastic", None))
@@ -3521,4 +3521,3 @@ class Ui_MainWindow(object):
         self.ApplyToImageText_4.setText(QCoreApplication.translate("MainWindow", u"Done!", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.ApplyToImageTabName), QCoreApplication.translate("MainWindow", u"Align Images", None))
     # retranslateUi
-
