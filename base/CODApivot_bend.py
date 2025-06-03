@@ -3083,32 +3083,33 @@ class MainWindow(QMainWindow):
             no variables output, but will update the second table of tab 1.
         """
         # extract the filename selected by the user and update table 2 in the app
-        file_path, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Select Moving Image File", "")
-        if file_path:  # If a file is selected
+        file_paths, _ = QtWidgets.QFileDialog.getOpenFileNames(self, "Select Moving Image Files", "")
 
-            # file_path = os.path.join(self.pthMoving, self.nmMoving)
-            if self.is_file_an_image(file_path):
-                self.moving_image_folder = os.path.normpath(os.path.dirname(file_path))  # Extract the folder
-                self.moving_image_filename = os.path.basename(file_path)  # Extract the filename
+        if file_paths:  # If a file is selected
+            for file_path in file_paths:
+                # file_path = os.path.join(self.pthMoving, self.nmMoving)
+                if self.is_file_an_image(file_path):
+                    self.moving_image_folder = os.path.normpath(os.path.dirname(file_path))  # Extract the folder
+                    self.moving_image_filename = os.path.basename(file_path)  # Extract the filename
 
-                # check if the scale factor is saved in the same folder
-                csv_filename = os.path.splitext(self.moving_image_filename)[0] + '.csv'
-                csv_path = os.path.join(self.moving_image_folder, csv_filename)
-                if os.path.exists(csv_path):
-                    try:
-                        with open(csv_path, "r") as f:
-                            lines = f.readlines()
-                        self.scale_moving_image = lines[1].strip()
-                    except:
-                        self.scale_moving_image = ""
-                self.populate_moving_table()
+                    # check if the scale factor is saved in the same folder
+                    csv_filename = os.path.splitext(self.moving_image_filename)[0] + '.csv'
+                    csv_path = os.path.join(self.moving_image_folder, csv_filename)
+                    if os.path.exists(csv_path):
+                        try:
+                            with open(csv_path, "r") as f:
+                                lines = f.readlines()
+                            self.scale_moving_image = lines[1].strip()
+                        except:
+                            self.scale_moving_image = ""
+                    self.populate_moving_table()
 
-                if len(self.moving_images_list) == 0:
-                    self.moving_images_list = np.array([[self.moving_image_filename, self.scale_moving_image, self.moving_image_folder]], dtype=object)
-                else:
-                    add_to_list = np.array([self.moving_image_filename, self.scale_moving_image, self.moving_image_folder])
-                    self.moving_images_list = np.vstack([self.moving_images_list, add_to_list])
-                self.populate_moving_table()
+                    if len(self.moving_images_list) == 0:
+                        self.moving_images_list = np.array([[self.moving_image_filename, self.scale_moving_image, self.moving_image_folder]], dtype=object)
+                    else:
+                        add_to_list = np.array([self.moving_image_filename, self.scale_moving_image, self.moving_image_folder])
+                        self.moving_images_list = np.vstack([self.moving_images_list, add_to_list])
+                    self.populate_moving_table()
 
     def browse_for_job_folder(self):
         """Allows the user to select a folder to serve as the job folder.
