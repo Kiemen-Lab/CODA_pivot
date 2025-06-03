@@ -28,24 +28,10 @@ def convert_to_csv(input_filename):
 
 if __name__ == '__main__':
 
-    pth1 = r'\\10.99.134.183\kiemen-lab-data\collaborations\Deconvolve Visium\IPMN Luciane\IPMN1_PN_1PMN6_1F_4\binned_outputs'
-    pth2 = r'\\10.99.134.183\kiemen-lab-data\collaborations\Deconvolve Visium\IPMN Luciane\IPMN2_S22_14734_5AA_3\binned_outputs'
-    pth3 = r'\\10.99.134.183\kiemen-lab-data\collaborations\Deconvolve Visium\IPMN Luciane\IPMN3_S24_05795_3M_3\binned_outputs'
-    pth4 = r'\\10.99.134.183\kiemen-lab-data\collaborations\Deconvolve Visium\IPMN Luciane\IPMN4_5CC_2\binned_outputs'
+    # example run to convert all three parquet files for Visium HD to csv files
+    pth = r'C:\Users\Ashley\Documents\Visium_HD_sample_1\binned_outputs'
+    convert_to_csv(os.path.join(pth, 'square_002um', 'spatial', 'tissue_positions.parquet'))
+    convert_to_csv(os.path.join(pth, 'square_008um', 'spatial', 'tissue_positions.parquet'))
+    convert_to_csv(os.path.join(pth, 'square_016um', 'spatial', 'tissue_positions.parquet'))
 
-    convert_to_csv(os.path.join(pth1, 'square_002um','spatial','tissue_positions.parquet'))
-    convert_to_csv(os.path.join(pth1, 'square_008um', 'spatial', 'tissue_positions.parquet'))
-    convert_to_csv(os.path.join(pth1, 'square_016um', 'spatial', 'tissue_positions.parquet'))
-
-    convert_to_csv(os.path.join(pth2, 'square_002um', 'spatial', 'tissue_positions.parquet'))
-    convert_to_csv(os.path.join(pth2, 'square_008um', 'spatial', 'tissue_positions.parquet'))
-    convert_to_csv(os.path.join(pth2, 'square_016um', 'spatial', 'tissue_positions.parquet'))
-
-    convert_to_csv(os.path.join(pth3, 'square_002um', 'spatial', 'tissue_positions.parquet'))
-    convert_to_csv(os.path.join(pth3, 'square_008um', 'spatial', 'tissue_positions.parquet'))
-    convert_to_csv(os.path.join(pth3, 'square_016um', 'spatial', 'tissue_positions.parquet'))
-
-    convert_to_csv(os.path.join(pth4, 'square_002um', 'spatial', 'tissue_positions.parquet'))
-    convert_to_csv(os.path.join(pth4, 'square_008um', 'spatial', 'tissue_positions.parquet'))
-    convert_to_csv(os.path.join(pth4, 'square_016um', 'spatial', 'tissue_positions.parquet'))
 
