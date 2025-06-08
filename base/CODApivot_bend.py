@@ -5,6 +5,7 @@ Date: October 23, 2024
 
 import os
 import cv2
+import json
 import time
 import scipy
 import random
@@ -21,7 +22,7 @@ from scipy.interpolate import griddata
 from scipy.interpolate import LinearNDInterpolator
 from PySide6 import QtWidgets
 from PySide6.QtCore import Qt, QPointF, Signal, QEvent
-from PySide6.QtGui import QPixmap, QTransform, QImage, QPainter, QCursor, QColor, QPen
+from PySide6.QtGui import QPixmap, QTransform, QImage, QPainter, QCursor, QColor, QPen, QIcon
 from PySide6.QtWidgets import QDialog, QStyledItemDelegate, QFileDialog, QLabel, QColorDialog, QHeaderView, QMainWindow, QVBoxLayout, QWidget
 from base.CODApivot_v0 import Ui_MainWindow
 
@@ -123,6 +124,7 @@ class MainWindow(QMainWindow):
         self.scale_fixed_image = ""
         self.scale_moving_image = ""
         self.scale_coordinates_file = ""
+        self.json_scale = 1
         # variables that will hold images - these are cleared when not in use to save RAM
         self.pixmap = [] # the current pixmap being edited (changes based on the current tab)
         self.im_fixed = [] # fixed image
@@ -303,14 +305,15 @@ class MainWindow(QMainWindow):
         self.ui.GoToCoordsTab.clicked.connect(self.initiate_apply_to_coords_tab)
         self.ui.GoToJobStatusTab.clicked.connect(self.initiate_job_status_tab)
         self.ui.GoToApplyImageTab.clicked.connect(self.initiate_apply_to_image_tab)
-        # create and set the custom delegate to allow double-clicking in tables
+        # set icon pics
+        icon_path = os.path.join(os.path.dirname(__file__), 'Folder.jpg')
+        self.ui.chooseFixedImageButton.setIcon(QIcon(icon_path))
+        self.ui.chooseMovingImageButton.setIcon(QIcon(icon_path))
+        self.ui.chooseJobFolderButton.setIcon(QIcon(icon_path))
+        self.ui.chooseCoordinatesFileButton.setIcon(QIcon(icon_path))
+        self.ui.chooseImageFileButton.setIcon(QIcon(icon_path))
+
         # import project tab
-        self.delegate = CustomDelegateTable(self.ui.fixedImageTableWidget)
-        self.ui.fixedImageTableWidget.setItemDelegate(self.delegate)
-        self.delegate.valueUpdatedTable.connect(self.handle_value_update_fixed)
-        self.delegate = CustomDelegateTable(self.ui.movingImageTableWidget)
-        self.ui.movingImageTableWidget.setItemDelegate(self.delegate)
-        self.delegate.valueUpdatedTable.connect(self.handle_value_update_moving)
         self.delegate = CustomDelegateTable(self.ui.setJobTableWidget)
         self.ui.setJobTableWidget.setItemDelegate(self.delegate)
         self.delegate.valueUpdatedTable.connect(self.handle_value_update_job)
@@ -1193,8 +1196,8 @@ class MainWindow(QMainWindow):
 
         # initiate the tables
         self.ui.tabWidget.setCurrentIndex(self.import_project_tab)
-        self.ui.fixedImageTableWidget.setHorizontalHeaderLabels(["Filename", "Scale", "Folder"])
-        self.ui.movingImageTableWidget.setHorizontalHeaderLabels(["Filename", "Scale", "Folder"])
+        self.ui.fixedImageTableWidget.setHorizontalHeaderLabels(["Filename", "Folder"])
+        self.ui.movingImageTableWidget.setHorizontalHeaderLabels(["Filename", "Folder"])
         self.ui.setJobTableWidget.setHorizontalHeaderLabels(["Results Name", "Folder"])
         self.ui.fixedImageTableWidget.setVerticalHeaderLabels([""])
         self.ui.movingImageTableWidget.setVerticalHeaderLabels(["1"])
@@ -1227,7 +1230,10 @@ class MainWindow(QMainWindow):
         self.ui.NavigationButton.setParent(self.ui.AlignImageTabName)
         self.ui.KeyboardShortcutsButton.setParent(self.ui.AlignImageTabName)
         self.close_navigation_tab()
-
+        # reset keyboard shortcut settings
+        self.shift_key_active = 0
+        self.which_key_press = 0
+        self.increase_decrease_brightness_contrast_key = 0
         # save the current fiducial points and view settings if the user is in the fiducials tab
         self.save_fiducial_state()
 
@@ -1242,6 +1248,7 @@ class MainWindow(QMainWindow):
         self.ui.FiducialPointControlsFrame.setVisible(False)
         self.ui.PickNewMovingImageButton.setVisible(False)
         self.ui.PickNewMovingImageButton.setEnabled(True)
+        self.ui.PickNewMovingImageButton.setStyleSheet(self.active_button_style)
         self.ui.AttemptICPRegistrationButton.setVisible(False)
         self.ui.AttemptICPRegistrationButton.setEnabled(True)
         self.ui.AttemptICPRegistrationButton.setStyleSheet(self.style_button_green)
@@ -1300,6 +1307,10 @@ class MainWindow(QMainWindow):
         self.ui.NavigationButton.setParent(self.ui.ViewOverlayTabName)
         self.ui.KeyboardShortcutsButton.setParent(self.ui.ViewOverlayTabName)
         self.close_navigation_tab()
+        # reset keyboard shortcut settings
+        self.shift_key_active = 0
+        self.which_key_press = 0
+        self.increase_decrease_brightness_contrast_key = 0
 
         # initial button settings
         self.ui.SaveRegistrationResultsButton_O.setStyleSheet(self.style_button_green)
@@ -1370,8 +1381,13 @@ class MainWindow(QMainWindow):
         self.ui.NavigationButton.setParent(self.ui.AlignElasticTabName)
         self.ui.KeyboardShortcutsButton.setParent(self.ui.AlignElasticTabName)
         self.close_navigation_tab()
+        # reset keyboard shortcut settings
+        self.shift_key_active = 0
+        self.which_key_press = 0
+        self.increase_decrease_brightness_contrast_key = 0
 
         # enter elastic registration mode
+        self.ui.SaveRegistrationResultsButton_E.setEnabled(True)
         self.ui.SaveRegistrationResultsButton_E.setVisible(False)
         self.ui.SaveRegistrationResultsButton_E.setStyleSheet(self.style_button_green)
         self.ui.ReturnToFiducialsTabButton_E.setVisible(False)
@@ -1427,6 +1443,10 @@ class MainWindow(QMainWindow):
         self.ui.NavigationButton.setParent(self.ui.AlignDataTabName)
         self.ui.KeyboardShortcutsButton.setParent(self.ui.AlignDataTabName)
         self.close_navigation_tab()
+        # reset keyboard shortcut settings
+        self.shift_key_active = 0
+        self.which_key_press = 0
+        self.increase_decrease_brightness_contrast_key = 0
 
         # save the current fiducial points and view settings if the user is in the fiducials tab
         self.save_fiducial_state()
@@ -1496,7 +1516,8 @@ class MainWindow(QMainWindow):
         self.pts_coords_reg = []
         self.pts_coords_reg_elastic = []
         self.sampled_indices = []
-        self.pts_size_coordinates_tab = np.ceil(float(self.pts_size_fiducial_tab) / 2)
+        self.pts_size_coordinates_tab = np.ceil(float(self.pts_size_fiducial_tab) / 5)
+        self.json_scale = 1
 
         # populate dropdown list
         self.populate_coordinates_combo_box()
@@ -2733,6 +2754,7 @@ class MainWindow(QMainWindow):
         else:
             # Pass the event to the base class for default handling
             super().keyPressEvent(event)
+
         # set the action to apply to the left or right image frame
         if self.current_index != self.apply_to_data_tab:
             ff = [0, 1]
@@ -2813,7 +2835,7 @@ class MainWindow(QMainWindow):
             # return
 
         # Define the folder where screenshots will be saved
-        folder = os.path.join(self.jobFolder, self.ResultsName, "Screenshots")
+        folder = os.path.join(self.job_folder, self.results_name, "Screenshots")
         #folder = r'C:\Users\Ashley\Documents\sample data\HE\screenshots for paper'
         if not os.path.exists(folder):
             os.makedirs(folder)
@@ -3153,9 +3175,7 @@ class MainWindow(QMainWindow):
         """
         # Populate the first row with the variables' values
         self.ui.fixedImageTableWidget.setItem(0, 0, QtWidgets.QTableWidgetItem(f"{self.fixed_image_filename}  "))
-        self.ui.fixedImageTableWidget.setItem(0, 1, QtWidgets.QTableWidgetItem(
-            f"{self.scale_fixed_image}  "))  # Convert scale to string if necessary
-        self.ui.fixedImageTableWidget.setItem(0, 2, QtWidgets.QTableWidgetItem(f"{self.fixed_image_folder}  "))
+        self.ui.fixedImageTableWidget.setItem(0, 1, QtWidgets.QTableWidgetItem(f"{self.fixed_image_folder}  "))
 
         # allow the user to set the job folder to the fixed image folder if the fixed image folder is defined
         if len(self.fixed_image_folder) > 0:
@@ -3188,8 +3208,7 @@ class MainWindow(QMainWindow):
         row_count = 0
         for row in self.moving_images_list:
             self.ui.movingImageTableWidget.setItem(row_count, 0, QtWidgets.QTableWidgetItem(f"{row[0]}  "))
-            self.ui.movingImageTableWidget.setItem(row_count, 1, QtWidgets.QTableWidgetItem(f"{row[1]}  "))
-            self.ui.movingImageTableWidget.setItem(row_count, 2, QtWidgets.QTableWidgetItem(f"{row[2]}  "))
+            self.ui.movingImageTableWidget.setItem(row_count, 1, QtWidgets.QTableWidgetItem(f"{row[2]}  "))
             row_count += 1
 
         # turn the frame green if all fixed image inputs are defined correctly
@@ -3227,34 +3246,25 @@ class MainWindow(QMainWindow):
             enabled, allowing the user to advance through the app.
         """
         # is the fixed image table complete
-        fixed_frame_done = int(len(self.fixed_image_filename) > 0) + int(len(self.scale_fixed_image) > 0) + int(len(self.fixed_image_folder) > 0)
+        fixed_frame_done = int(len(self.fixed_image_filename) > 0) + int(len(self.fixed_image_folder) > 0)
         # is the job folder table complete
         job_frame_done = int(len(self.job_folder) > 0) + int(len(self.results_name) > 0)
         # is the moving image table complete
         moving_frame_done = 1  # complete
         if len(self.moving_images_list) == 0:
             moving_frame_done = 0  # not started
-        else:
-            for row in self.moving_images_list:
-                for cell in row:
-                    if not isinstance(cell, str) or not cell.strip():
-                        moving_frame_done = 2  # incomplete
 
         # update the fixed image frame color based on the completion
-        if fixed_frame_done == 3:  # fully complete = green
+        if fixed_frame_done == 2:  # fully complete = green
             self.ui.DefineFixedImageFrame.setStyleSheet("background-color: #375c46;")  # 3d4a3d
-        elif fixed_frame_done == 0:  # not started = grey
+        else: # fixed_frame_done == 0:  # not started = grey
             self.ui.DefineFixedImageFrame.setStyleSheet("background-color: #4b4b4b;")
-        else:  # incomplete = red
-            self.ui.DefineFixedImageFrame.setStyleSheet("background-color: #5c3737;")
 
         # update the moving image frame color based on the completion
         if moving_frame_done == 1:  # fully complete = green
             self.ui.DefineMovingImageFrame.setStyleSheet("background-color: #375c46;")
-        elif moving_frame_done == 0:  # not started = grey
+        else: # moving_frame_done == 0:  # not started = grey
             self.ui.DefineMovingImageFrame.setStyleSheet("background-color: #4b4b4b;")
-        else:  # incomplete = red
-            self.ui.DefineMovingImageFrame.setStyleSheet("background-color: #5c3737;")
 
         # update the job folder frame color based on the completion
         if job_frame_done == 2:  # fully complete = green
@@ -3267,7 +3277,7 @@ class MainWindow(QMainWindow):
             self.ui.JobFolderCheckBox.setStyleSheet("color: #e6e6e6;")
 
         # enable app navigation if all frames are completed
-        if fixed_frame_done == 3 and job_frame_done == 2 and moving_frame_done == 1:
+        if fixed_frame_done == 2 and job_frame_done == 2 and moving_frame_done == 1:
             self.close_navigation_tab()
             self.ui.NavigationButton.setEnabled(True)
             self.ui.NavigationButton.setStyleSheet(self.active_button_style)
@@ -3338,6 +3348,10 @@ class MainWindow(QMainWindow):
         self.scale_fixed_image = X[2, 2]
         self.fixed_image_folder = os.path.normpath(X[2, 3])
 
+        # correct for nan
+        if pd.isna(self.scale_fixed_image):
+            self.scale_fixed_image = ""
+
         # Get location of output folder
         self.results_name = X[4, 1]
         self.job_folder = os.path.normpath(X[4, 3])
@@ -3347,10 +3361,14 @@ class MainWindow(QMainWindow):
         # Get a list of all moving images
         self.moving_images_list = X[6:, [1, 2, 3]]
         self.moving_images_list[:, 2] = [os.path.normpath(p) for p in self.moving_images_list[:, 2]]
+        self.moving_images_list = np.vectorize(self.replace_nan)(self.moving_images_list)
 
         self.populate_fixed_table()
         self.populate_moving_table()
         self.populate_project_table()
+
+    def replace_nan(self, val):
+        return "" if isinstance(val, float) and np.isnan(val) else val
 
     def default_model_name(self):
         """Set the initial text of the model_name text box to today's date.
@@ -3375,22 +3393,13 @@ class MainWindow(QMainWindow):
 
         # if the table is populated and table edit mode is not already active
         if len(self.fixed_image_filename) > 0 and self.edit_table_active == 0:
+            # turn on edit table mode
+            self.edit_table_active = 1  # fixed image
+            self.enter_edit_table()
 
-            # if editing the scale
-            if column == 1:
-                # enable text input to the results name window
-                item = self.ui.fixedImageTableWidget.item(row, column)
-                if item:
-                    item.setFlags(item.flags() | Qt.ItemIsEditable)  # Enable editing
-                    self.ui.fixedImageTableWidget.editItem(item)  # Put the cell into edit mode
-            elif column == 0 or column == 2:
-                # turn on edit table mode
-                self.edit_table_active = 1  # fixed image
-                self.enter_edit_table()
-
-                # make delete visible
-                self.ui.keepFixedImageButton.setVisible(True)
-                self.ui.deleteFixedImageButton.setVisible(True)
+            # make delete visible
+            self.ui.keepFixedImageButton.setVisible(True)
+            self.ui.deleteFixedImageButton.setVisible(True)
 
     def doubleclick_moving_table(self, row, column):
         """Enable editing of the moving image variables in table 2
@@ -3405,22 +3414,14 @@ class MainWindow(QMainWindow):
         # if the table is populated and table edit mode is not already active
         if len(self.moving_images_list) > 0 and self.edit_table_active == 0:
 
-            # if editing the scale
-            if column == 1:
-                # enable text input to the scale window
-                item = self.ui.movingImageTableWidget.item(row, column)
-                if item:
-                    item.setFlags(item.flags() | Qt.ItemIsEditable)  # Enable editing
-                    self.ui.movingImageTableWidget.editItem(item)  # Put the cell into edit mode
-            elif column == 0 or column == 2:
-                # turn on edit table mode
-                self.edit_table_active = 2  # moving image
-                self.enter_edit_table()
-                self.num_moving_delete = row
+            # turn on edit table mode
+            self.edit_table_active = 2  # moving image
+            self.enter_edit_table()
+            self.num_moving_delete = row
 
-                # make delete visible
-                self.ui.keepMovingImageButton.setVisible(True)
-                self.ui.deleteMovingImageButton.setVisible(True)
+            # make delete visible
+            self.ui.keepMovingImageButton.setVisible(True)
+            self.ui.deleteMovingImageButton.setVisible(True)
 
     def doubleclick_job_table(self, row, column):
         """Enable editing of the define job name in the first table in tab one
@@ -3441,50 +3442,6 @@ class MainWindow(QMainWindow):
                 if item:
                     item.setFlags(item.flags() | Qt.ItemIsEditable)  # Enable editing
                     self.ui.setJobTableWidget.editItem(item)  # Put the cell into edit mode
-
-    def handle_value_update_fixed(self, new_value, row, column):
-        """Make sure that the fixed image table inputs are valid.
-        Used in tab 1 only
-        Args:
-            new_value: new value input by the user for this cell of the table
-            row: row of the table that the user double-clicked on
-            column: column of the table that the user double-clicked on
-        Returns:
-            no variables output, but updates table 2
-        """
-
-        # Optionally update other variables or UI elements
-        if column == 1:  # For example, update ScaleFixed if editing the Scale column
-            # Check if the string is a number
-            try:
-                float(new_value)
-                self.scale_fixed_image = new_value
-            except:
-                text = "The entered value is not a number. Please enter a number"
-                self.show_error_message(text)
-            self.populate_fixed_table()
-
-    def handle_value_update_moving(self, new_value, row, column):
-        """Make sure that the moving image table inputs are valid.
-        Used in tab 1 only
-        Args:
-            new_value: new value input by the user for this cell of the table
-            row: row of the table that the user double-clicked on
-            column: column of the table that the user double-clicked on
-        Returns:
-            no variables output, but updates table 2
-        """
-
-        # Optionally update other variables or UI elements
-        if column == 1:
-            # Check if the string is a number
-            try:
-                float(new_value)
-                self.moving_images_list[row][column] = new_value
-            except:
-                text = "The entered value is not a number. Please enter a number"
-                self.show_error_message(text)
-            self.populate_moving_table()
 
     def handle_value_update_job(self, new_value, row, column):
         """Make sure that the folder name input by the user is valid.
@@ -3563,10 +3520,11 @@ class MainWindow(QMainWindow):
         """
 
         # app-wide buttons
-        self.ui.NavigationButton.setEnabled(True)
-        self.ui.NavigationButton.setStyleSheet(self.active_button_style)
-        self.ui.KeyboardShortcutsButton.setEnabled(True)
-        self.ui.KeyboardShortcutsButton.setStyleSheet(self.active_button_style)
+        if self.current_index != 0:
+            self.ui.NavigationButton.setEnabled(True)
+            self.ui.NavigationButton.setStyleSheet(self.active_button_style)
+            self.ui.KeyboardShortcutsButton.setEnabled(True)
+            self.ui.KeyboardShortcutsButton.setStyleSheet(self.active_button_style)
 
         if self.edit_table_active == 5:
             self.ui.chooseImageFileButton.setEnabled(True)
@@ -4465,7 +4423,49 @@ class MainWindow(QMainWindow):
         self.coordinates_filename = os.path.basename(file_path)  # Extract the filename
         self.column_in_coords_file_containing_x_values = ""
         self.column_in_coords_file_containing_y_values = ""
+
+        # automatically load the scale factor if this is a visium file
+        try:
+            self.load_visium_scale()
+        except:
+            self.json_scale = 1
+
         self.populate_coordinates_table()
+
+    def load_visium_scale(self):
+        """If the coordinates file is for visium, load the scale factor automatically.
+        Used in tab 3 only
+        Args:
+            none, draws from self
+        Returns:
+            no variables output, but the coordinate scale factor may change.
+        """
+
+        coords_filename = os.path.basename(self.coordinates_filename)
+        if 'tissue_positions' in coords_filename:
+
+            scalefactors_path = os.path.join(self.coordinates_file_folder, 'scalefactors_json.json')
+            if os.path.exists(scalefactors_path):
+                # load JSON data
+                with open(scalefactors_path, 'r') as f:
+                    scalefactors = json.load(f)
+
+                # Determine the image filename and assign the correct scale
+                moving_img_name = os.path.basename(self.moving_image_filename_corresponding_to_coordinates)
+                if 'tissue_hires_image' in moving_img_name:
+                    self.json_scale = scalefactors.get('tissue_hires_scalef', "")
+                    current_index_in_table = self.ui.CorrespondingImageComboBox.currentIndex()
+                    row_number = self.which_moving_images_are_registered[0]
+                    row_number = row_number[current_index_in_table - 1]
+                    scaled_value = float(self.moving_images_list[row_number][1]) * self.json_scale
+                    self.scale_coordinates_file = str(scaled_value)
+                elif 'tissue_lowres_image' in moving_img_name:
+                    self.json_scale = scalefactors.get('tissue_lowres_scalef', "")
+                    current_index_in_table = self.ui.CorrespondingImageComboBox.currentIndex()
+                    row_number = self.which_moving_images_are_registered[0]
+                    row_number = row_number[current_index_in_table - 1]
+                    scaled_value = float(self.moving_images_list[row_number][1]) * self.json_scale
+                    self.scale_coordinates_file = str(scaled_value)
 
     def unregistered_coords_checkbox_changed(self, state):
         """Handle the unregistered image checkbox state change.
@@ -4681,6 +4681,13 @@ class MainWindow(QMainWindow):
         self.moving_image_filename_corresponding_to_coordinates = moving_filename
         self.moving_image_folder_corresponding_to_coordinates = moving_folder
         self.scale_coordinates_file = scale
+
+        # automatically load the scale factor if this is a visium file
+        try:
+            self.load_visium_scale()
+        except:
+            self.json_scale = 1
+
         # update the table
         self.populate_coordinates_table()
 
@@ -5213,10 +5220,12 @@ class MainWindow(QMainWindow):
         if self.coord_registration_type == 0: # save ICP registration
             X[self.number_of_first_row_in_coords_file:, [xCol, yCol]] = self.pts_coords_reg
             self.ui.SaveRegisteredCoordinatesButton.setStyleSheet(self.inactive_button_style)
+            self.ui.SaveRegisteredCoordinatesButton.setEnabled(False)
             output_file = os.path.join(output_folder, f"Global_Registered_{self.coordinates_filename}")
         else: # save elastic registration
             X[self.number_of_first_row_in_coords_file:, [xCol, yCol]] = self.pts_coords_reg_elastic
             self.ui.SaveRegisteredECoordinatesButton.setStyleSheet(self.inactive_button_style)
+            self.ui.SaveRegisteredECoordinatesButton.setEnabled(False)
             output_file = os.path.join(output_folder, f"Elastic_Registered_{self.coordinates_filename}")
 
         # Save the updated X matrix as a CSV file
@@ -5576,6 +5585,16 @@ class MainWindow(QMainWindow):
                     response = msg_box.exec()
                     if response == QtWidgets.QMessageBox.Cancel:
                         # the registration results have changed and the user does not want to replace them. abort
+                        self.ui.SaveRegistrationResultsButton_O.setStyleSheet(self.active_button_style)
+                        self.ui.SaveRegistrationResultsButton_O.setEnabled(True)
+                        self.ui.ReturnToFiducialsTab_O.setEnabled(True)
+                        self.ui.ImageViewControlsFrame_O.setEnabled(True)
+                        self.ui.NavigationButton.setEnabled(True)
+                        self.ui.NavigationButton.setStyleSheet(self.active_button_style)
+                        self.ui.KeyboardShortcutsButton.setEnabled(True)
+                        self.ui.KeyboardShortcutsButton.setStyleSheet(self.active_button_style)
+                        self.ui.DisableFrame_O1.setVisible(False)
+                        QtWidgets.QApplication.processEvents()
                         return
                     else:
                         # check if elastic registration results exist and delete them if they do
@@ -6143,8 +6162,6 @@ class MainWindow(QMainWindow):
 
         # what to do next
         self.ui.DisableFrame_E1.setVisible(False)
-        self.ui.SaveRegistrationResultsButton_E.setEnabled(True)
-        self.ui.SaveRegistrationResultsButton_E.setStyleSheet(self.active_button_style)
         self.ui.ReturnToFiducialsTabButton_E.setEnabled(True)
         self.ui.ReturnToFiducialsTabButton_E.setStyleSheet(self.active_button_style)
         self.ui.NavigationButton.setEnabled(True)
@@ -6672,7 +6689,6 @@ if __name__ == '__main__':
 
     app = QtWidgets.QApplication(sys.argv)
     from base.CODApivot_v0 import Ui_MainWindow
-
 
     window = MainWindow()
     window.show()

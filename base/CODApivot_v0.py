@@ -24,7 +24,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(854, 718)
+        MainWindow.resize(867, 718)
         icon = QIcon()
         icon.addFile(u"logo square large.jpg", QSize(), QIcon.Normal, QIcon.Off)
         MainWindow.setWindowIcon(icon)
@@ -44,7 +44,7 @@ class Ui_MainWindow(object):
         self.centralWidget.setObjectName(u"centralWidget")
         self.tabWidget = QTabWidget(self.centralWidget)
         self.tabWidget.setObjectName(u"tabWidget")
-        self.tabWidget.setGeometry(QRect(10, 10, 841, 691))
+        self.tabWidget.setGeometry(QRect(10, 10, 851, 691))
         font = QFont()
         font.setPointSize(10)
         font.setBold(True)
@@ -110,13 +110,12 @@ class Ui_MainWindow(object):
 "    border: 1px solid #e6e6e6; /* Border  */\n"
 "    border-radius: 0px; /* Optional: Rounded corners */\n"
 "    padding: 5px; /* Optional: Padding around text */\n"
-"	qproperty-icon: url(Folder.jpg); /* Default icon */\n"
 "}\n"
 " ")
         self.chooseFixedImageButton.setIconSize(QSize(35, 35))
         self.fixedImageTableWidget = QTableWidget(self.DefineFixedImageFrame)
-        if (self.fixedImageTableWidget.columnCount() < 3):
-            self.fixedImageTableWidget.setColumnCount(3)
+        if (self.fixedImageTableWidget.columnCount() < 2):
+            self.fixedImageTableWidget.setColumnCount(2)
         if (self.fixedImageTableWidget.rowCount() < 1):
             self.fixedImageTableWidget.setRowCount(1)
         self.fixedImageTableWidget.setObjectName(u"fixedImageTableWidget")
@@ -176,7 +175,7 @@ class Ui_MainWindow(object):
 "}")
         self.fixedImageTableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.fixedImageTableWidget.setRowCount(1)
-        self.fixedImageTableWidget.setColumnCount(3)
+        self.fixedImageTableWidget.setColumnCount(2)
         self.fixedImageTableWidget.horizontalHeader().setMinimumSectionSize(75)
         self.fixedImageTableWidget.horizontalHeader().setDefaultSectionSize(227)
         self.fixedImageTableWidget.horizontalHeader().setStretchLastSection(True)
@@ -252,8 +251,8 @@ class Ui_MainWindow(object):
         self.MovingImageTableHeaderText.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.MovingImageTableHeaderText.setReadOnly(True)
         self.movingImageTableWidget = QTableWidget(self.DefineMovingImageFrame)
-        if (self.movingImageTableWidget.columnCount() < 3):
-            self.movingImageTableWidget.setColumnCount(3)
+        if (self.movingImageTableWidget.columnCount() < 2):
+            self.movingImageTableWidget.setColumnCount(2)
         if (self.movingImageTableWidget.rowCount() < 1):
             self.movingImageTableWidget.setRowCount(1)
         self.movingImageTableWidget.setObjectName(u"movingImageTableWidget")
@@ -313,7 +312,7 @@ class Ui_MainWindow(object):
 "}")
         self.movingImageTableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.movingImageTableWidget.setRowCount(1)
-        self.movingImageTableWidget.setColumnCount(3)
+        self.movingImageTableWidget.setColumnCount(2)
         self.movingImageTableWidget.horizontalHeader().setMinimumSectionSize(75)
         self.movingImageTableWidget.horizontalHeader().setDefaultSectionSize(227)
         self.movingImageTableWidget.horizontalHeader().setStretchLastSection(True)
@@ -330,7 +329,6 @@ class Ui_MainWindow(object):
 "    border: 1px solid #e6e6e6; /* Border  */\n"
 "    border-radius: 0px; /* Optional: Rounded corners */\n"
 "    padding: 5px; /* Optional: Padding around text */\n"
-"	qproperty-icon: url(Folder.jpg); /* Default icon */\n"
 "}\n"
 " ")
         self.chooseMovingImageButton.setIconSize(QSize(35, 35))
@@ -489,7 +487,6 @@ class Ui_MainWindow(object):
 "    border: 1px solid #e6e6e6; /* Border  */\n"
 "    border-radius: 0px; /* Optional: Rounded corners */\n"
 "    padding: 5px; /* Optional: Padding around text */\n"
-"	qproperty-icon: url(Folder.jpg); /* Default icon */\n"
 "}\n"
 " ")
         self.chooseJobFolderButton.setIconSize(QSize(35, 35))
@@ -1224,7 +1221,6 @@ class Ui_MainWindow(object):
 "    border: 1px solid #e6e6e6; /* Border  */\n"
 "    border-radius: 0px; /* Optional: Rounded corners */\n"
 "    padding: 5px; /* Optional: Padding around text */\n"
-"	qproperty-icon: url(Folder.jpg); /* Default icon */\n"
 "}\n"
 " ")
         self.chooseCoordinatesFileButton.setIconSize(QSize(35, 35))
@@ -1629,6 +1625,7 @@ class Ui_MainWindow(object):
 "}")
         self.PlottingImageText.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.PlottingImageText.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.PlottingImageText.setReadOnly(True)
         self.DisableFrame_C_2 = QFrame(self.AlignDataTabName)
         self.DisableFrame_C_2.setObjectName(u"DisableFrame_C_2")
         self.DisableFrame_C_2.setGeometry(QRect(190, 590, 10, 10))
@@ -2874,7 +2871,6 @@ class Ui_MainWindow(object):
 "    border: 1px solid #e6e6e6; /* Border  */\n"
 "    border-radius: 0px; /* Optional: Rounded corners */\n"
 "    padding: 5px; /* Optional: Padding around text */\n"
-"	qproperty-icon: url(Folder.jpg); /* Default icon */\n"
 "}\n"
 " ")
         self.chooseImageFileButton.setIconSize(QSize(35, 35))
@@ -3245,7 +3241,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(7)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -3390,7 +3386,7 @@ class Ui_MainWindow(object):
         self.SavingRegistrationResultsText.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:600; font-style:normal;\">\n"
+"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:4.125pt; font-weight:600; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9pt;\">Saving Registration Results. Please Wait...</span></p></body></html>", None))
         self.ImageViewFrameHeaderText_O.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
@@ -3452,7 +3448,7 @@ class Ui_MainWindow(object):
         self.CalculatingElasticRegistrationText.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:600; font-style:normal;\">\n"
+"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:4.125pt; font-weight:600; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9pt;\">Calculating Elastic Registration. Please Wait...</span></p></body></html>", None))
         self.ViewElasticCheckBox.setText(QCoreApplication.translate("MainWindow", u"Visible", None))
         self.CalculateElasticRegistrationButton.setText(QCoreApplication.translate("MainWindow", u"Calculate Elastic", None))
