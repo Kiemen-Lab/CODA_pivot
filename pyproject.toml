@@ -32,6 +32,7 @@ dependencies = [
     "matplotlib",
     "scikit-image",
     "PySide6",
+    "json",
 ]
 
 [project.scripts]
