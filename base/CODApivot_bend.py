@@ -2871,7 +2871,7 @@ class MainWindow(QMainWindow):
         scale_width = new_size.width() / self.original_width
         scale_height = new_size.height() / self.original_height
 
-        self.padnum = self.padnum * scale_height
+        self.padnum = self.ui.tabWidget.tabBar().sizeHint().height() # offset of the image view windows from the edge of the app
 
         # scale the main window proportionally
         self.resize(self.widget_dimensions[0, 0] * scale_width, self.widget_dimensions[1, 0] * scale_height)
