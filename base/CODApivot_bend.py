@@ -4457,14 +4457,22 @@ class MainWindow(QMainWindow):
                     current_index_in_table = self.ui.CorrespondingImageComboBox.currentIndex()
                     row_number = self.which_moving_images_are_registered[0]
                     row_number = row_number[current_index_in_table - 1]
-                    scaled_value = float(self.moving_images_list[row_number][1]) * self.json_scale
+                    if self.moving_images_list[row_number][1] == '':
+                        num = 1
+                    else:
+                        num = float(self.moving_images_list[row_number][1])
+                    scaled_value = num * self.json_scale
                     self.scale_coordinates_file = str(scaled_value)
                 elif 'tissue_lowres_image' in moving_img_name:
                     self.json_scale = scalefactors.get('tissue_lowres_scalef', "")
                     current_index_in_table = self.ui.CorrespondingImageComboBox.currentIndex()
                     row_number = self.which_moving_images_are_registered[0]
                     row_number = row_number[current_index_in_table - 1]
-                    scaled_value = float(self.moving_images_list[row_number][1]) * self.json_scale
+                    if self.moving_images_list[row_number][1] == '':
+                        num = 1
+                    else:
+                        num = float(self.moving_images_list[row_number][1])
+                    scaled_value = num * self.json_scale
                     self.scale_coordinates_file = str(scaled_value)
 
     def unregistered_coords_checkbox_changed(self, state):
