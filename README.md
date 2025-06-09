@@ -9,7 +9,7 @@ CODApivot is a user interface guided tool for multi-omic image and coordinate re
 * **Interactive Fiducial Point Selection:** Dynamically adjust brightness, contrast, zoom, pan, flip, and rotate images to streamline fiducial point pair selection.
 * **Nonlinear Finetuning Registration:** Optionally fine tune your fiducial point-based affine registration using automated nonlinear registration.
 * **Registration of coordinate data:** Apply registration transforms directly to coordinate points directly in the app.
-* 
+  
 
 
 ---
