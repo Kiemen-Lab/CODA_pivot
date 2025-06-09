@@ -2319,7 +2319,7 @@ class MainWindow(QMainWindow):
             with Image.open(file_path) as img:
                 img.verify()  # Verify that it is an image
             return True
-        except (IOError, SyntaxError):
+        except (IOError, SyntaxError, AttributeError):
             text = "The selected file is not an image. Please select an image"
             self.show_error_message(text)
             return False
