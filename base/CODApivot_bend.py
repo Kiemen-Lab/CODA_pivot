@@ -2061,11 +2061,11 @@ class MainWindow(QMainWindow):
 
         # pad the fixed image
         im_fixed_pad, im_fixed_pad_grey = self.pad_images(im_fixed, width, height, self.mode_intensity_fixed)
-        mode_fixed = sum(self.mode_intensity_fixed) / len(self.mode_intensity_fixed)
+        mode_fixed = np.mean(np.array(self.mode_intensity_fixed))
 
         # pad the moving image
         im_moving_pad, im_moving_pad_grey = self.pad_images(im_moving, width, height, self.mode_intensity_moving)
-        mode_moving = sum(self.mode_intensity_moving) / len(self.mode_intensity_moving)
+        mode_moving = np.mean(np.array(self.mode_intensity_moving))
 
         # if one image is brightfield and the other is fluorescent, complement one image so the overlay is clear
         if mode_moving < 25 < mode_fixed:
