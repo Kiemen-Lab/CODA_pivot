@@ -24,15 +24,14 @@ authors = [
 keywords = ["medical imaging", "image registration"]
 
 dependencies = [
-    "opencv-python",
-    "scipy",
-    "numpy",
-    "pandas",
-    "Pillow",
-    "matplotlib",
-    "scikit-image",
-    "PySide6",
-    "json",
+    "opencv-python>=4.11.0.86",
+    "scipy>=1.15.3",
+    "numpy>=2.2.6",
+    "pandas>=2.3.0",
+    "Pillow>=11.2.1",
+    "matplotlib>=3.10.3",
+    "scikit-image>=0.25.2",
+    "PySide6>=6.9.1",
 ]
 
 [project.scripts]
