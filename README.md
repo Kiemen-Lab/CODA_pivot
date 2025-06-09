@@ -1,23 +1,16 @@
 # CODApivot
 
-CODApivot is a user interface guided tool for streamlined image registration which simplifies the process of aligning and visualizing data.
+CODApivot is a user interface guided tool for multi-omic image and coordinate registration
 
 ---
 ## 🚀 Key Features
 
-* **Project-Based Workflow:** Organize your fixed and moving images, results, and associated data.
-* **Interactive Fiducial Point Selection:** Add, move, and remove fiducial points directly on your images.
-* **Smart Image Viewer:** Dynamically adjust brightness, contrast, zoom, pan, flip, and rotate to tailor your view.
-* **Robust Registration Algorithms:**
+* **Project-Based Workflow:** Organize your fixed and moving images, results, and associated data in project files within the GUI.
+* **Interactive Fiducial Point Selection:** Dynamically adjust brightness, contrast, zoom, pan, flip, and rotate images to streamline fiducial point pair selection.
+* **Nonlinear Finetuning Registration:** Optionally fine tune your fiducial point-based affine registration using automated nonlinear registration.
+* **Registration of coordinate data:** Apply registration transforms directly to coordinate points directly in the app.
+  
 
-  * Perform affine registration using Iterative Closest Point (ICP) based on fiducial points.
-  * Execute elastic registration for capturing complex non-linear deformations.
-* **Transformation Engine:**
-
-  * Apply saved transformations to coordinate datasets (CSV, Excel).
-  * Transfer registrations to new images.
-* **Overlay Visualization:** Instantly visualize overlays of fixed and moving images, plus transformed fiducials, to verify alignment quality.
-* **Keyboard Shortcuts:** Work efficiently with built-in shortcut support for most actions.
 
 ---
 ## ⚙️ Installation Guide
