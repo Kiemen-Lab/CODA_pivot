@@ -24,7 +24,7 @@ Begin by downloading and installing Miniconda from the official [Miniconda websi
 Create a new environment and activate it:
 
 ```bash
-    conda create -n CODApivot python>3.8
+    conda create -n CODApivot python=3.10
     conda activate CODApivot
 ```
 
@@ -34,6 +34,12 @@ Install the CODApivot package via Git:
 
 ```bash
   pip install -e git+https://github.com/Kiemen-Lab/CODA_pivot.git#egg=CODApivot
+```
+
+Or clone/download this repository, cd into it, and install from your local copy with:
+
+```bash
+  pip install --editable .
 ```
 
 > ⚠️ **Note:** Ensure Git is installed. If not, download it from [git-scm.com](https://git-scm.com/downloads/win). After installation, restart your IDE or terminal and reactivate the environment.

@@ -2061,11 +2061,11 @@ class MainWindow(QMainWindow):
 
         # pad the fixed image
         im_fixed_pad, im_fixed_pad_grey = self.pad_images(im_fixed, width, height, self.mode_intensity_fixed)
-        mode_fixed = sum(self.mode_intensity_fixed) / len(self.mode_intensity_fixed)
+        mode_fixed = np.mean(np.array(self.mode_intensity_fixed))
 
         # pad the moving image
         im_moving_pad, im_moving_pad_grey = self.pad_images(im_moving, width, height, self.mode_intensity_moving)
-        mode_moving = sum(self.mode_intensity_moving) / len(self.mode_intensity_moving)
+        mode_moving = np.mean(np.array(self.mode_intensity_moving))
 
         # if one image is brightfield and the other is fluorescent, complement one image so the overlay is clear
         if mode_moving < 25 < mode_fixed:
@@ -2319,7 +2319,7 @@ class MainWindow(QMainWindow):
             with Image.open(file_path) as img:
                 img.verify()  # Verify that it is an image
             return True
-        except (IOError, SyntaxError):
+        except (IOError, SyntaxError, AttributeError):
             text = "The selected file is not an image. Please select an image"
             self.show_error_message(text)
             return False
@@ -2871,7 +2871,7 @@ class MainWindow(QMainWindow):
         scale_width = new_size.width() / self.original_width
         scale_height = new_size.height() / self.original_height
 
-        self.padnum = self.padnum * scale_height
+        self.padnum = self.ui.tabWidget.tabBar().sizeHint().height() # offset of the image view windows from the edge of the app
 
         # scale the main window proportionally
         self.resize(self.widget_dimensions[0, 0] * scale_width, self.widget_dimensions[1, 0] * scale_height)
