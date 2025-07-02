@@ -31,8 +31,7 @@ dependencies = [
     "Pillow",
     "matplotlib",
     "scikit-image",
-    "PySide6",
-    "json",
+    "PySide6"
 ]
 
 [project.scripts]
