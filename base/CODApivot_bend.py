@@ -3315,13 +3315,13 @@ class MainWindow(QMainWindow):
         line4 = ['Output folder', '', '', '']
         line5 = ['', self.results_name, '', self.job_folder]
         line6 = ['Moving images', '', '', '']
-        all_lines_concat = np.row_stack([line1, line2, line3, line4, line5, line6])
+        all_lines_concat = np.vstack([line1, line2, line3, line4, line5, line6])
 
         # define lines 7 - end of the csv file (depends on the number of moving images
         for num in range(0, self.moving_images_list.shape[0]):
             tmp = ['', self.moving_images_list[num, 0], self.moving_images_list[num, 1],
                    self.moving_images_list[num, 2]]
-            all_lines_concat = np.row_stack([all_lines_concat, tmp])
+            all_lines_concat = np.vstack([all_lines_concat, tmp])
 
         # make sure the output folder exists
         output_folder = os.path.join(self.job_folder, self.results_name)
@@ -5235,6 +5235,13 @@ class MainWindow(QMainWindow):
             self.ui.SaveRegisteredECoordinatesButton.setStyleSheet(self.inactive_button_style)
             self.ui.SaveRegisteredECoordinatesButton.setEnabled(False)
             output_file = os.path.join(output_folder, f"Elastic_Registered_{self.coordinates_filename}")
+
+        # The output name inherits the coordinate file's extension, which is
+        # .xlsx when the coordinates were loaded from Excel. The contents are
+        # written as CSV either way, so force the extension to match. Without
+        # this, Excel opens a .xlsx holding comma separated text and reports
+        # the file as corrupt.
+        output_file = os.path.splitext(output_file)[0] + ".csv"
 
         # Save the updated X matrix as a CSV file
         pd.DataFrame(X).to_csv(output_file, header=None, index=False)
