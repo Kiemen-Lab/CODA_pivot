@@ -2812,9 +2812,10 @@ class MainWindow(QMainWindow):
         image_max_intensity = np.max(image)
 
         # calculate the mode intensity of each channel of the image
-        r = mode(image[..., 0].flatten(), axis=None).mode
-        g = mode(image[..., 1].flatten(), axis=None).mode
-        b = mode(image[..., 2].flatten(), axis=None).mode
+        # cast to int: scipy returns uint8 scalars, which overflow when the channels are summed
+        r = int(mode(image[..., 0].flatten(), axis=None).mode)
+        g = int(mode(image[..., 1].flatten(), axis=None).mode)
+        b = int(mode(image[..., 2].flatten(), axis=None).mode)
         mode_intensity_rgb = [r, g, b]
 
         # convert the image to a pixmap
